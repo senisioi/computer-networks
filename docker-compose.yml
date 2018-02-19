@@ -2,27 +2,21 @@ version: '2.1'
 
 services:
     rt1:
-        build:
-            context: docker
-            dockerfile: Dockerfile
+        image: baseimage:latest
         volumes:
             - .:/elocal
         tty: true
         networks:
             - dmz
     rt2:
-        build:
-            context: docker
-            dockerfile: Dockerfile
+        image: baseimage:latest
         volumes:
             - .:/elocal
         tty: true
         networks:
             - dmz
     rt3:
-        build:
-            context: docker
-            dockerfile: Dockerfile
+        image: baseimage:latest
         volumes:
             - .:/elocal
         tty: true
