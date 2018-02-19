@@ -1,0 +1,33 @@
+version: '2.1'
+
+services:
+    rt1:
+        build:
+            context: docker
+            dockerfile: Dockerfile
+        volumes:
+            - .:/elocal
+        tty: true
+        networks:
+            - dmz
+    rt2:
+        build:
+            context: docker
+            dockerfile: Dockerfile
+        volumes:
+            - .:/elocal
+        tty: true
+        networks:
+            - dmz
+    rt3:
+        build:
+            context: docker
+            dockerfile: Dockerfile
+        volumes:
+            - .:/elocal
+        tty: true
+        networks:
+            - dmz
+
+networks:
+    dmz: {}
