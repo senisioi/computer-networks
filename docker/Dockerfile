@@ -9,6 +9,5 @@ RUN apt-get install -y build-essential git net-tools arp-scan nmap rtpflood pyth
 RUN pip install scapy
 
 RUN useradd -u 1000 -m rtuser
-RUN mkdir /home/rtuser
 USER rtuser
 WORKDIR /home/rtuser
