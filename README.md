@@ -6,6 +6,8 @@
 
 ## Starting up
 ```bash
+# build the docker image
+docker build -t baseimage ./docker/
 # start services defined in docker-compose.yml
 docker-compose up -d
 ```
