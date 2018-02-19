@@ -2,6 +2,6 @@
 
 ## Requirements
 - [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
-- docker-compose (already in this repo)
+- [docker-compose](https://docs.docker.com/compose/install/) already in this repo
 
 
