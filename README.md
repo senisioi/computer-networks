@@ -29,6 +29,9 @@ docker ps --filter "status=exited"
 # remove the container
 docker rm $CONTAINER_ID
 
+# list available networks
+docker network ls
+
 # inspect network
 docker network inspect $NETWORK_ID
 
@@ -49,4 +52,6 @@ docker-compose exec --user root rt1 bash
 ```
 
 ## References
-More to be added...
+- [docker-compose](http://docker-k8s-lab.readthedocs.io/en/latest/docker/docker-compose.html)
+- [compose networking](https://runnable.com/docker/docker-compose-networking)
+- [extra](https://success.docker.com/article/Docker_Reference_Architecture-_Designing_Scalable,_Portable_Docker_Container_Networks)
