@@ -52,6 +52,7 @@ docker-compose exec --user root rt1 bash
 ```
 
 ## References
+- [docker concepts](https://docs.docker.com/engine/docker-overview/#docker-engine)
 - [docker-compose](http://docker-k8s-lab.readthedocs.io/en/latest/docker/docker-compose.html)
 - [compose networking](https://runnable.com/docker/docker-compose-networking)
 - [extra](https://success.docker.com/article/Docker_Reference_Architecture-_Designing_Scalable,_Portable_Docker_Container_Networks)
