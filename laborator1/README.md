@@ -3,6 +3,15 @@
 ### In prealabil
 Rulati comenzi de docker din https://github.com/senisioi/computer-networks.
 
+Stergeti toate containerele create si resetati modificarile efectuate in branch-ul local de git.
+```bash
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
+
+git fetch --all
+git reset --hard origin/master
+```
+
 ### Comenzi de baza
 ```bash
 # executati un shell in containerul rt1
