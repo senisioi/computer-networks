@@ -27,6 +27,7 @@ Comanda *ifconfig* ne indica doua device-uri care ruleaza pe containerul *rt1*:
 - Ce este ether?
 - Ce este inet?
 - Ce este [netmask](https://www.computerhope.com/jargon/n/netmask.htm)?
+- Netmask si Subnet cu [prefix notation](https://www.ripe.net/about-us/press-centre/IPv4CIDRChart_2015.pdf)?
 - Maximum Transmission Unit [MTU](https://en.wikipedia.org/wiki/Maximum_transmission_unit) dimensiunea in bytes a pachetului maxim
 
 ##### Exercitiu
