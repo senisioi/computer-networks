@@ -55,11 +55,13 @@ Este un tool de networking care se foloseste de [ICMP](https://en.wikipedia.org/
 ```bash
 ping localhost
 
-ping 172.27.0.3
+ping 172.111.0.3
 
 ping 127.0.0.1
 
 ping 127.0.2.12
+
+ping 198.13.13.1
 ```
 
 1. Cand rulati ping, utilizati optiunea -R pentru a vedea si calea pe care o efectueaza pachetul.
