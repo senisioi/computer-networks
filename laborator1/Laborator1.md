@@ -53,14 +53,17 @@ networks:
 Este un tool de networking care se foloseste de [ICMP](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol) pentru a verifica daca un host este conectat la o retea prin IP.
 
 ```bash
+# ping localhost and loopback
 ping localhost
-
-ping 172.111.0.3
 
 ping 127.0.0.1
 
 ping 127.0.2.12
 
+# ping neighbour from network dmz
+ping 172.111.0.3
+
+# ping neighbour from network net
 ping 198.13.13.1
 ```
 
@@ -72,6 +75,8 @@ ping 198.13.13.1
 
 4. Folositi `docker stop` pentru a opri un container, cum arata rezultatul comenzii `ping` catre adresa IP a containerului care tocmai a fost oprit?
 
+4. Retelele dmz si net au in comun containerul rt1. Un container din reteaua dmz primeste raspunsuri la ping de la containere din reteaua net?
+
 5. Folositi optiunea `-c 10` pentru a trimite un numar fix de pachete.
 
 6. Folositi optiunea `-s 1000` pentru a schimba dimensiunea pachetului ICMP
@@ -80,3 +85,4 @@ ping 198.13.13.1
 
 8. Optiunea `-f` este folosita pentru a face un flood de ping-uri.  Rulati un shell cu user root, apoi `ping -f 172.27.0.4`. Separat, intr-un alt terminal rulati `docker stats`. Ce observati?
 
+9. De multe ori raspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva raspunsul la ping rulati intr-un container cu userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`
