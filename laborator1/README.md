@@ -1,7 +1,7 @@
 ## Laborator 1
 
-### In Prealabil
-Rulati comenzi de docker din README.md.
+### In prealabil
+Rulati comenzi de docker din https://github.com/senisioi/computer-networks.
 
 ### Comenzi de baza
 ```bash
