@@ -82,8 +82,8 @@ ping 198.13.13.1
 
 6. Folositi optiunea `-s 1000` pentru a schimba dimensiunea pachetului ICMP
 
-7. Reporniti toate containerele. Cum arata rezultatele pentru `ping -M do -s 30000 172.27.0.4` si pentru `ping -M do -s 30000 127.27.0.4`. Care este diferenta dintre cele doua? Care este rezultatul daca selectati dimensiunea 1500?
+7. Reporniti toate containerele. Cum arata rezultatele pentru `ping -M do -s 30000 172.111.0.4` si pentru `ping -M do -s 30000 172.111.0.4`. Care este diferenta dintre cele doua? Care este rezultatul daca selectati dimensiunea 1500?
 
-8. Optiunea `-f` este folosita pentru a face un flood de ping-uri.  Rulati un shell cu user root, apoi `ping -f 172.27.0.4`. Separat, intr-un alt terminal rulati `docker stats`. Ce observati?
+8. Optiunea `-f` este folosita pentru a face un flood de ping-uri.  Rulati un shell cu user root, apoi `ping -f 172.111.0.4`. Separat, intr-un alt terminal rulati `docker stats`. Ce observati?
 
 9. De multe ori raspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva raspunsul la ping rulati intr-un container cu userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`
