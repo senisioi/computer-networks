@@ -48,6 +48,7 @@ networks:
                 - subnet: 198.13.13.0/16
                   gateway: 198.13.13.1
 ```
+Ce se intampla daca constrangeti subnet-ul definit pentru a nu putea permite mai mult de 4 ip-uri intr-o retea.
 
 ### Ping
 Este un tool de networking care se foloseste de [ICMP](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol) pentru a verifica daca un host este conectat la o retea prin IP.
