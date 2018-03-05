@@ -143,5 +143,5 @@ tcpdump -XX
 ```
 
  - Intrebare: este posibil sa captati pachetele care circula intre google.com si rt2 folosind masina rt1?
- - Pentru mai multe detalii puteti urmari acest [tutorial](https://danielmiessler.com/study/tcpdump/)
+ - Pentru mai multe detalii puteti urmari acest [tutorial](https://danielmiessler.com/study/tcpdump/) sau [alte exemple](https://www.rationallyparanoid.com/articles/tcpdump.html)
 
