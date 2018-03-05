@@ -7,6 +7,7 @@ Stergeti toate containerele create si resetati modificarile efectuate in branch-
 ```bash
 docker stop $(docker ps -a -q)
 docker rm $(docker ps -a -q)
+docker network prune
 
 git fetch --all
 git reset --hard origin/master
@@ -96,3 +97,51 @@ ping 198.13.13.1
 8. Optiunea `-f` este folosita pentru a face un flood de ping-uri.  Rulati un shell cu user root, apoi `ping -f 172.111.0.4`. Separat, intr-un alt terminal rulati `docker stats`. Ce observati?
 
 9. De multe ori raspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva raspunsul la ping rulati intr-un container cu userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`
+
+
+### tcpdump
+Este un tool care va permite monitorizarea traficului de pe containerul/masina pe care va aflati. Vom folosi *tcpdump* pentru a monitoriza traficul generat de comanda ping. Pentru a rula tcpdump, trebuie sa ne atasam unui container cu user **root** apoi putem rula:
+
+```bash
+# pentru a capta pachete circula verbose default
+# -i denota interfata pe care o folosim pentru a capta pachete, in cazul acesta eth0
+# -n indica afisarea valorilor numerice ale ip-urilo in loc de valorile date de nameserver
+# -tttt afiseaza pachetele cu timestamp
+tcpdump -vv -n -tttt -i eth0
+```
+Daca tcpdump nu exista ca aplicatie, va trebui sa modificati fisierul *Dockerfile* pentru a adauga comanda de instalare a acestei aplicatii. Reconstruiti imaginea folosind comanda docker build, distrugeti si reconstruiti containerele folosind `docker-compose down` si `docker-compose up -d`.
+Daca in urma rularii acestei comenzi nu apare nimic, inseamna ca in momentul acesta interfata data pe containerul respectiv nu executa operatii pe retea. Pentru a vedea ce interfete (device-uri) putem folosi pentru a capta pachete, putem rula:
+```bash
+tcpdump -D
+```
+
+
+##### Exercitii
+In paralel cu terminalul in care ati rulat tcpdump, deschideti un alt terminal pe care sa-l folositi pentru a genera diferite tipuri de trafic:
+```bash
+ping google.com
+ping VECIN_DE_PE_RETEA
+ping localhost
+
+wget https://github.com/senisioi/computer-networks/
+```
+
+In paralel rulati tcpdump cu diferite optiuni:
+```bash
+# -c pentru a capta un numar fix de pachete
+tcpdump -c 20
+
+# -w pentru a salva pachetele intr-un fisier si -r pentru a citi fisierul
+tcpdump -w pachete.pcap
+tcpdump -r pachete.pcap
+
+# pentru a afisa doar pachetele care vin sau pleaca cu adresa google.com
+tcpdump host google.com
+
+# folositi -XX pentru a afisa si continutul in HEX si ASCII
+tcpdump -XX
+```
+
+ - Intrebare: este posibil sa captati pachetele care circula intre google.com si rt2 folosind masina rt1?
+ - Pentru mai multe detalii puteti urmari acest [tutorial](https://danielmiessler.com/study/tcpdump/)
+
