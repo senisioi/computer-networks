@@ -109,7 +109,19 @@ Este un tool care va permite monitorizarea traficului de pe containerul/masina p
 # -tttt afiseaza pachetele cu timestamp
 tcpdump -vv -n -tttt -i eth0
 ```
-Daca tcpdump nu exista ca aplicatie, va trebui sa modificati fisierul *Dockerfile* pentru a adauga comanda de instalare a acestei aplicatii. Reconstruiti imaginea folosind comanda docker build, distrugeti si reconstruiti containerele folosind `docker-compose down` si `docker-compose up -d`.
+Daca tcpdump nu exista ca aplicatie, va trebui sa modificati fisierul *Dockerfile* pentru a adauga comanda de instalare a acestei aplicatii. Reconstruiti imaginea folosind comanda docker build, distrugeti si reconstruiti containerele folosind `docker-compose down` si `docker-compose up -d`. Din cauza unui [bug de docker](https://github.com/moby/moby/issues/14140) e posibil ca aceasta comanda sa nu functioneze imediat dupa instalare, afisand eroarea:
+```bash
+tcpdump: error while loading shared libraries: libcrypto.so.1.0.0: cannot open shared object file: Permission denied
+```
+Pentru a remedia aceasta eroare, trebuie sa adaugati in Dockerfile:
+```bash
+# move tcpdump from the default location to /usr/local
+RUN mv /usr/sbin/tcpdump /usr/local/bin
+# add the new location to the PATH in case it's not there
+ENV PATH="/usr/local/bin:${PATH}"
+```
+
+
 Daca in urma rularii acestei comenzi nu apare nimic, inseamna ca in momentul acesta interfata data pe containerul respectiv nu executa operatii pe retea. Pentru a vedea ce interfete (device-uri) putem folosi pentru a capta pachete, putem rula:
 ```bash
 tcpdump -D
