@@ -5,10 +5,14 @@ Rulati comenzi de docker din https://github.com/senisioi/computer-networks.
 
 Stergeti toate containerele create si resetati modificarile efectuate in branch-ul local de git.
 ```bash
+# pentru a opri toate containerele
 docker stop $(docker ps -a -q)
+# pentru a sterge toate containerele
 docker rm $(docker ps -a -q)
-docker network prune
+# pentru a sterge toate retelele care nu au containere alocate
+yes | docker network prune
 
+# pentru a suprascrie modificarile locale
 git fetch --all
 git reset --hard origin/master
 ```
@@ -120,7 +124,7 @@ RUN mv /usr/sbin/tcpdump /usr/local/bin
 # add the new location to the PATH in case it's not there
 ENV PATH="/usr/local/bin:${PATH}"
 ```
-
+De asemenea, e posibil ca datorita unor schimbari recente in repository de kali linux, sa fie necesara reconstruirea imaginii, altfel nu vor putea fi instalate pachetele necesare. Pentru aceasta operaite, trebuie sa opriti toate containere, sa stergeti containerele create impreuna cu retelele create (vezi primele 3 comenzi de mai sus). Apoi putem sterge toate imaginile folosind `docker rmi $(docker images -a -q)`. In urma stergerii imaginilor, trebuie sa reconstruim imaginea *baseimage* folosind `docker build -t baseimage ./docker/`.
 
 Daca in urma rularii acestei comenzi nu apare nimic, inseamna ca in momentul acesta interfata data pe containerul respectiv nu executa operatii pe retea. Pentru a vedea ce interfete (device-uri) putem folosi pentru a capta pachete, putem rula:
 ```bash
@@ -132,7 +136,7 @@ tcpdump -D
 In paralel cu terminalul in care ati rulat tcpdump, deschideti un alt terminal pe care sa-l folositi pentru a genera diferite tipuri de trafic:
 ```bash
 ping google.com
-ping VECIN_DE_PE_RETEA
+ping -s 3000 rt2
 ping localhost
 
 wget https://github.com/senisioi/computer-networks/
