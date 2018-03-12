@@ -107,11 +107,7 @@ ping 198.13.13.1
 Este un tool care va permite monitorizarea traficului de pe containerul/masina pe care va aflati. Vom folosi *tcpdump* pentru a monitoriza traficul generat de comanda ping. Pentru a rula tcpdump, trebuie sa ne atasam unui container cu user **root** apoi putem rula:
 
 ```bash
-# pentru a capta pachete circula verbose default
-# -i denota interfata pe care o folosim pentru a capta pachete, in cazul acesta eth0
-# -n indica afisarea valorilor numerice ale ip-urilo in loc de valorile date de nameserver
-# -tttt afiseaza pachetele cu timestamp
-tcpdump -vv -n -tttt -i eth0
+tcpdump
 ```
 Daca tcpdump nu exista ca aplicatie, va trebui sa modificati fisierul *Dockerfile* pentru a adauga comanda de instalare a acestei aplicatii. Reconstruiti imaginea folosind comanda docker build, distrugeti si reconstruiti containerele folosind `docker-compose down` si `docker-compose up -d`. Din cauza unui [bug de docker](https://github.com/moby/moby/issues/14140) e posibil ca aceasta comanda sa nu functioneze imediat dupa instalare, afisand eroarea:
 ```bash
@@ -133,16 +129,20 @@ tcpdump -D
 
 
 ##### Exercitii
-In paralel cu terminalul in care ati rulat tcpdump, deschideti un alt terminal pe care sa-l folositi pentru a genera diferite tipuri de trafic:
-```bash
-ping google.com
-ping -s 3000 rt2
-ping localhost
+1. In containerul rt1 rulati `tcpdump -n`. In containerul rt2 rulati `ping -c 1 rt1`. Ce trasaturi observati la pachetul ICMP? Ce observati daca rulati `ping -c 1 -s 2000 rt1`?
 
-wget https://github.com/senisioi/computer-networks/
-```
+2. Rulati aceleasi ping-uri dar acum monitorizati pachetele cu `tcpdump -nvtS`. Ce detalii observati in plus? Dar daca adaugati optiunea `tcpdump -nvtSXX`?
 
-In paralel rulati tcpdump cu diferite optiuni:
+3. Pentru a vedea si header-ul de ethernet, adaugati optiunea `-e` la tcpdump.
+
+4. In rt1 monitorizati traficul cu `tcpdump -nevtSXX` Intr-un alt terminal, rulati un shell tot pe containerul rt1 apoi dati `ping -c 1 yahoo.com`. Ce adrese MAC si IP sunt folosite pentru a trimite requestul ICMP? Cate pachete sunt captate in total?
+
+5. In loc de ultimul ping, generati trafic la nivelul aplicatie folosind `wget https://github.com/senisioi/computer-networks/`
+
+6. Captand pachete, ati putut observa requesturi la o adresa de tipul 239.255.255.255? Mai multe detalii [aici](https://en.wikipedia.org/wiki/IP_multicast).
+
+
+Diferite optiuni pentru tcpdump:
 ```bash
 # -c pentru a capta un numar fix de pachete
 tcpdump -c 20
@@ -156,6 +156,24 @@ tcpdump host google.com
 
 # folositi -XX pentru a afisa si continutul in HEX si ASCII
 tcpdump -XX
+
+# pentru un timestamp normal
+tcpdump -t
+
+# pentru a capta pachete circula verbose
+tcpdump -vvv
+
+# indica interfata pe care o folosim pentru a capta pachete, in cazul acesta eth0 
+tcpdump -i
+
+# afisarea headerului de ethernet
+tcpdump -e
+
+# afisarea valorilor numerice ale ip-urilo in loc de valorile date de nameserver
+tcpdump -n
+
+# numarul de secventa al pachetului 
+tcpdump -S
 ```
 
  - Intrebare: este posibil sa captati pachetele care circula intre google.com si rt2 folosind masina rt1?
