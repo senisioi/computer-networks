@@ -12,6 +12,9 @@ docker rm $(docker ps -a -q)
 # pentru a sterge toate retelele care nu au containere alocate
 yes | docker network prune
 
+# pentru a sterge toate imaginile de docker (!!!rulati doar daca stiti ce face)
+docker rmi $(docker images -a -q)
+
 # pentru a suprascrie modificarile locale
 git fetch --all
 git reset --hard origin/master
@@ -120,7 +123,7 @@ RUN mv /usr/sbin/tcpdump /usr/local/bin
 # add the new location to the PATH in case it's not there
 ENV PATH="/usr/local/bin:${PATH}"
 ```
-De asemenea, e posibil ca datorita unor schimbari recente in repository de kali linux, sa fie necesara reconstruirea imaginii, altfel nu vor putea fi instalate pachetele necesare. Pentru aceasta operaite, trebuie sa opriti toate containere, sa stergeti containerele create impreuna cu retelele create (vezi primele 3 comenzi de mai sus). Apoi putem sterge toate imaginile folosind `docker rmi $(docker images -a -q)`. In urma stergerii imaginilor, trebuie sa reconstruim imaginea *baseimage* folosind `docker build -t baseimage ./docker/`.
+De asemenea, e posibil ca datorita unor schimbari recente in repository de kali linux, sa fie necesara reconstruirea imaginii, altfel nu vor putea fi instalate pachetele necesare. Pentru aceasta operatie, trebuie sa opriti toate containere, sa stergeti containerele create impreuna cu retelele create (vezi primele 4 comenzi de la inceputul fisierului). Apoi putem sterge toate imaginile folosind `docker rmi $(docker images -a -q)`. In urma stergerii imaginilor, trebuie sa reconstruim imaginea *baseimage* folosind `docker build -t baseimage ./docker/`.
 
 Daca in urma rularii acestei comenzi nu apare nimic, inseamna ca in momentul acesta interfata data pe containerul respectiv nu executa operatii pe retea. Pentru a vedea ce interfete (device-uri) putem folosi pentru a capta pachete, putem rula:
 ```bash
@@ -137,11 +140,39 @@ tcpdump -D
 
 4. In rt1 monitorizati traficul cu `tcpdump -nevtSXX` Intr-un alt terminal, rulati un shell tot pe containerul rt1 apoi dati `ping -c 1 yahoo.com`. Ce adrese MAC si IP sunt folosite pentru a trimite requestul ICMP? Cate pachete sunt captate in total?
 
-5. In loc de ultimul ping, generati trafic la nivelul aplicatie folosind `wget https://github.com/senisioi/computer-networks/`
+5. In loc de ultimul ping, generati trafic la nivelul aplicatie folosind `wget https://github.com/senisioi/computer-networks/`. Comparati continutul pachetului cu un request HTTP: `wget http://moodle.fmi.unibuc.ro`
 
-6. Captand pachete, ati putut observa requesturi la o adresa de tipul 239.255.255.255? Mai multe detalii [aici](https://en.wikipedia.org/wiki/IP_multicast).
+6. Puteti deduce din output-ul lui tcpdump care este adresa IP a site-ului github.com sau moodle.fmi.unibuc.ro? Ce reprezinta adresa MAC din cadrul acelor request-uri?
+
+7. Captand pachete, ati putut observa requesturi la o adresa de tipul 239.255.255.255? Mai multe detalii [aici](https://en.wikipedia.org/wiki/IP_multicast).
 
 
+###### TCP/IP stack
+```
+                     ----------------------------
+                     |    Application (HTTP+S)  |
+                     |                          |
+                     |...  \ | /  ..  \ | /  ...|
+                     |     -----      -----     |
+                     |     |TCP|      |UDP|     |
+                     |     -----      -----     |
+                     |         \      /         |
+                     |         --------         |
+                     |         |  IP  |         |
+                     |  -----  -*------         |
+                     |  |ARP|   |               |
+                     |  -----   |               |
+                     |      \   |               |
+                     |      ------              |
+                     |      |ENET|              |
+                     |      ---@--              |
+                     ----------|-----------------
+                               |
+         ----------------------o---------
+             Ethernet Cable
+
+                  Basic TCP/IP Network Node
+```
 Diferite optiuni pentru tcpdump:
 ```bash
 # -c pentru a capta un numar fix de pachete
