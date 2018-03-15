@@ -39,10 +39,9 @@ ifconfig
 
 Comanda *ifconfig* ne indica doua device-uri care ruleaza pe containerul *rt1*:
 
-- *eht0* - placa de retea Ethernet virtuala care indica configuratia pentru stabilirea unei conexiuni de retea a containerului.
-- *lo* - [local Loopback device](https://askubuntu.com/questions/247625/what-is-the-loopback-device-and-how-do-i-use-it) care defineste categoria de adrese care se mapeaza pe localhost.
-- Ce este ether?
-- Ce este inet?
+- [*eht0*](http://www.tldp.org/LDP/nag/node67.html#SECTION007720000) - placa de retea Ethernet virtuala care indica configuratia pentru stabilirea unei conexiuni de retea a containerului.
+- [*lo*](https://askubuntu.com/questions/247625/what-is-the-loopback-device-and-how-do-i-use-it) - local Loopback device defineste categoria de adrese care se mapeaza pe localhost.
+- Ce reprezinta [ether](https://en.wikipedia.org/wiki/MAC_address) si [inet](https://en.wikipedia.org/wiki/IPv4)?
 - Ce este [netmask](https://www.computerhope.com/jargon/n/netmask.htm)?
 - Netmask si Subnet cu [prefix notation](https://www.ripe.net/about-us/press-centre/IPv4CIDRChart_2015.pdf)?
 - Maximum Transmission Unit [MTU](https://en.wikipedia.org/wiki/Maximum_transmission_unit) dimensiunea in bytes a pachetului maxim
@@ -140,7 +139,7 @@ tcpdump -D
 
 4. In rt1 monitorizati traficul cu `tcpdump -nevtSXX` Intr-un alt terminal, rulati un shell tot pe containerul rt1 apoi dati `ping -c 1 yahoo.com`. Ce adrese MAC si IP sunt folosite pentru a trimite requestul ICMP? Cate pachete sunt captate in total?
 
-5. In loc de ultimul ping, generati trafic la nivelul aplicatie folosind `wget https://github.com/senisioi/computer-networks/`. Comparati continutul pachetului cu un request HTTP: `wget http://moodle.fmi.unibuc.ro`
+5. In loc de ultimul ping, generati trafic la nivelul aplicatie folosind `wget https://github.com/senisioi/computer-networks/`. Comparati continutul pachetului cu un request HTTP: `wget http://moodle.fmi.unibuc.ro`. Observati diferenta dintre HTTP si HTTPS la nivel de pachete.
 
 6. Puteti deduce din output-ul lui tcpdump care este adresa IP a site-ului github.com sau moodle.fmi.unibuc.ro? Ce reprezinta adresa MAC din cadrul acelor request-uri?
 
@@ -173,6 +172,7 @@ tcpdump -D
 
                   Basic TCP/IP Network Node
 ```
+
 Diferite optiuni pentru tcpdump:
 ```bash
 # -c pentru a capta un numar fix de pachete
