@@ -102,7 +102,12 @@ ping 198.13.13.1
 
 8. Optiunea `-f` este folosita pentru a face un flood de ping-uri.  Rulati un shell cu user root, apoi `ping -f 172.111.0.4`. Separat, intr-un alt terminal rulati `docker stats`. Ce observati?
 
-9. De multe ori raspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva raspunsul la ping rulati intr-un container cu userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`
+9. De multe ori raspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva raspunsul la ping rulati userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`. Intr-un container de docker nu aveti dreptul sa modificati acel fisier si veti primi o eroare. Putem, in schimb, modifica structura containerului din *docker-compose.yml* si-i putem adauga pe langa image, networks, volumes, tty, o optiune de [sysctls](https://docs.docker.com/compose/compose-file/compose-file-v2/#sysctls):
+```
+        sysctls:
+          - net.ipv4.icmp_echo_ignore_all=1
+```
+
 
 
 ### tcpdump
