@@ -1,5 +1,6 @@
 ## Laborator 1
 
+<a name="clean_all"></a> 
 ### In prealabil
 Rulati comenzi de docker din https://github.com/senisioi/computer-networks.
 
@@ -46,6 +47,7 @@ Comanda *ifconfig* ne indica doua device-uri care ruleaza pe containerul *rt1*:
 - Netmask si Subnet cu [prefix notation](https://www.ripe.net/about-us/press-centre/IPv4CIDRChart_2015.pdf)?
 - Maximum Transmission Unit [MTU](https://en.wikipedia.org/wiki/Maximum_transmission_unit) dimensiunea in bytes a pachetului maxim
 
+<a name="exercitiu1"></a>
 ##### Exercitiu
 Modificati docker-compose.yml pentru a adauga inca o retea si inca 3 containere atasate la reteaua respectiva. Modificati definitia container-ului rt1 pentru a face parte din ambele retele. 
 Exemplu de retele:
@@ -66,6 +68,7 @@ networks:
 ```
 Ce se intampla daca constrangeti subnet-ul definit pentru a nu putea permite mai mult de 4 ip-uri intr-o retea.
 
+<a name="ping"></a>
 ### Ping
 Este un tool de networking care se foloseste de [ICMP](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol) pentru a verifica daca un host este conectat la o retea prin IP.
 
@@ -102,15 +105,18 @@ ping 198.13.13.1
 
 8. Optiunea `-f` este folosita pentru a face un flood de ping-uri.  Rulati un shell cu user root, apoi `ping -f 172.111.0.4`. Separat, intr-un alt terminal rulati `docker stats`. Ce observati?
 
+<a name="ping_block"></a>
 9. De multe ori raspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva raspunsul la ping rulati userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`. Intr-un container de docker nu aveti dreptul sa modificati acel fisier si veti primi o eroare. Putem, in schimb, modifica structura containerului din *docker-compose.yml* si-i putem adauga pe langa image, networks, volumes, tty, o optiune de [sysctls](https://docs.docker.com/compose/compose-file/compose-file-v2/#sysctls):
 ```
+    rt1:
+        ..........
         sysctls:
           - net.ipv4.icmp_echo_ignore_all=1
 ```
 
 
-
-### tcpdump
+<a name="tcpdump_install"></a>
+###  tcpdump
 Este un tool care va permite monitorizarea traficului de pe containerul/masina pe care va aflati. Vom folosi *tcpdump* pentru a monitoriza traficul generat de comanda ping. Pentru a rula tcpdump, trebuie sa ne atasam unui container cu user **root** apoi putem rula:
 
 ```bash
@@ -134,7 +140,7 @@ Daca in urma rularii acestei comenzi nu apare nimic, inseamna ca in momentul ace
 tcpdump -D
 ```
 
-
+<a name="tcpdump_exer"></a>
 ##### Exercitii
 1. In containerul rt1 rulati `tcpdump -n`. In containerul rt2 rulati `ping -c 1 rt1`. Ce trasaturi observati la pachetul ICMP? Ce observati daca rulati `ping -c 1 -s 2000 rt1`?
 
