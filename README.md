@@ -1,11 +1,13 @@
 # 2018 computer networks lab
 
 
+## Curs
+- [Materiale de curs](http://nlp.unibuc.ro/people/liviu.html#Courses)
+- Cursul de [Computer Networks](https://www.youtube.com/watch?v=xKNPTYtTnAo&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C), University of Washington
+
 ## Requirements
 - [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 - [docker-compose](https://docs.docker.com/compose/install/) already in this repo
-- [University of Washington - Computer Networks](https://www.youtube.com/watch?v=xKNPTYtTnAo&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C)
-
 
 ## Concepte de baza
 O masina virtuala de docker o vom numi container sau serviciu. Pentru a porni o masina virtuala, trebuie sa folosim [docker build](https://docs.docker.com/engine/reference/commandline/build/) pentru a construi o imagine cu un sistem de operare care sa fie utilizat pe acea masina. Comanda de build utilizeaza fisierul [./docker/Dockerfile](https://github.com/senisioi/computer-networks/blob/master/docker/Dockerfile) care defineste ce sistem de operare folosim, ce aplicatii vor fi instalate si ce useri vor exista pe containerele care ruleaza acea imagine. 
