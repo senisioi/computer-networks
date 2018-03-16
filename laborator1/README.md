@@ -214,4 +214,5 @@ tcpdump -S
 
  - Intrebare: este posibil sa captati pachetele care circula intre google.com si rt2 folosind masina rt1?
  - Pentru mai multe detalii puteti urmari acest [tutorial](https://danielmiessler.com/study/tcpdump/) sau [alte exemple](https://www.rationallyparanoid.com/articles/tcpdump.html)
+ - Pentru exemple de filtrare mai detaliate, puteti urmari si [acest tutorial](https://forum.ivorde.com/tcpdump-how-to-to-capture-only-icmp-ping-echo-requests-t15191.html)
 
