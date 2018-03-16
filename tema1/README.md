@@ -1,7 +1,7 @@
 # Tema 1
 
 ## Informatii tema
-Tema va fi livrata sub forma unui link/URL de git. Sectiunea de mai jos **Instructiuni git** contine toate informatiile de care aveti nevoie pentru a crea un repository si pentru a uploada fisierele pe git. Daca intampinati orice fel de probleme sau erori, va rog sa-mi scrieti pe mail. In repository veti adauga cateva fisiere de log-uri si un *docker-compose.yml* dupa cum este explicat in cerintele de mai jos.
+Tema va fi livrata sub forma unui link/URL de git. Sectiunea de mai jos **[Instructiuni git](https://github.com/senisioi/computer-networks/tree/master/tema1#git)** contine toate informatiile de care aveti nevoie pentru a crea un repository si pentru a uploada fisierele pe git. Daca intampinati orice fel de probleme sau erori, va rog sa-mi scrieti pe mail. In repository veti adauga cateva fisiere de log-uri si un *docker-compose.yml* dupa cum este explicat in cerintele de mai jos.
 Link-ul catre repository il trimite pe mail cu subject "tema1 retele 2018 Prenume Nume GRUPA".
 Deadline: **29 martie**. Orice zi de intarziere se penalizeaza cu un punct.
 
@@ -64,6 +64,7 @@ docker-compose logs tn1 > logs_tn1.log
 ```
 
 
+<a name="git"></a>
 ## Adaugati totul pe git
 #### Instructiuni git
 Daca nu ati mai lucrat cu git, puteti urma pasii:
