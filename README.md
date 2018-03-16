@@ -5,7 +5,8 @@
 - [Materiale de curs](http://nlp.unibuc.ro/people/liviu.html#Courses)
 - Cursul de [Computer Networks](https://www.youtube.com/watch?v=xKNPTYtTnAo&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C), University of Washington
 
-## Requirements
+## Inainte de a incepe
+Pentru acest laborator, vom avea nevoie de:
 - [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 - [docker-compose](https://docs.docker.com/compose/install/) already in this repo
 
@@ -26,13 +27,17 @@ docker-compose up -d
 ```
 
 
-## Basic docker commands
+## Comenzi de baza de docker
 ```bash
+# list your images
+docker image ls
+
 # stop services
 docker-compose down
 
 # see the containers running
 docker ps
+docker-compose ps
 
 # kill a container
 docker kill $CONTAINER_ID
@@ -68,5 +73,6 @@ docker-compose exec --user root rt1 bash
 ## References
 - [docker concepts](https://docs.docker.com/engine/docker-overview/#docker-engine)
 - [docker-compose](http://docker-k8s-lab.readthedocs.io/en/latest/docker/docker-compose.html)
-- [compose networking](https://runnable.com/docker/docker-compose-networking)
-- [extra](https://success.docker.com/article/Docker_Reference_Architecture-_Designing_Scalable,_Portable_Docker_Container_Networks)
+- [Compose Networking](https://runnable.com/docker/docker-compose-networking)
+- [Designing Scalable, Portable Docker Container Networks](https://success.docker.com/article/Docker_Reference_Architecture-_Designing_Scalable,_Portable_Docker_Container_Networks)
+- [Docker Networking Cookbook](https://github.com/TechBookHunter/Free-Docker-Books/blob/master/book/Docker%20Networking%20Cookbook.pdf)
