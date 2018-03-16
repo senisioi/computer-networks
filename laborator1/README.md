@@ -106,7 +106,7 @@ ping 198.13.13.1
 8. Optiunea `-f` este folosita pentru a face un flood de ping-uri.  Rulati un shell cu user root, apoi `ping -f 172.111.0.4`. Separat, intr-un alt terminal rulati `docker stats`. Ce observati?
 
 <a name="ping_block"></a>
-9. De multe ori raspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva raspunsul la ping rulati userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`. Intr-un container de docker nu aveti dreptul sa modificati acel fisier si veti primi o eroare. Putem, in schimb, modifica structura containerului din *docker-compose.yml* si-i putem adauga pe langa image, networks, volumes, tty, o optiune de [sysctls](https://docs.docker.com/compose/compose-file/compose-file-v2/#sysctls):
+De multe ori raspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva raspunsul la ping rulati userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`. Intr-un container de docker nu aveti dreptul sa modificati acel fisier si veti primi o eroare. Putem, in schimb, modifica structura containerului din *docker-compose.yml* si-i putem adauga pe langa image, networks, volumes, tty, o optiune de [sysctls](https://docs.docker.com/compose/compose-file/compose-file-v2/#sysctls):
 ```
     rt1:
         ..........
@@ -133,7 +133,7 @@ RUN mv /usr/sbin/tcpdump /usr/local/bin
 # add the new location to the PATH in case it's not there
 ENV PATH="/usr/local/bin:${PATH}"
 ```
-De asemenea, e posibil ca datorita unor schimbari recente in repository de kali linux, sa fie necesara reconstruirea imaginii, altfel nu vor putea fi instalate pachetele necesare. Pentru aceasta operatie, trebuie sa opriti toate containere, sa stergeti containerele create impreuna cu retelele create (vezi primele 4 comenzi de la inceputul fisierului). Apoi putem sterge toate imaginile folosind `docker rmi $(docker images -a -q)`. In urma stergerii imaginilor, trebuie sa reconstruim imaginea *baseimage* folosind `docker build -t baseimage ./docker/`.
+De asemenea, e posibil ca datorita unor schimbari recente in repository de kali linux, sa fie necesara reconstruirea imaginii, altfel nu vor putea fi instalate pachetele necesare. Pentru aceasta operatie, trebuie sa opriti toate containere, sa stergeti containerele create impreuna cu retelele create (vezi [primele 4 comenzi de la inceputul fisierului](https://github.com/senisioi/computer-networks/tree/master/laborator1#clean_all)). In urma stergerii imaginilor, trebuie sa reconstruim imaginea *baseimage* folosind `docker build -t baseimage ./docker/`.
 
 Daca in urma rularii acestei comenzi nu apare nimic, inseamna ca in momentul acesta interfata data pe containerul respectiv nu executa operatii pe retea. Pentru a vedea ce interfete (device-uri) putem folosi pentru a capta pachete, putem rula:
 ```bash
