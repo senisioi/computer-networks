@@ -57,7 +57,7 @@ lista = [1,5,7,8,2,5,2]
 for element in lista:
     print lista
 
-for idx, element in lista:
+for idx, element in enumerate(lista):
     print idx, element
 
 for idx in range(0, len(lista)):
