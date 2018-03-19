@@ -167,7 +167,7 @@ print G.nume
 2. Rulati scriptul anterior intr-un container.
 3. Folosind [command](https://docs.docker.com/compose/compose-file/compose-file-v2/#command), modificati docker-compose.yml pentru a lansa acel script ca proces al containerului.
 
-<a name="Socket API"></a> 
+<a name="socket"></a> 
 ## Socket API
 ![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/laborator2/sockets.png)
 
