@@ -24,7 +24,7 @@ Pentru a lansa wingdie, trebuie sa rulam:
 cd ~/wingdie && ./wing-personal
 ```
 
-Pentru a-l face sa arate mai bine, putem rula:
+Pentru a-l face sa arate mai bine, putem rula din linia de comanda:
 ```bash
 cat <<EOF >> ~/.wingpersonal6/preferences
 [user-preferences]
@@ -136,10 +136,14 @@ except:
     logging.exception("Un mesaj de exceptie!")
 
 program_name = sys.argv[0]
-time.sleep(5)
 print program_name
-print exists('/usr/local/lib')
+print "Exista '/elocal'?", exists('/elocal')
 print os.path.join('usr', 'local', 'bin')
+
+for element in "hello world":
+    sys.stdout.write(element)
+    sys.stdout.flush()
+    time.sleep(1)
 ```
 
 #### [main](https://stackoverflow.com/questions/4041238/why-use-def-main)
@@ -236,7 +240,8 @@ sock.close()
 
 <a name="exercitii_udp"></a> 
 ### Exercitii
-1. Pe acelasi container de docker rulati [udp_server.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_server.py), [udp_client.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_client.py). 
-2. Care este portul destinatie pe care il foloseste server-ul pentru a trimite un mesaj clientului?
-3. Modificati mesajul client-ului ca acesta sa fie citit ca parametru al scriptului (`sys.argv[1]`). Transmiteti mesaje de la un container la altul folosind *udp_server.py* si *udp_client.py*.
-4. Utilizati `tcpdump -nvvX -i any udp port 10000` pentru a scana mesajele UDP care circula pe portul 10000.
+1. Pe container-ul rt1 rulati [udp_server.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_server.py), [udp_client.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_client.py). 
+2. Incercati sa folositi udp_client.py pentru a va conecta de pe sistemul host la container-ul rt1.
+3. Care este portul destinatie pe care il foloseste server-ul pentru a trimite un mesaj clientului?
+4. Modificati mesajul client-ului ca acesta sa fie citit ca parametru al scriptului (`sys.argv[1]`). Transmiteti mesaje de la un container la altul folosind *udp_server.py* si *udp_client.py*.
+5. Utilizati `tcpdump -nvvX -i any udp port 10000` pentru a scana mesajele UDP care circula pe portul 10000.
