@@ -24,6 +24,15 @@ Pentru a lansa wingdie, trebuie sa rulam:
 ~/wingdie/wing-personal
 ```
 
+Pentru a-l face sa arate mai bine, putem rula:
+```bash
+cat <<EOF >> ~/.wingpersonal6/preferences
+[user-preferences]
+gui.qt-color-palette = u'one-dark'
+gui.use-palette-throughout-ui = True
+EOF
+```
+
 <a name="basics"></a> 
 ## [python 2.7 basics](https://www.tutorialspoint.com/python/python_variable_types.htm)
 ```python
