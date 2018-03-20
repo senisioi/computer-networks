@@ -18,8 +18,11 @@ Pentru a instala wingdie fara permisiuni de administrator, putem rula:
 wget https://gist.githubusercontent.com/senisioi/772b4b87b4fb52b96e6b83a22a4299b5/raw/d131f650bdf75701915809a52672e4e13b0bb926/wingdie-install.sh
 bash wingdie-install.sh
 ```
-[Scriptul](https://gist.github.com/senisioi/772b4b87b4fb52b96e6b83a22a4299b5) va instala editorul in directorul $HOME.
-
+[Scriptul](https://gist.github.com/senisioi/772b4b87b4fb52b96e6b83a22a4299b5) va instala editorul in directorul $HOME. 
+Pentru a lansa wingdie, trebuie sa rulam:
+```bash
+~/wingdie/wing-personal
+```
 
 <a name="basics"></a> 
 ## [python 2.7 basics](https://www.tutorialspoint.com/python/python_variable_types.htm)
@@ -55,7 +58,7 @@ print d['grupa'], d['nr_studenti']
 ```python
 lista = [1,5,7,8,2,5,2]
 for element in lista:
-    print lista
+    print element
 
 for idx, element in enumerate(lista):
     print idx, element
