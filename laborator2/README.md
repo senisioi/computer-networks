@@ -21,7 +21,7 @@ bash wingdie-install.sh
 [Scriptul](https://gist.github.com/senisioi/772b4b87b4fb52b96e6b83a22a4299b5) va instala editorul in directorul $HOME. 
 Pentru a lansa wingdie, trebuie sa rulam:
 ```bash
-~/wingdie/wing-personal
+cd ~/wingdie && ./wing-personal
 ```
 
 Pentru a-l face sa arate mai bine, putem rula:
