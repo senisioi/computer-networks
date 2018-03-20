@@ -241,7 +241,7 @@ sock.close()
 <a name="exercitii_udp"></a> 
 ### Exercitii
 1. Pe container-ul rt1 rulati [udp_server.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_server.py), [udp_client.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_client.py). 
-2. Incercati sa folositi udp_client.py pentru a va conecta de pe sistemul host la container-ul rt1.
+2. Incercati sa folositi udp_client.py pentru a va conecta de pe sistemul host la container-ul rt1. Verificati documentatia de la [ports](https://docs.docker.com/compose/compose-file/compose-file-v2/#ports)
 3. Care este portul destinatie pe care il foloseste server-ul pentru a trimite un mesaj clientului?
 4. Modificati mesajul client-ului ca acesta sa fie citit ca parametru al scriptului (`sys.argv[1]`). Transmiteti mesaje de la un container la altul folosind *udp_server.py* si *udp_client.py*.
 5. Utilizati `tcpdump -nvvX -i any udp port 10000` pentru a scana mesajele UDP care circula pe portul 10000.
