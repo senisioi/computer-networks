@@ -8,7 +8,8 @@
 ## Inainte de a incepe
 Pentru acest laborator, vom avea nevoie de:
 - [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
-- [docker-compose](https://docs.docker.com/compose/install/) already in this repo
+- [docker-compose](https://docs.docker.com/compose/install/) - este deja adaugat in acest repository
+- dupa instalarea docker, trebuie sa adauga userul cu care lucram in grupul de docker `sudo usermod -aG docker $USER`
 
 ## Concepte de baza
 O masina virtuala de docker o vom numi container sau serviciu. Pentru a porni o masina virtuala, trebuie sa folosim [docker build](https://docs.docker.com/engine/reference/commandline/build/) pentru a construi o imagine cu un sistem de operare care sa fie utilizat pe acea masina. Comanda de build utilizeaza fisierul [./docker/Dockerfile](https://github.com/senisioi/computer-networks/blob/master/docker/Dockerfile) care defineste ce sistem de operare folosim, ce aplicatii vor fi instalate si ce useri vor exista pe containerele care ruleaza acea imagine. 

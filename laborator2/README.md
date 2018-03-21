@@ -12,22 +12,24 @@
 ## Introducere
 In cadrul acestui capitol vom lucra cu [python](http://www.bestprogramminglanguagefor.me/why-learn-python), un limbaj de programare foarte simplu pe care il vom folosi pentru a crea si trimite pachete pe retea.
 
-Pentru debug si autocomplete, este bine sa avem un editor si [IDE pentru acest limbaj](https://wiki.python.org/moin/IntegratedDevelopmentEnvironments). In cadrul orelor vom lucra cu [wingdie](http://wingware.com/downloads/wing-personal), dar pe calculatoarele voastre personale puteti lucra cu orice alt editor. 
-Pentru a instala wingdie fara permisiuni de administrator, putem rula:
+Pentru debug si autocomplete, este bine sa avem un editor si [IDE pentru acest limbaj](https://wiki.python.org/moin/IntegratedDevelopmentEnvironments). In cadrul orelor vom lucra cu [wingide](http://wingware.com/downloads/wing-personal), dar pe calculatoarele voastre personale puteti lucra cu orice alt editor. 
+Pentru a instala wingide fara permisiuni de administrator, putem rula:
 ```bash
-wget https://gist.githubusercontent.com/senisioi/772b4b87b4fb52b96e6b83a22a4299b5/raw/d131f650bdf75701915809a52672e4e13b0bb926/wingdie-install.sh
-bash wingdie-install.sh
+wget https://gist.githubusercontent.com/senisioi/7d3d8a223f23d8bc9a21464dbe5f7e47/raw/e6657e66c441e2554fb8d3777783ca0eb6a2c985/install-wing.sh
+bash install-wing.sh
 ```
 [Scriptul](https://gist.github.com/senisioi/772b4b87b4fb52b96e6b83a22a4299b5) va instala editorul in directorul $HOME. 
-Pentru a lansa wingdie, trebuie sa rulam:
+Pentru a lansa wingide, putem sa rulam in terminal:
 ```bash
-cd ~/wingdie && ./wing-personal
+wing-personal
 ```
+Daca aplicatia nu exista, puteti sa o adaugati in path sau puteti incerca sa o instalati din nou.
 
-Pentru a-l face sa arate mai bine, putem rula din linia de comanda:
+Pentru a face editorul sa arate mai bine, rulati din linia de comanda:
 ```bash
 cat <<EOF >> ~/.wingpersonal6/preferences
 [user-preferences]
+edit.show-line-numbers = 1
 gui.qt-color-palette = u'one-dark'
 gui.use-palette-throughout-ui = True
 EOF
