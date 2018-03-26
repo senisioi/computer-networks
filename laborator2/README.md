@@ -7,6 +7,9 @@
 - [Socket API](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#socket)
 - [UDP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#udp)
 - [Exercitii socket UDP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#exercitii_udp)
+- [TCP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#tcp)
+- [Exercitii socket TCP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#exercitii_tcp)
+
 
 <a name="intro"></a> 
 ## Introducere
@@ -187,14 +190,12 @@ print G.nume
 
 <a name="socket"></a> 
 ## Socket API
-![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/laborator2/sockets.png)
-
 Este un [API](https://www.youtube.com/watch?v=s7wmiS2mSXY) disponibil in mai toate limbajele de programare cu care putem implementa comunicarea pe retea la un nivel mai inalt. Semnificatia flag-urilor este cel mai bine explicata in tutoriale de [unix sockets](https://www.tutorialspoint.com/unix_sockets/socket_core_functions.htm) care acopera partea de C. In limbajul [python](https://docs.python.org/2/library/socket.html) avem la dispozitie exact aceleasi functii si flag-uri ca in C iar interpretarea lor nu tine de un limbaj de programare particular.
 
 <a name="udp"></a> 
-### [UDP](https://tools.ietf.org/html/rfc768)
+### User Datagram Protocol - [UDP](https://tools.ietf.org/html/rfc768)
 
-Este un protocol simplu la [nivelul transport](http://www.erg.abdn.ac.uk/users/gorry/course/inet-pages/transport.html). Header-ul acestuia include portul sursa, portul destinatie, lungime si un checksum optional:
+Este un protocol simplu la [nivelul transport](https://www.youtube.com/watch?v=hi9BVTNvl4c&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C&index=50). Header-ul acestuia include portul sursa, portul destinatie, lungime si un checksum optional:
 ```
   0      7 8     15 16    23 24    31
   +--------+--------+--------+--------+
@@ -208,7 +209,7 @@ Este un protocol simplu la [nivelul transport](http://www.erg.abdn.ac.uk/users/g
   |          data octets ...
   +---------------- ...
 ```
-Cateva caracteristi ale protocolului sunt descrise [aici](https://en.wikipedia.org/wiki/User_Datagram_Protocol#Attributes).
+Cateva caracteristi ale protocolului sunt descrise [aici](https://en.wikipedia.org/wiki/User_Datagram_Protocol#Attributes) iar partea de curs este acoperita in mare parte [aici](https://www.youtube.com/watch?v=Z1HggQJG0Fc&index=51&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C).
 
 Server-ul se instantiaza cu [AF_INET](https://stackoverflow.com/questions/1593946/what-is-af-inet-and-why-do-i-need-it) si SOCK_DGRAM (datagrams - connectionless, unreliable messages of a fixed maximum length) pentru UDP:
 ```python
@@ -240,6 +241,10 @@ data, server = sock.recvfrom(4096)
 sock.close()
 ```
 
+O diagrama a procesului anterior este reprezentata aici:
+![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/laborator2/UDPsockets.png)
+
+
 <a name="exercitii_udp"></a> 
 ### Exercitii
 1. Pe container-ul rt1 rulati [udp_server.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_server.py), [udp_client.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_client.py). 
@@ -247,3 +252,73 @@ sock.close()
 3. Care este portul destinatie pe care il foloseste server-ul pentru a trimite un mesaj clientului?
 4. Modificati mesajul client-ului ca acesta sa fie citit ca parametru al scriptului (`sys.argv[1]`). Transmiteti mesaje de la un container la altul folosind *udp_server.py* si *udp_client.py*.
 5. Utilizati `tcpdump -nvvX -i any udp port 10000` pentru a scana mesajele UDP care circula pe portul 10000.
+
+
+<a name="tcp"></a> 
+### Trasnmission Control Protocol - [TCP](https://tools.ietf.org/html/rfc793#page-15)
+
+Este un protocol mai avansat de la [nivelul transport](http://www.erg.abdn.ac.uk/users/gorry/course/inet-pages/transport.html). 
+Header-ul acestuia este mai complex:
+```
+  0                   1                   2                   3   
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |          Source Port          |       Destination Port        |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                        Sequence Number                        |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                    Acknowledgment Number                      |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  Data |       |C|E|U|A|P|R|S|F|                               |
+  | Offset|  Res. |W|C|R|C|S|S|Y|I|            Window             | 
+  |       |       |R|E|G|K|H|T|N|N|                               |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |           Checksum            |         Urgent Pointer        |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                    Options                    |    Padding    |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                             data                              |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+```
+Cateva caracteristi ale protocolului sunt descrise [aici](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_segment_structure) iar partea de curs este acoperita in mare parte [aici](https://www.youtube.com/watch?v=c6gHTlzy-7Y&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C&index=52).
+
+Server-ul se instantiaza cu [AF_INET](https://stackoverflow.com/questions/1593946/what-is-af-inet-and-why-do-i-need-it) si SOCK_STREAM (fiindca TCP opereaza la nivel de [byte streams](https://softwareengineering.stackexchange.com/questions/216597/what-is-a-byte-stream-actually))
+
+```python
+# UDP socket 
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+port = 10000
+adresa = 'localhost'
+server_address = (adresa, port)
+sock.bind(server_address)
+
+sock.listen(5)
+while True:
+   conexiune, addr = sock.accept()
+   time.sleep(30)
+   conexiune.close()
+
+sock.close()
+```
+
+Clientul trebuie sa stie la ce adresa ip si pe ce port sa comunice cu serverul:
+```python
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+port = 10000
+adresa = 'localhost'
+server_address = (adresa, port)
+
+sock.connect(server_address)
+
+sock.close()
+```
+
+O diagrama a procesului anterior este reprezentata aici:
+![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/laborator2/TCPsockets.png)
+
+
+<a name="exercitii_tcp"></a> 
+### Exercitii
+1. In containerul rt1 rulati `tcpdump -Snnt tcp` si tot in rt1 rulati un server tcp. Din container-ul rt2, creati o conexiune. Urmariti [three-way handshake](https://www.geeksforgeeks.org/computer-network-tcp-3-way-handshake-process/) si inchiderea conexiunii la nivel de pachete.
