@@ -285,7 +285,7 @@ Cateva caracteristi ale protocolului sunt descrise [aici](https://en.wikipedia.o
 Server-ul se instantiaza cu [AF_INET](https://stackoverflow.com/questions/1593946/what-is-af-inet-and-why-do-i-need-it) si SOCK_STREAM (fiindca TCP opereaza la nivel de [byte streams](https://softwareengineering.stackexchange.com/questions/216597/what-is-a-byte-stream-actually))
 
 ```python
-# UDP socket 
+# TCP socket 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 port = 10000
@@ -297,6 +297,7 @@ sock.listen(5)
 while True:
    conexiune, addr = sock.accept()
    time.sleep(30)
+   #conexiune.send("Hello from TCP!")
    conexiune.close()
 
 sock.close()
@@ -311,6 +312,7 @@ adresa = 'localhost'
 server_address = (adresa, port)
 
 sock.connect(server_address)
+#data = sock.recv(1024)
 
 sock.close()
 ```
