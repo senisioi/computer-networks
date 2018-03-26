@@ -242,7 +242,7 @@ sock.close()
 ```
 
 O diagrama a procesului anterior este reprezentata aici:
-![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/laborator2/UDPsockets.png)
+![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/laborator2/UDPsockets.jpg)
 
 
 <a name="exercitii_udp"></a> 
