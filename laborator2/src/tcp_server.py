@@ -18,7 +18,7 @@ while True:
     conexiune, address = sock.accept()
     logging.info("Handshake cu %s", address)
     time.sleep(15)
-    data = sock.recv(1024)
+    data = conexiune.recv(1024)
     logging.info('Content primit: "%s"', data)
     conexiune.send("Server - OK")
     conexiune.close()
