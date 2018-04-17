@@ -222,6 +222,9 @@ server_address = (adresa, port)
 sock.bind(server_address)
 
 data, address = sock.recvfrom(4096)
+
+print data, address
+
 sent = sock.sendto(data, address)
 
 sock.close()
