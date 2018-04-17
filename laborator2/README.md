@@ -286,7 +286,7 @@ Server-ul se instantiaza cu [AF_INET](https://stackoverflow.com/questions/159394
 
 ```python
 # TCP socket 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 port = 10000
 adresa = 'localhost'
@@ -305,7 +305,7 @@ sock.close()
 
 Clientul trebuie sa stie la ce adresa ip si pe ce port sa comunice cu serverul:
 ```python
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 port = 10000
 adresa = 'localhost'
