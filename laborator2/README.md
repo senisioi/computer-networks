@@ -262,23 +262,23 @@ Header-ul acestuia este mai complex:
 ```
   0                   1                   2                   3   
   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |          Source Port          |       Destination Port        |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                        Sequence Number                        |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                    Acknowledgment Number                      |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |  Data |       |C|E|U|A|P|R|S|F|                               |
-  | Offset|  Res. |W|C|R|C|S|S|Y|I|            Window             | 
-  |       |       |R|E|G|K|H|T|N|N|                               |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |           Checksum            |         Urgent Pointer        |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                    Options                    |    Padding    |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |                             data                              |
-  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |          Source Port          |       Destination Port        |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                        Sequence Number                        |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                    Acknowledgment Number                      |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ | Data  |0 0 0| |C|E|U|A|P|R|S|F|                               |
+ |Offset | Res.|N|W|C|R|C|S|S|Y|I|            Window             | 
+ |       |     |S|R|E|G|K|H|T|N|N|                               |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |           Checksum            |         Urgent Pointer        |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                    Options                    |    Padding    |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                             data                              |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 ```
 Cateva caracteristi ale protocolului sunt descrise [aici](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_segment_structure) iar partea de curs este acoperita in mare parte [aici](https://www.youtube.com/watch?v=c6gHTlzy-7Y&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C&index=52).
 
@@ -325,3 +325,4 @@ O diagrama a procesului anterior este reprezentata aici:
 ### Exercitii
 1. In containerul rt1 rulati `tcpdump -Snnt tcp` si tot in rt1 rulati un server tcp. Din container-ul rt2, creati o conexiune. Urmariti [three-way handshake](https://www.geeksforgeeks.org/computer-network-tcp-3-way-handshake-process/) si inchiderea conexiunii la nivel de pachete.
 2. Pentru a observa retransmisiile, putem introduce un delay artificial sau putem ignora anumite pachete pe retea. Pentru asta, folosim un tool linux numit [netem](https://wiki.linuxfoundation.org/networking/netem) sau mai pe scurt [aici](https://stackoverflow.com/questions/614795/simulate-delayed-and-dropped-packets-on-linux). Aplicati o regula de ignorare a 1% din pachetele care circula pe eth0 folosind: `tc qdisc add dev eth0 root netem loss 0.1%`. Rulati comanda `tc -s qdisc` pentru a vedea filtrul adaugat pe eth0. Puteti modifica filtrul prin `tc qdisc change dev eth0 root netem loss 75%` sau puteti sa stergeti regulile folosind: `tc qdisc del dev eth0 root netem`. Puteti rula *netem* pornind un nou bash shell cu user root pe rt1, pastrati deschise tcpdump si server-ul. Conectati client-ul si observati pachetele care circula pe eth0.
+3. Pentru a putea rula 3-way handshake din scapy, trebuie sa adaugam o regula in iptables care sa ignore reset-urile pe care le face kernelul automat: `iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP`.

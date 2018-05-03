@@ -1,0 +1,64 @@
+version: '2.1'
+
+services:
+    rt1:
+        image: baseimage:latest
+        volumes:
+            - .:/elocal
+        tty: true
+        cap_add:
+          - NET_ADMIN
+          - NET_RAW
+          - SYS_ADMIN
+        networks:
+            net:
+              ipv4_address: 198.13.0.14
+        depends_on:
+            - "rt2"
+        command: bash -c "ip route add 172.111.0.0/16 via 198.13.0.1 && sleep infinity"
+    rt2:
+        image: baseimage:latest
+        volumes:
+            - .:/elocal
+        tty: true
+        cap_add:
+          - NET_ADMIN
+          - NET_RAW
+          - SYS_ADMIN
+        networks:
+            dmz:
+              ipv4_address: 172.111.0.1
+            net:
+              ipv4_address: 198.13.0.1
+        sysctls:
+          - net.ipv4.ip_forward=1
+        command: bash -c "tc qdisc add dev eth0 root netem loss 50% && tc qdisc add dev eth1 root netem loss 50% && sleep infinity"
+    rt3:
+        image: baseimage:latest
+        volumes:
+            - .:/elocal
+        tty: true
+        cap_add:
+          - NET_ADMIN
+          - NET_RAW
+          - SYS_ADMIN
+        networks:
+            dmz:
+              ipv4_address: 172.111.0.14
+        depends_on:
+            - "rt2"
+            - "rt1"
+        command: bash -c "ip route add 198.13.0.0/16 via 172.111.0.1 && sleep infinity"
+networks:
+    dmz:
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.111.111.0/16
+                  gateway: 172.111.111.1
+    net:
+        ipam:
+            driver: default
+            config:
+                - subnet: 198.13.13.0/16
+                  gateway: 198.13.13.1
