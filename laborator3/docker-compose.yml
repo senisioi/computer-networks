@@ -4,7 +4,7 @@ services:
     rt1:
         image: baseimage:latest
         volumes:
-            - .:/elocal
+            - ..:/elocal
         tty: true
         cap_add:
           - NET_ADMIN
@@ -19,7 +19,7 @@ services:
     rt2:
         image: baseimage:latest
         volumes:
-            - .:/elocal
+            - ..:/elocal
         tty: true
         cap_add:
           - NET_ADMIN
@@ -36,7 +36,7 @@ services:
     rt3:
         image: baseimage:latest
         volumes:
-            - .:/elocal
+            - ..:/elocal
         tty: true
         cap_add:
           - NET_ADMIN

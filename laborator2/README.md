@@ -330,4 +330,24 @@ O diagrama a procesului anterior este reprezentata aici:
 ### Exercitii
 1. In containerul rt1 rulati `tcpdump -Snnt tcp` si tot in rt1 rulati un server tcp. Din container-ul rt2, creati o conexiune. Urmariti [three-way handshake](https://www.geeksforgeeks.org/computer-network-tcp-3-way-handshake-process/) si inchiderea conexiunii la nivel de pachete.
 2. Pentru a observa retransmisiile, putem introduce un delay artificial sau putem ignora anumite pachete pe retea. Pentru asta, folosim un tool linux numit [netem](https://wiki.linuxfoundation.org/networking/netem) sau mai pe scurt [aici](https://stackoverflow.com/questions/614795/simulate-delayed-and-dropped-packets-on-linux). Aplicati o regula de ignorare a 1% din pachetele care circula pe eth0 folosind: `tc qdisc add dev eth0 root netem loss 0.1%`. Rulati comanda `tc -s qdisc` pentru a vedea filtrul adaugat pe eth0. Puteti modifica filtrul prin `tc qdisc change dev eth0 root netem loss 75%` sau puteti sa stergeti regulile folosind: `tc qdisc del dev eth0 root netem`. Puteti rula *netem* pornind un nou bash shell cu user root pe rt1, pastrati deschise tcpdump si server-ul. Conectati client-ul si observati pachetele care circula pe eth0.
-3. Rulati 3-way handshake intre rt1 si rt3 folosind docker-compose.yml din laborator2 si laborator2/src/tcp_handshake.py.
+
+<a name="shake"></a> 
+### 3-way handshake
+```
+tcpdump -Snn tcp
+
+SYN:
+   IP 172.111.0.14.59004 > 198.13.0.14.10000: Flags [S], seq 2416620956, win 29200, options [mss 1460,sackOK,TS val 897614012 ecr 0,nop,wscale 7], length 0
+
+SYN-ACK:
+   IP 198.13.0.14.10000 > 172.111.0.14.59004: Flags [S.], seq 409643424, ack 2416620957, win 28960, options [mss 1460,sackOK,TS val 2714984427 ecr 897614012,nop,wscale 7], length 0
+
+ACK:
+   IP 172.111.0.14.59004 > 198.13.0.14.10000: Flags [.], ack 409643425, win 229, length 0
+
+Trimite un octet cu PSH si intervalul de secventa de dimensiune 1:
+   IP 172.111.0.14.59004 > 198.13.0.14.10000: Flags [P.], seq 2416620957:2416620958, ack 409643425, win 229, length 1
+
+ACK cu sequence capatul intervalului care semnifica: am primit octeti pana la 2416620957, astept de la 2416620958 inainte:
+    IP 198.13.0.14.10000 > 172.111.0.14.59004: Flags [.], ack 2416620958, win 227, length 0
+```
