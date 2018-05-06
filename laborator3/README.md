@@ -260,8 +260,8 @@ Pentru a trimite pachete la nivelul legatura de date, completand manual campuri 
 
 ### Exercitii
 1. Folositi exemplul de mai sus pentru a trimite mesaje intre serverul pe UDP si scapy.
-2. Rulati 3-way handshake intre rt1 si rt3 folosind containerele definite in laborator3, astfel: containerul rt1 va rula laborator2/tcp_server.py pe adresa '0.0.0.0', iar in containerul rt3, rulati: `docker-compose exec --user root rt3 scapy` si configurati fisierul din [laborator3/src/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/master/laborator3/src/tcp_handshake.py) pentru a face 3-way handshake.
-3. Configurati optiunea pentru Maximum Segment Size (MSS) astfel incat sa il notificati pe server ca segmentul maxim este de 1 byte.
+2. Rulati 3-way handshake intre rt1 si mid1 folosind containerele definite in laborator3, astfel: containerul rt1 va rula laborator2/tcp_server.py pe adresa '0.0.0.0', iar in containerul mid1, rulati: `docker-compose exec --user root rt3 scapy` si configurati fisierul din [laborator3/src/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/master/laborator3/src/tcp_handshake.py) pentru a face 3-way handshake.
+3. Configurati optiunea pentru Maximum Segment Size (MSS) astfel incat sa il notificati pe server ca segmentul maxim este de 1 byte. Puteti sa-l configurati cu 0?
 4. Trimiteti un mesaj serverului folosind flag-ul PSH.
 5. Setati flag-urile ECN in IP si flag-ul ECE in TCP pentru a notifica serverul de congestionarea retelei.
-6. [TCP Syn Scanning](https://scapy.readthedocs.io/en/latest/usage.html#syn-scans) - folositi scapy pentru a crea un pachet cu IP-ul destinatie 193.226.51.6 si un layer de TCP cu dport=(10, 500) pentru a afla care porturi sunt deschise comunicarii cu TCP pe site-ul facultatii.
+6. [TCP Syn Scanning](https://scapy.readthedocs.io/en/latest/usage.html#syn-scans) - folositi scapy pentru a crea un pachet cu IP-ul destinatie 193.226.51.6 (site-ul facultatii) si un layer de TCP cu dport=(10, 500) pentru a afla care porturi sunt deschise comunicarii cu TCP pe site-ul facultatii.
