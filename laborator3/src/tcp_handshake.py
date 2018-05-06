@@ -4,23 +4,29 @@
 from scapy.all import *
 
 ip = IP()
-ip.src = # ip-ul nostru
-ip.dst = # ip-ul serverului 
+ip.src = ''
+ip.dst = ''
+
+
 tcp = TCP()
-tcp.sport = # un port la alegere
-tcp.dport = # portul destinatie pe care ruleaza serverul
-tcp.seq = # un sequence number la alegere
+tcp.sport = 54321
+tcp.dport = 10000
+
+## SYN ##
+tcp.seq = 100
 tcp.flags = 'S' # flag de SYN
+raspuns_syn_ack = sr1(ip/tcp)
 
-SYN = ip/tcp
-raspuns_SYN_ACK = sr1(SYN)
-rasp_ack = raspuns_SYN_ACK.seq + 1
-rasp_seq = tcp.seq + 1
-
-tcp.seq = rasp_seq
-tcp.ack = rasp_ack
+tcp.seq += 1
+tcp.ack = raspuns_syn_ack.seq + 1
 tcp.flags = 'A'
+ACK = ip / tcp
 
-ACK= ip / tcp
-send (ACK)
+send(ACK)
 
+for ch in "salut, lume":
+    tcp.flags = 'PA'
+    tcp.ack = raspuns_syn_ack.seq + 1
+    rcv = sr1(ip/tcp/ch)
+    rcv
+    tcp.seq += 1

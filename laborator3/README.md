@@ -19,7 +19,6 @@ docker build -t baseimage ./docker/
 - [Scapy tutorial](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#scapy)
 
 
-
 <a name="tcp"></a> 
 ### [TCP Segment Header](https://tools.ietf.org/html/rfc793#page-15)
 ```
@@ -257,7 +256,7 @@ In scapy avem mai multe functii de trimitere a pachetelor:
 Pentru a trimite pachete la nivelul legatura de date, completand manual campuri din sectiunea Ethernet, avem echivalentul functiilor de mai sus:
 - `sendp()` - send_ethernet trimite un pachet la nivelul data-link, cu layer Ether custom
 - `answered, unanswered = srp()` - send_receive_ethernet trimite pachete la layer 2 si inregistreaza si raspunsurile
-- `answer = sr1p()` - send_receive_1_ethernet la fel ca srp, dar inregistreaza doar primul raspuns
+- `answer = srp1()` - send_receive_1_ethernet la fel ca srp, dar inregistreaza doar primul raspuns
 
 ### Exercitii
 1. Folositi exemplul de mai sus pentru a trimite mesaje intre serverul pe UDP si scapy.

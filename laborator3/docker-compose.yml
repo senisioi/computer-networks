@@ -16,6 +16,23 @@ services:
         depends_on:
             - "rt2"
         command: bash -c "ip route add 172.111.0.0/16 via 198.13.0.1 && iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP && sleep infinity"
+    mid1:
+        image: baseimage:latest
+        volumes:
+            - ..:/elocal
+        tty: true
+        cap_add:
+          - NET_ADMIN
+          - NET_RAW
+          - SYS_ADMIN
+        networks:
+            net:
+              ipv4_address: 198.13.0.15
+        depends_on:
+            - "rt2"
+        sysctls:
+          - net.ipv4.ip_forward=1
+        command: bash -c "ip route add 172.111.0.0/16 via 198.13.0.1 && iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP && sleep infinity"
     rt2:
         image: baseimage:latest
         volumes:
