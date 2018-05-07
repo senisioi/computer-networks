@@ -54,7 +54,7 @@ Prima specificatie a protocolului TCP a fost in:
 - URG, ACK, PSH, RST, SYN, FIN - [flags](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-Flags_OS_RFC-793_3540.htm)
 - Window Size - folosit pentru flow control, exemplu [aici](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-Window-Size_OS_RFC-793.htm)
 - Urgent Pointer - mai multe detalii in [RFC6093](https://tools.ietf.org/html/rfc6093), pe scurt explicat [aici](http://packetlife.net/blog/2011/mar/2/tcp-flags-psh-and-urg/) si un exemplu de functionare [aici](https://osqa-ask.wireshark.org/questions/25929/tcp-urgent-pointer-and-urgent-data).
-- Optiuni - sunt optionale, iar o [lista completa de optiuni se gaseste aici](http://www.networksorcery.com/enp/Protocol/tcp.htm#Options). Probabil cele mai importante sunt prezentate pe scurt in [acest tutorial](http://www.firewall.cx/networking-topics/protocols/tcp/138-tcp-options.html): Maximum Segment Size, Window Scaling, Selective Acknowledgement, Timestamps (pentru round-trip-time), si NOP (no option). 
+- Optiuni - sunt optionale, iar o [lista completa de optiuni se gaseste aici](http://www.networksorcery.com/enp/Protocol/tcp.htm#Options). Probabil cele mai importante sunt prezentate pe scurt in [acest tutorial](http://www.firewall.cx/networking-topics/protocols/tcp/138-tcp-options.html): [Maximum Segment Size](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00005.html), [Window Scaling](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00009.html), Selective Acknowledgement, [Timestamps](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00011.html) (pentru round-trip-time), si NOP (no option pentru separare intre optiuni). 
 - Checksum - suma in complement fata de 1 a bucatilor de cate 16 biti, complementata cu 1, vezi mai multe detalii [aici](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation) si [RFC1071 aici](https://tools.ietf.org/html/rfc1071)
 Se calculeaza din concatenarea: unui pseudo-header de IP [adresa IP sursa, IP dest (32 biti fiecare), placeholder (8 biti setati pe 0), [protocol](https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers) (8 biti), si lungimea in bytes a intregii sectiuni TCP sau UDP (16 biti)], TCP sau UDP header cu checksum setat pe 0, si sectiunea de date. Pentru simplitate, mai jos este redata sectiunea pentru care calculam checksum la UDP: IP pseudo-header + UDP header + Data.
 ```
@@ -100,6 +100,22 @@ FSRPAUECN
 # optiunie se pot seta folosind obiectul TCPOptions
 print TCPOptions[1]
 {'Mood': 25, 'MSS': 2, 'UTO': 28, 'SAck': 5, 'EOL': 0, 'WScale': 3, 'TFO': 34, 'AltChkSumOpt': 15, 'Timestamp': 8, 'NOP': 1, 'AltChkSum': 14, 'SAckOK': 4}
+
+print TCPOptions[0]
+{0: ('EOL', None), 1: ('NOP', None), 2: ('MSS', '!H'), 3: ('WScale', '!B'), 4: ('SAckOK', None), 5: ('SAck', '!'), 8: ('Timestamp', '!II'), 14: ('AltChkSum', '!BH'), 15: ('AltChkSumOpt', None), 25: ('Mood', '!p'), 28: ('UTO', '!H'), 34: ('TFO', '!II')}
+```
+In scapy optiunile pot fi setate printr-o lista tupluri: `[(Optiune1, Valoare1), ('NOP', None), ('NOP', None), (Optiune2, Valoare2), ('EOL', None)]`. TCPOptions[0] indica optiunile si indicele de accesare pentru TCPOptions[1]. Iar TCPOptions[1] indica formatul (sau pe cati biti) se regaseste fiecare optiune. Formatul cu `!` ne spune ca biti pe care ii setam trebuie sa fie in [Network Order (Big Endian)](https://stackoverflow.com/questions/13514614/why-is-network-byte-order-defined-to-be-big-endian) iar literele arata formatul pe care trebuie sa il folosim cu [struct.pack](https://docs.python.org/2/library/struct.html#format-characters). Spre exemplu, window scale are o dimensiune de 1 byte (`!B`) si valoarea trebuie setata corespunzator:
+```python
+import struct
+optiune = 'WScale'
+op_index = TCPOptions[1][optiune]
+op_format = TCPOptions[0][op_index]
+print op_format
+# optiunea window scale are o dimensiune de 1 byte (`!B`)
+# ('WScale', '!B')
+valoare = struct.pack(op_format[1], 15)
+# valoarea 15 a fost inpachetata intr-un string de 1 byte
+tcp.option = [(optiune, valoare)]
 ```
 
 <a name="ip"></a> 
