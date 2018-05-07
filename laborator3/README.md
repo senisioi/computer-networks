@@ -46,14 +46,16 @@ docker build -t baseimage ./docker/
 Prima specificatie a protocolului TCP a fost in: 
 - [RFC793](https://tools.ietf.org/html/rfc793).
 - [RFC2581](https://tools.ietf.org/html/rfc2581) contine informatiile cu privire la congestion control
+- Source Port si Destination Port sunt porturile sursa si destinatie pentru conexiunea curenta
+- [Sequence si Acknowledgment](http://packetlife.net/blog/2010/jun/7/understanding-tcp-sequence-acknowledgment-numbers/) sunt folosite pentru indicarea secventei de bytes transmisa si notificarea ca acea secventa a fost primita
 - Data offset - dimensiunea header-ului in multipli de 32 de biti
 - Res - 3 biti rezervati
-- NS, CWR, ECE - biti pentru explicit congestion notification [ECN](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-ECN_OS_RFC-793_3540.htm). NS e o suma binara pentru siguranta, CWR - indica necesitatea micsorarii ferestrei de congestionare iar ECE este un bit de echo care indica prezenta congestionarii.
+- NS, CWR, ECE - biti pentru notificarea explicita a existentei congestionarii [ECN](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-ECN_OS_RFC-793_3540.htm), explicat mai bine si [aici](http://blog.catchpoint.com/2015/10/30/tcp-flags-cwr-ece/). NS e o suma binara pentru siguranta, CWR - indica necesitatea micsorarii ferestrei de congestionare iar ECE este un bit de echo care indica prezenta congestionarii.
 - URG, ACK, PSH, RST, SYN, FIN - [flags](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-Flags_OS_RFC-793_3540.htm)
 - Window Size - folosit pentru flow control, exemplu [aici](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-Window-Size_OS_RFC-793.htm)
-- Urgent Pointer - mai multe detalii [aici](https://tools.ietf.org/html/rfc6093) si [aici](https://osqa-ask.wireshark.org/questions/25929/tcp-urgent-pointer-and-urgent-data).
-- Optiuni -  lista completa de optiuni poate fi verificata [aici](http://www.networksorcery.com/enp/Protocol/tcp.htm#Options)
-- Checksum - suma in complement fata de 1 a bucatilor de cate 16 biti, complementata cu 1, vezi mai multe detalii [aici](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation) si [RFC-ul original aici](https://tools.ietf.org/html/rfc1071)
+- Urgent Pointer - mai multe detalii in [RFC6093](https://tools.ietf.org/html/rfc6093), pe scurt explicat [aici](http://packetlife.net/blog/2011/mar/2/tcp-flags-psh-and-urg/) si un exemplu de functionare [aici](https://osqa-ask.wireshark.org/questions/25929/tcp-urgent-pointer-and-urgent-data).
+- Optiuni - sunt optionale, iar o [lista completa de optiuni se gaseste aici](http://www.networksorcery.com/enp/Protocol/tcp.htm#Options). Probabil cele mai importante sunt prezentate pe scurt in [acest tutorial](http://www.firewall.cx/networking-topics/protocols/tcp/138-tcp-options.html): Maximum Segment Size, Window Scaling, Selective Acknowledgement, Timestamps (pentru round-trip-time), si NOP (no option). 
+- Checksum - suma in complement fata de 1 a bucatilor de cate 16 biti, complementata cu 1, vezi mai multe detalii [aici](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation) si [RFC1071 aici](https://tools.ietf.org/html/rfc1071)
 Se calculeaza din concatenarea: unui pseudo-header de IP [adresa IP sursa, IP dest (32 biti fiecare), placeholder (8 biti setati pe 0), [protocol](https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers) (8 biti), si lungimea in bytes a intregii sectiuni TCP sau UDP (16 biti)], TCP sau UDP header cu checksum setat pe 0, si sectiunea de date. Pentru simplitate, mai jos este redata sectiunea pentru care calculam checksum la UDP: IP pseudo-header + UDP header + Data.
 ```
   0                   1                   2                   3   
