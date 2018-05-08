@@ -11,7 +11,7 @@ RUN apt-get install -y build-essential git net-tools arp-scan nmap rtpflood pyth
 # add the new location to the PATH in case it's not there
 ENV PATH="/usr/local/bin:${PATH}"
 RUN pip install scapy
-RUN RUN apt-get install -y netcat
+RUN apt-get install -y netcat
 RUN useradd -u 1000 -m rtuser
 USER rtuser
 WORKDIR /home/rtuser
