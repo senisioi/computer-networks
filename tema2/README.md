@@ -14,7 +14,7 @@ Implementati un protocol la nivelul aplicatiei pentru rt1 si rt3 respectand urma
 - pe rt1 rulati un client UDP
 - clientul trimite numere intre 1 si 10000 pe retea astfel incat numerele sa ajunga in aceeasi ordine pe server
 - pentru jumate de punctaj puteti implementa [Stop and Wait](https://www.isi.edu/nsnam/DIRECTED_RESEARCH/DR_HYUNAH/D-Research/stop-n-wait.html)
-- pentru punctajul integral, puteti implementa un algoritm cu fereastra glisanta
+- pentru punctajul integral, puteti implementa un algoritm cu fereastra glisanta/[sliding window](http://www.ccs-labs.org/teaching/rn/animations/gbn_sr/)
 
 #### 2. [Address Resolution Protocol](http://www.erg.abdn.ac.uk/users/gorry/course/inet-pages/arp.html) (3p.)
 [ARP](https://www.youtube.com/watch?v=QPi5Nvxaosw) este un protocol care face maparea intre protocolul de retea (IP-uri) si adresele hardware/fizice (adrese MAC) de pe o retea locala.
