@@ -4,7 +4,7 @@
 Trebuie sa reconstruim imaginea folosind [Dockerfile din laborator3](https://github.com/senisioi/computer-networks/blob/master/laborator3/docker/Dockerfile) care are configurat deja `USER root` si instalarea pentru tcpdump.
 ```
 cd computer-networks/laborator3
-docker build -t baseimage ./docker/
+docker build --no-cache -t baseimage ./docker/
 # pentru a porni containerle, rulam docker-compose din directorul superior cu ..:
 ../docker-compose up -d
 
