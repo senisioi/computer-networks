@@ -11,7 +11,7 @@ Pentru rezolvarea temei, utilizati docker-compose.yml si Dockerfile din laborato
 #### 1. Transfer reliable de date prin UDP (3p.)
 Implementati un protocol la nivelul aplicatiei pentru rt1 si rt3 respectand urmatoarele cerinte:
 - pe rt3 rulati un server UDP
-- pe rt1 rulati un client UDP
+- pe rt1 rulati un client UDP (poate fi implementat si utilizand scapy)
 - clientul trimite numere intre 1 si 10000 pe retea astfel incat numerele sa ajunga in aceeasi ordine pe server
 - pentru jumate de punctaj puteti implementa [Stop and Wait](https://www.isi.edu/nsnam/DIRECTED_RESEARCH/DR_HYUNAH/D-Research/stop-n-wait.html)
 - pentru punctajul integral, puteti implementa un algoritm cu fereastra glisanta/[sliding window](http://www.ccs-labs.org/teaching/rn/animations/gbn_sr/)
@@ -53,7 +53,8 @@ Iar in headerul de TCP:
 - flag-urile [CWR si ECE](http://blog.catchpoint.com/2015/10/30/tcp-flags-cwr-ece/)
 - vezi exemplu in [laborator3](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#tcp_scapy).
 
-Faceti trei transmisii a cate un byte (o litera) folosind functia `sr1` si afisati raspunsul pentru fiecare, apoi incercati sa transmiteti 3 bytes. In cele din urma, resetati conexiunea trimitand un RST. Pentru testare, si prezentare la laborator, tot procesul de la handhsake pana la reset trebuie inregistrat cu `tcpdump -Snnt tcp` pe ambele containere. Pentru jumatate din punctaj, puteti prezenta doar log-urile salvate cu `docker-compose logs rt1 mid1 > exercitiul3.logs`.
+Faceti trei transmisii a cate un byte (o litera) folosind functia `sr1` si afisati raspunsul pentru fiecare, apoi incercati sa transmiteti 3 bytes. In cele din urma, resetati conexiunea trimitand un RST. 
+Pentru testare, si prezentare la laborator, tot procesul de la handhsake pana la reset trebuie inregistrat cu `tcpdump -Snnt tcp` pe ambele containere. Pentru jumatate din punctaj, puteti prezenta/explica doar log-urile de `tcpdump` de la alti colegi la care functioneaza codul.
 
 #### 4. ARP Spoofing (3p.)
 [ARP spoofing](https://samsclass.info/124/proj11/P13xN-arpspoof.html) presupune trimiterea unui pachet ARP de tip reply catre o tinta pentru a-l informa gresit cu privire la adresa MAC pereche pentru un IP. [Aici](https://medium.com/@ismailakkila/black-hat-python-arp-cache-poisoning-with-scapy-7cb1d8b9d242) puteti urmari cum se executa un atac de otravire a tabelei cache ARP stocata pe diferite masini. Puteti astfel sa folositi containerul mid1 din aceiasi retea cu rt1, care are setat ip forwarding = 1 (ca rt2) si il va notifica constant pe rt1 ca adresa fizica a gateway-ului este adresa fizica a sa, iar pe gateway il va notifica ca adresa fizica a lui rt1, este adresa fizica a sa. Rulati acest proces constant, cu un time.sleep de cateva secunde pentru a nu face flood de pachete. La prezentarea temei, puteti rula tcpdump pe masina mid1 iar pe rt1, puteti face un `wget http://moodle.fmi.unibuc.ro`. Daca totul a functionat, mid1, ar trebui sa fie capabil sa intercepteze pachetele cerute de rt1 cu wget.
