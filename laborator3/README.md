@@ -75,6 +75,7 @@ Se calculeaza din concatenarea: unui pseudo-header de IP [adresa IP sursa, IP de
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -----------------
 ```
 
+<a name="tcp_scapy"></a> 
 ##### TCP object in scapy:
 ```python
 tcp_obj = TCP()
@@ -96,6 +97,8 @@ tcp_obj.show()
 print TCP.flags.names
 FSRPAUECN
 'FIN, SYN, RST, PSH, ACK, URG, ECE, CWR, NS'
+# pentru a seta PSH si ACK, folosim un singur string:
+tcp.flags = 'PA'
 
 # optiunie se pot seta folosind obiectul TCPOptions
 print TCPOptions[1]
@@ -104,6 +107,8 @@ print TCPOptions[1]
 print TCPOptions[0]
 {0: ('EOL', None), 1: ('NOP', None), 2: ('MSS', '!H'), 3: ('WScale', '!B'), 4: ('SAckOK', None), 5: ('SAck', '!'), 8: ('Timestamp', '!II'), 14: ('AltChkSum', '!BH'), 15: ('AltChkSumOpt', None), 25: ('Mood', '!p'), 28: ('UTO', '!H'), 34: ('TFO', '!II')}
 ```
+
+<a name="tcp_options"></a> 
 In scapy optiunile pot fi setate printr-o lista tupluri: `[(Optiune1, Valoare1), ('NOP', None), ('NOP', None), (Optiune2, Valoare2), ('EOL', None)]`. TCPOptions[0] indica optiunile si indicele de accesare pentru TCPOptions[1]. Iar TCPOptions[1] indica formatul (sau pe cati biti) se regaseste fiecare optiune. Formatul cu `!` ne spune ca biti pe care ii setam trebuie sa fie in [Network Order (Big Endian)](https://stackoverflow.com/questions/13514614/why-is-network-byte-order-defined-to-be-big-endian) iar literele arata formatul pe care trebuie sa il folosim cu [struct.pack](https://docs.python.org/2/library/struct.html#format-characters). Spre exemplu, window scale are o dimensiune de 1 byte (`!B`) si valoarea trebuie setata corespunzator:
 ```python
 import struct
@@ -156,6 +161,7 @@ Prima specificatie a protocolului IP a fost in:
 - Source/Destination Address - adrese ip pe 32 de biti
 - Options - prezinta diverse riscuri, [conform wikipedia](https://en.wikipedia.org/wiki/IPv4#Options) sau acestui [raport](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2005/EECS-2005-24.pdf). Mai multe informatii despre rolul acestora puteti gasi [aici](http://www.tcpipguide.com/free/t_IPDatagramOptionsandOptionFormat.htm), [aici](http://www.cc.ntut.edu.tw/~kwke/DC2006/ipo.pdf) si specificatia completa [aici](http://www.networksorcery.com/enp/protocol/ip.htm#Options).
 
+<a name="ip_scapy"></a> 
 ##### IPv4 object in scapy:
 ```python
 ip = IP() 
@@ -178,6 +184,7 @@ ip.show()
 # observam ca DSCP si ECN nu sunt inca implementate in scapy.
 # daca vrem sa le folosim, va trebui sa setam tos cu o valoare
 # pe 8 biti care sa reprezinte DSCP si ECN folosind: int('DSCP_BINARY_STR' + 'ECN_BINARY_STR', 2)
+# pentru a seta DSCP si ECN cu notificare de congestie: ip.tos = int('000111' + '11', 2)
 ```
 
 
