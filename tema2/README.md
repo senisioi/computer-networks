@@ -45,7 +45,7 @@ Modificati tcp_server.py din laborator 2 astfel incat serverul sa accepte o sing
 
 Pentru simplitate, puteti folosi containerele rt1 si mid1 din reteaua net. Rulati in containerul `rt1` serverul vostru modificat (`python /elocal/laborator2/src/tcp_server_modificat.py`) iar pe `mid1` faceti [3-way handshake](https://github.com/senisioi/computer-networks/blob/master/laborator3/src/tcp_handshake.py) cu serverul si setati optiunea [Maximum Segment Size](https://www.incapsula.com/blog/mtu-mss-explained.html) `MSS = 2` (vezi exemplu in [laborator3](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#tcp_options)). 
 Dupa acest pas, setati in headerul de IP:
-- flag-ul [ECN](https://tools.ietf.org/html/rfc3168) pe `11` 
+- flag-ul [ECN](https://www.youtube.com/watch?v=-atBciuG53o) pe `11` 
 - flag-ul [DSCP pe AF33](https://en.wikipedia.org/wiki/Differentiated_services#Commonly_used_DSCP_values) pentru [video streaming](https://tools.ietf.org/html/rfc4594#page-19)
 - vezi exemplu in [laborator3](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#ip_scapy).
 
