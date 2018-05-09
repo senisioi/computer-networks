@@ -109,7 +109,7 @@ print TCPOptions[0]
 ```
 
 <a name="tcp_options"></a> 
-In scapy optiunile pot fi setate printr-o lista tupluri: `[(Optiune1, Valoare1), ('NOP', None), ('NOP', None), (Optiune2, Valoare2), ('EOL', None)]`. TCPOptions[0] indica optiunile si indicele de accesare pentru TCPOptions[1]. Iar TCPOptions[1] indica formatul (sau pe cati biti) se regaseste fiecare optiune. Formatul cu `!` ne spune ca biti pe care ii setam trebuie sa fie in [Network Order (Big Endian)](https://stackoverflow.com/questions/13514614/why-is-network-byte-order-defined-to-be-big-endian) iar literele arata formatul pe care trebuie sa il folosim cu [struct.pack](https://docs.python.org/2/library/struct.html#format-characters). Spre exemplu, window scale are o dimensiune de 1 byte (`!B`) si valoarea trebuie setata corespunzator:
+In scapy optiunile pot fi setate printr-o lista tupluri: `[(Optiune1, Valoare1), ('NOP', None), ('NOP', None), (Optiune2, Valoare2), ('EOL', None)]`. TCPOptions[0] indica optiunile si indicele de accesare pentru TCPOptions[1]. Iar TCPOptions[1] indica formatul (sau pe cati biti) se regaseste fiecare optiune. Formatul cu `!` ne spune ca bitii pe care ii setam trebuie sa fie in [Network Order (Big Endian)](https://stackoverflow.com/questions/13514614/why-is-network-byte-order-defined-to-be-big-endian) iar literele arata formatul pe care trebuie sa il folosim cu [struct.pack](https://docs.python.org/2/library/struct.html#format-characters). Spre exemplu, window scale are o dimensiune de 1 byte (`!B`) si valoarea trebuie setata corespunzator:
 ```python
 import struct
 optiune = 'WScale'
