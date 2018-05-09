@@ -3,9 +3,21 @@
 ## Inainte de a incepe
 Trebuie sa reconstruim imaginea folosind [Dockerfile din laborator3](https://github.com/senisioi/computer-networks/blob/master/laborator3/docker/Dockerfile) care are configurat deja `USER root` si instalarea pentru tcpdump.
 ```
-cd computer-networks/laborator3
+cd computer-networks
+
+# stergem toate containerele create default
+./docker-compose down
+
+# stergem retelele create anterior ca sa nu se suprapuna cu noile subnets
+docker network prune
+
+# lucram cu ../docker-compose doar din laborator3
+cd laborator3
+
+# reconstruim imaginea cu --no-cache in caz de eroare
 docker build --no-cache -t baseimage ./docker/
-# pentru a porni containerle, rulam docker-compose din directorul superior cu ..:
+
+# pentru a porni containerle, rulam docker-compose din directorul superior cu:
 ../docker-compose up -d
 
 # sau din directorul computer-networks: 
@@ -240,15 +252,15 @@ WARNING: Mac address to reach destination not found. Using broadcast.
 Este o unealta de python pe care o putem folosi pentru a construi pachete si configura manual headerele mesajelor transmise. 
 Presupunem ca am deschis scapy in rt1 (`docker-compose exec --user root rt1 scapy`) si vrem sa trimitem un mesaj prin UDP unui server care ruleaza pe rt3 si care asculta pe portul 10000. 
 ```python
-# presupunem ca rulam serverul pe rt3 si scapy pe rt1
+# presupunem ca rulam serverul pe rt1 si scapy pe mid1
 
 udp_layer = UDP()
 udp_layer.sport = 54321
 udp_layer.dport = 10000
 
 ip_layer = IP()
-ip_layer.src = '198.13.0.14'
-ip_layer.dst = '172.111.0.14'
+ip_layer.src = '198.13.0.15'
+ip_layer.dst = '198.13.0.14'
 
 mesaj = Raw()
 mesaj.load = "impachetat manual"
@@ -256,7 +268,7 @@ mesaj.load = "impachetat manual"
 # folosim operatorul / pentru a stivui layerele
 # sau pentru a adauga layerul cel mai din dreapta
 # in sectiunea de date/payload a layerului din stanga sa
-pachet_complet = i / u / mesaj
+pachet_complet = ip_layer / udp_layer / mesaj
 
 # trimitem fara a astepta un raspuns
 send(pachet_complet)
