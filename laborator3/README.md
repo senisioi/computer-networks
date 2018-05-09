@@ -149,7 +149,7 @@ Prima specificatie a protocolului IP a fost in:
 - [RFC791](https://tools.ietf.org/html/rfc791).
 - Version - 4 pentru ipv4
 - IHL - similar cu Data offset de la TCP, ne spune care este dimnesiunea header-ului in multiplii de 32 de biti. Daca nu sunt specificate optiuni, IHL este 5.
-- [DSCP](https://en.wikipedia.org/wiki/Differentiated_services) - in tcpdump mai apare ca ToS (type of service), acest camp a fost definit in [RFC2474](https://tools.ietf.org/html/rfc2474) si seteaza politici de retransmitere a pachetelor, ca [aici](https://en.wikipedia.org/wiki/Differentiated_services#Commonly_used_DSCP_values).
+- [DSCP](https://en.wikipedia.org/wiki/Differentiated_services) - in tcpdump mai apare ca ToS (type of service), acest camp a fost definit in [RFC2474](https://tools.ietf.org/html/rfc2474) si seteaza politici de retransmitere a pachetelor, ca [aici](https://en.wikipedia.org/wiki/Differentiated_services#Commonly_used_DSCP_values). Aici puteti gasi un [ghid de setare pentru DSCP](https://tools.ietf.org/html/rfc4594#page-19).
 - ECN - definit in [RFC3186](https://tools.ietf.org/html/rfc3168) este folosit de catre routere, pentru a notifica transmitatorii cu privire la existenta unor congestionari pe retea. Setarea flag-ului pe 11 (Congestion Encountered - CE), va determina layer-ul TCP sa isi seteze ECE, CWR si NS.
 - Total length - lumgimea totala in octeti, cu header si date pentru intreg-ul datagram
 - Identification - un id care este folosit pentru idenficarea pachetelor fragmentate
@@ -184,7 +184,7 @@ ip.show()
 # observam ca DSCP si ECN nu sunt inca implementate in scapy.
 # daca vrem sa le folosim, va trebui sa setam tos cu o valoare
 # pe 8 biti care sa reprezinte DSCP si ECN folosind: int('DSCP_BINARY_STR' + 'ECN_BINARY_STR', 2)
-# pentru a seta DSCP si ECN cu notificare de congestie: ip.tos = int('000111' + '11', 2)
+# pentru a seta DSCP cu cod AF32 pentru video streaming si ECN cu notificare de congestie: ip.tos = int('011100' + '11', 2)
 ```
 
 
