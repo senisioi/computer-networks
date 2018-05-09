@@ -11,7 +11,7 @@ Pentru rezolvarea temei, utilizati docker-compose.yml si Dockerfile din laborato
 #### 1. Transfer reliable de date prin UDP (3p.)
 Implementati un protocol la nivelul aplicatiei pentru rt1 si rt3 respectand urmatoarele cerinte:
 - pe rt3 rulati un server UDP
-- pe rt1 rulati un client UDP (poate fi implementat si utilizand scapy)
+- pe rt1 rulati un client UDP (puteti utiliza scapy sau doar functii de python)
 - clientul trimite numere intre 1 si 10000 pe retea astfel incat numerele sa ajunga in aceeasi ordine pe server
 - pentru jumate de punctaj puteti implementa [Stop and Wait](https://www.isi.edu/nsnam/DIRECTED_RESEARCH/DR_HYUNAH/D-Research/stop-n-wait.html)
 - pentru punctajul integral, puteti implementa un algoritm cu fereastra glisanta/[sliding window](http://www.ccs-labs.org/teaching/rn/animations/gbn_sr/)
