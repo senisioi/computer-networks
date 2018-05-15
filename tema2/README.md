@@ -3,7 +3,7 @@
 ## Informatii tema
 Tema aceasta poate fi rezolvata in echipe de cate 4 studenti si tot codul trebuie livrat sub forma unui link/URL de git care va fi discutat la o ora de laborator. In plus, pentru aceasta tema puteti obtine o nota peste 10, daca alegeti sa rezolvati toate cele 4 cerinte. Sectiunea din **[tema anterioara](https://github.com/senisioi/computer-networks/tree/master/tema1#git)** contine toate informatiile de care aveti nevoie pentru a crea un repository si pentru a uploada primele fisiere pe git. Pentru a va downloada local ultimele modificari facute de alti colegi, va trebui sa rulati [git pull](https://github.com/SouthGreenPlatform/tutorials/wiki/Git-Beginner's-Guide-for-Dummies#pull) in repository. Pentru a face modificari si a le publica, trebuie sa rulati o secventa de comenzi: git add FISIER, git commit -m "MESAJ", git push origin master, mai multe detalii [aici](https://github.com/SouthGreenPlatform/tutorials/wiki/Git-Beginner's-Guide-for-Dummies#file-add). Daca intampinati orice fel de probleme sau erori, va rog sa-mi scrieti pe mail.
 
-**Deadline**: oricand pana in saptamana **22-24 mai**, la orele fiecarei grupe. Prezentarea cu intarziere la o alta grupa se penalizeaza cu 3 puncte.
+**Deadline**: oricand pana in saptamana (~~22-24 mai~~) **29 mai - 1 iunie**, la orele fiecarei grupe. Prezentarea cu intarziere la o alta grupa se penalizeaza cu 3 puncte.
 
 ## Cerinte tema (1 p. oficiu)
 Pentru rezolvarea temei, utilizati docker-compose.yml si Dockerfile din laborator3.
