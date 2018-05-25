@@ -1,32 +1,32 @@
 ## Laborator 1
 
 <a name="clean_all"></a> 
-### In prealabil
-Rulati comenzi de docker din https://github.com/senisioi/computer-networks.
+### În prealabil
+Rulați comenzi de docker din https://github.com/senisioi/computer-networks.
 
-Stergeti toate containerele create si resetati modificarile efectuate in branch-ul local de git.
+Ștergeți toate containerele create și resetați modificările efectuate în branch-ul local de git.
 ```bash
 # pentru a opri toate containerele
 docker stop $(docker ps -a -q)
-# pentru a sterge toate containerele
+# pentru a șterge toate containerele
 docker rm $(docker ps -a -q)
-# pentru a sterge toate retelele care nu au containere alocate
+# pentru a șterge toate rețelele care nu au containere alocate
 yes | docker network prune
 
-# pentru a sterge toate imaginile de docker (!!!rulati doar daca stiti ce face)
+# pentru a șterge toate imaginile de docker (!!!rulați doar dacă știți ce face)
 docker rmi $(docker images -a -q)
 
-# pentru a suprascrie modificarile locale
+# pentru a suprascrie modificările locale
 git fetch --all
 git reset --hard origin/master
 ```
 
-### Comenzi de baza
+### Comenzi de bază
 ```bash
-# executati un shell in containerul rt1
+# executați un shell în containerul rt1
 docker-compose exec rt1 bash
 
-# listati configuratiile de retea
+# listați configurațiile de rețea
 ifconfig
 
 ### eth0 - Ethernet device to communicate with the outside  ###
@@ -38,19 +38,19 @@ ifconfig
 #        loop  txqueuelen 1000  (Local Loopback)
 ```
 
-Comanda *ifconfig* ne indica doua device-uri care ruleaza pe containerul *rt1*:
+Comanda *ifconfig* ne indică două device-uri care rulează pe containerul *rt1*:
 
-- [*eht0*](http://www.tldp.org/LDP/nag/node67.html#SECTION007720000) - placa de retea Ethernet virtuala care indica configuratia pentru stabilirea unei conexiuni de retea a containerului.
-- [*lo*](https://askubuntu.com/questions/247625/what-is-the-loopback-device-and-how-do-i-use-it) - local Loopback device defineste categoria de adrese care se mapeaza pe localhost.
-- Ce reprezinta [ether](https://en.wikipedia.org/wiki/MAC_address) si [inet](https://en.wikipedia.org/wiki/IPv4)?
+- [*eht0*](http://www.tldp.org/LDP/nag/node67.html#SECTION007720000) - placa de rețea Ethernet virtuală care indică configurația pentru stabilirea unei conexiuni de rețea a containerului.
+- [*lo*](https://askubuntu.com/questions/247625/what-is-the-loopback-device-and-how-do-i-use-it) - local Loopback device definește categoria de adrese care se mapează pe localhost.
+- Ce reprezintă [ether](https://en.wikipedia.org/wiki/MAC_address) si [inet](https://en.wikipedia.org/wiki/IPv4)?
 - Ce este [netmask](https://www.computerhope.com/jargon/n/netmask.htm)?
-- Netmask si Subnet cu [prefix notation](https://www.ripe.net/about-us/press-centre/IPv4CIDRChart_2015.pdf)?
-- Maximum Transmission Unit [MTU](https://en.wikipedia.org/wiki/Maximum_transmission_unit) dimensiunea in bytes a pachetului maxim
+- Netmask și Subnet cu [prefix notation](https://www.ripe.net/about-us/press-centre/IPv4CIDRChart_2015.pdf)?
+- Maximum Transmission Unit [MTU](https://en.wikipedia.org/wiki/Maximum_transmission_unit) dimensiunea în bytes a pachetului maxim
 
-<a name="exercitiu1"></a>
-##### Exercitiu
-Modificati docker-compose.yml pentru a adauga inca o retea si inca 3 containere atasate la reteaua respectiva. Modificati definitia container-ului rt1 pentru a face parte din ambele retele. 
-Exemplu de retele:
+<a name="exercițiu1"></a>
+##### Exercițiu
+Modificați docker-compose.yml pentru a adaugă încă o rețea și încă 3 containere atașate la rețeaua respectivă. Modificați definiția container-ului rt1 pentru a face parte din ambele rețele. 
+Exemplu de rețele:
 ```bash
 networks:
     dmz:
@@ -66,11 +66,11 @@ networks:
                 - subnet: 198.13.13.0/16
                   gateway: 198.13.13.1
 ```
-Ce se intampla daca constrangeti subnet-ul definit pentru a nu putea permite mai mult de 4 ip-uri intr-o retea.
+Ce se intamplă dacă constrângeți subnet-ul definit pentru a nu putea permite mai mult de 4 ip-uri într-o rețea.
 
 <a name="ping"></a>
 ### Ping
-Este un tool de networking care se foloseste de [ICMP](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol) pentru a verifica daca un host este conectat la o retea prin IP.
+Este un tool de networking care se foloseste de [ICMP](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol) pentru a verifica dacă un host este conectat la o rețea prin IP.
 
 ```bash
 # ping localhost and loopback
@@ -87,26 +87,26 @@ ping 172.111.0.3
 ping 198.13.13.1
 ```
 
-1. Cand rulati ping, utilizati optiunea -R pentru a vedea si calea pe care o efectueaza pachetul.
+1. Când rulați ping, utilizați opțiunea -R pentru a vedea și calea pe care o efectuează pachetul.
 
-2. Ce reprezinta adresa 127.0.2.12? De ce functioneaza ping catre aceasta?
+2. Ce reprezintă adresa 127.0.2.12? De ce funcționează ping către aceasta?
 
-3. Intr-un terminal nou, rulati comanda `docker network inspect computernetworks_dmz` pentru a vedea ce adrese au celelalte containere. Incercati sa trimiteti un ping catre adresele IP ale celorlalte containere.
+3. Într-un terminal nou, rulați comanda `docker network inspect computernetworks_dmz` pentru a vedea ce adrese au celelalte containere. Încercați să trimiteți un ping către adresele IP ale celorlalte containere.
 
-4. Folositi `docker stop` pentru a opri un container, cum arata rezultatul comenzii `ping` catre adresa IP a containerului care tocmai a fost oprit?
+4. Folosiți `docker stop` pentru a opri un container, cum arată rezultatul comenzii `ping` către adresa IP a containerului care tocmai a fost oprit?
 
-4. Retelele dmz si net au in comun containerul rt1. Un container din reteaua dmz primeste raspunsuri la ping de la containere din reteaua net?
+4. Rețelele dmz și net au în comun containerul rt1. Un container din rețeaua dmz primește răspunsuri la ping de la containere din rețeaua net?
 
-5. Folositi optiunea `-c 10` pentru a trimite un numar fix de pachete.
+5. Folosiți opțiunea `-c 10` pentru a trimite un număr fix de pachete.
 
-6. Folositi optiunea `-s 1000` pentru a schimba dimensiunea pachetului ICMP
+6. Folosiți opțiunea `-s 1000` pentru a schimba dimensiunea pachetului ICMP
 
-7. Reporniti toate containerele. Cum arata rezultatele pentru `ping -M do -s 30000 172.111.0.4` si pentru `ping -M do -s 30000 172.111.0.4`. Care este diferenta dintre cele doua? Care este rezultatul daca selectati dimensiunea 1500?
+7. Reporniți toate containerele. Cum arată rezultatele pentru `ping -M do -s 30000 172.111.0.4` și pentru `ping -M do -s 30000 172.111.0.4`. Care este diferenta dintre cele două? Care este rezultatul dacă selectați dimensiunea 1500?
 
-8. Optiunea `-f` este folosita pentru a face un flood de ping-uri.  Rulati un shell cu user root, apoi `ping -f 172.111.0.4`. Separat, intr-un alt terminal rulati `docker stats`. Ce observati?
+8. Opțiunea `-f` este folosită pentru a face un flood de ping-uri.  Rulați un shell cu user root, apoi `ping -f 172.111.0.4`. Separat, într-un alt terminal rulați `docker stats`. Ce observați?
 
 <a name="ping_block"></a>
-De multe ori raspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva raspunsul la ping rulati userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`. Intr-un container de docker nu aveti dreptul sa modificati acel fisier si veti primi o eroare. Putem, in schimb, modifica structura containerului din *docker-compose.yml* si-i putem adauga pe langa image, networks, volumes, tty, o optiune de [sysctls](https://docs.docker.com/compose/compose-file/compose-file-v2/#sysctls):
+De multe ori răspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva răspunsul la ping rulați userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`. Într-un container de docker nu aveți dreptul să modificați acel fișier și veți primi o eroare. Putem, în schimb, modifica structura containerului din *docker-compose.yml* și-i putem adăuga pe lângă image, networks, volumes, tty, o opțiune de [sysctls](https://docs.docker.com/compose/compose-file/compose-file-v2/#sysctls):
 ```
     rt1:
         ..........
@@ -117,44 +117,44 @@ De multe ori raspunsurile la ping [sunt dezactivate](https://superuser.com/quest
 
 <a name="tcpdump_install"></a>
 ###  tcpdump
-Este un tool care va permite monitorizarea traficului de pe containerul/masina pe care va aflati. Vom folosi *tcpdump* pentru a monitoriza traficul generat de comanda ping. Pentru a rula tcpdump, trebuie sa ne atasam unui container cu user **root** apoi putem rula:
+Este un tool care vă permite monitorizarea traficului de pe containerul/mașina pe care vă aflați. Vom folosi *tcpdump* pentru a monitoriza traficul generat de comanda ping. Pentru a rula tcpdump, trebuie să ne atașam unui container cu user **root** apoi putem rula:
 
 ```bash
 tcpdump
 ```
-Daca tcpdump nu exista ca aplicatie, va trebui sa modificati fisierul *Dockerfile* pentru a adauga comanda de instalare a acestei aplicatii. Reconstruiti imaginea folosind comanda docker build, distrugeti si reconstruiti containerele folosind `docker-compose down` si `docker-compose up -d`. Din cauza unui [bug de docker](https://github.com/moby/moby/issues/14140) e posibil ca aceasta comanda sa nu functioneze imediat dupa instalare, afisand eroarea:
+Dacă tcpdump nu există ca aplicație, va trebui să modificați fișierul *Dockerfile* pentru a adaugă comanda de instalare a acestei aplicații. Reconstruiți imaginea folosind comanda docker build, distrugeți și reconstruiți containerele folosind `docker-compose down` și `docker-compose up -d`. Din cauza unui [bug de docker](https://github.com/moby/moby/issues/14140) e posibil ca această comandă să nu funcționeze imediat după instalare, afisând eroarea:
 ```bash
 tcpdump: error while loading shared libraries: libcrypto.so.1.0.0: cannot open shared object file: Permission denied
 ```
-Pentru a remedia aceasta eroare, trebuie sa adaugati in Dockerfile:
+Pentru a remedia această eroare, trebuie să adăugați în Dockerfile:
 ```bash
 # move tcpdump from the default location to /usr/local
 RUN mv /usr/sbin/tcpdump /usr/local/bin
 # add the new location to the PATH in case it's not there
 ENV PATH="/usr/local/bin:${PATH}"
 ```
-De asemenea, e posibil ca datorita unor schimbari recente in repository de kali linux, sa fie necesara reconstruirea imaginii, altfel nu vor putea fi instalate pachetele necesare. Pentru aceasta operatie, trebuie sa opriti toate containere, sa stergeti containerele create impreuna cu retelele create (vezi [primele 4 comenzi de la inceputul fisierului](https://github.com/senisioi/computer-networks/tree/master/laborator1#clean_all)). In urma stergerii imaginilor, trebuie sa reconstruim imaginea *baseimage* folosind `docker build -t baseimage ./docker/`.
+De asemenea, e posibil ca datorită unor schimbări recente în repository de kali linux, să fie necesară reconstruirea imaginii, altfel nu vor putea fi instalate pachetele necesare. Pentru această operație, trebuie să opriți toate containere, să ștergeți containerele create împreună cu rețelele create (vezi [primele 4 comenzi de la începutul fișierului](https://github.com/senisioi/computer-networks/tree/master/laborator1#clean_all)). În urma ștergerii imaginilor, trebuie să reconstruim imaginea *baseimage* folosind `docker build -t baseimage ./docker/`.
 
-Daca in urma rularii acestei comenzi nu apare nimic, inseamna ca in momentul acesta interfata data pe containerul respectiv nu executa operatii pe retea. Pentru a vedea ce interfete (device-uri) putem folosi pentru a capta pachete, putem rula:
+Dacă în urma rulării acestei comenzi nu apare nimic, înseamnă că în momentul acesta interfața dată pe containerul respectiv nu execută operații pe rețea. Pentru a vedea ce interfețe (device-uri) putem folosi pentru a capta pachete, putem rula:
 ```bash
 tcpdump -D
 ```
 
 <a name="tcpdump_exer"></a>
-##### Exercitii
-1. In containerul rt1 rulati `tcpdump -n`. In containerul rt2 rulati `ping -c 1 rt1`. Ce trasaturi observati la pachetul ICMP? Ce observati daca rulati `ping -c 1 -s 2000 rt1`?
+##### Exerciții
+1. În containerul rt1 rulați `tcpdump -n`. În containerul rt2 rulați `ping -c 1 rt1`. Ce trasături observați la pachetul ICMP? Ce observați dacă rulați `ping -c 1 -s 2000 rt1`?
 
-2. Rulati aceleasi ping-uri dar acum monitorizati pachetele cu `tcpdump -nvtS`. Ce detalii observati in plus? Dar daca adaugati optiunea `tcpdump -nvtSXX`?
+2. Rulați aceleasi ping-uri dar acum monitorizați pachetele cu `tcpdump -nvtS`. Ce detalii observați în plus? Dar dacă adăugați opțiunea `tcpdump -nvtSXX`?
 
-3. Pentru a vedea si header-ul de ethernet, adaugati optiunea `-e` la tcpdump.
+3. Pentru a vedea și header-ul de ethernet, adăugați opțiunea `-e` la tcpdump.
 
-4. In rt1 monitorizati traficul cu `tcpdump -nevtSXX` Intr-un alt terminal, rulati un shell tot pe containerul rt1 apoi dati `ping -c 1 yahoo.com`. Ce adrese MAC si IP sunt folosite pentru a trimite requestul ICMP? Cate pachete sunt captate in total?
+4. În rt1 monitorizați traficul cu `tcpdump -nevtSXX` Într-un alt terminal, rulați un shell tot pe containerul rt1 apoi dați `ping -c 1 yahoo.com`. Ce adrese MAC și IP sunt folosite pentru a trimite requestul ICMP? Câte pachete sunt captate în total?
 
-5. In loc de ultimul ping, generati trafic la nivelul aplicatie folosind `wget https://github.com/senisioi/computer-networks/`. Comparati continutul pachetului cu un request HTTP: `wget http://moodle.fmi.unibuc.ro`. Observati diferenta dintre HTTP si HTTPS la nivel de pachete.
+5. În loc de ultimul ping, generați trafic la nivelul aplicație folosind `wget https://github.com/senisioi/computer-networks/`. Comparați continutul pachetului cu un request HTTP: `wget http://moodle.fmi.unibuc.ro`. Observați diferența dintre HTTP si HTTPS la nivel de pachete.
 
-6. Puteti deduce din output-ul lui tcpdump care este adresa IP a site-ului github.com sau moodle.fmi.unibuc.ro? Ce reprezinta adresa MAC din cadrul acelor request-uri?
+6. Puteți deduce din output-ul lui tcpdump care este adresa IP a site-ului github.com sau moodle.fmi.unibuc.ro? Ce reprezintă adresa MAC din cadrul acelor request-uri?
 
-7. Captand pachete, ati putut observa requesturi la o adresa de tipul 239.255.255.255? Mai multe detalii [aici](https://en.wikipedia.org/wiki/IP_multicast).
+7. Captând pachete, ați putut observa requesturi la o adresă de tipul 239.255.255.255? Mai multe detalii [aici](https://en.wikipedia.org/wiki/IP_multicast).
 
 
 ###### TCP/IP stack
@@ -184,19 +184,19 @@ tcpdump -D
                   Basic TCP/IP Network Node
 ```
 
-Diferite optiuni pentru tcpdump:
+Diferite opțiuni pentru tcpdump:
 ```bash
 # -c pentru a capta un numar fix de pachete
 tcpdump -c 20
 
-# -w pentru a salva pachetele intr-un fisier si -r pentru a citi fisierul
+# -w pentru a salva pachetele într-un fișier și -r pentru a citi fișierul
 tcpdump -w pachete.pcap
 tcpdump -r pachete.pcap
 
-# pentru a afisa doar pachetele care vin sau pleaca cu adresa google.com
+# pentru a afișa doar pachetele care vin sau pleacă cu adresa google.com
 tcpdump host google.com
 
-# folositi -XX pentru a afisa si continutul in HEX si ASCII
+# folosiți -XX pentru a afișa și conținutul în HEX și ASCII
 tcpdump -XX
 
 # pentru un timestamp normal
@@ -205,20 +205,20 @@ tcpdump -t
 # pentru a capta pachete circula verbose
 tcpdump -vvv
 
-# indica interfata pe care o folosim pentru a capta pachete, in cazul acesta eth0 
+# indică interfața pe care o folosim pentru a capta pachete, în cazul acesta eth0 
 tcpdump -i
 
-# afisarea headerului de ethernet
+# afișarea headerului de ethernet
 tcpdump -e
 
-# afisarea valorilor numerice ale ip-urilo in loc de valorile date de nameserver
+# afișarea valorilor numerice ale ip-urilo în loc de valorile date de nameserver
 tcpdump -n
 
-# numarul de secventa al pachetului 
+# numărul de secvență al pachetului 
 tcpdump -S
 ```
 
- - Intrebare: este posibil sa captati pachetele care circula intre google.com si rt2 folosind masina rt1?
- - Pentru mai multe detalii puteti urmari acest [tutorial](https://danielmiessler.com/study/tcpdump/) sau [alte exemple](https://www.rationallyparanoid.com/articles/tcpdump.html)
- - Pentru exemple de filtrare mai detaliate, puteti urmari si [acest tutorial](https://forum.ivorde.com/tcpdump-how-to-to-capture-only-icmp-ping-echo-requests-t15191.html)
- - Trucuri de [filtare avansata](https://www.wains.be/pub/networking/tcpdump_advanced_filters.txt)
+ - Întrebare: este posibil să captați pachetele care circulă între google.com și rt2 folosind mașina rt1?
+ - Pentru mai multe detalii puteteți urmări acest [tutorial](https://danielmiessler.com/study/tcpdump/) sau [alte exemple](https://www.rationallyparanoid.com/articles/tcpdump.html)
+ - Pentru exemple de filtrare mai detaliate, puteți urmări si [acest tutorial](https://forum.ivorde.com/tcpdump-how-to-to-capture-only-icmp-ping-echo-requests-t15191.html)
+ - Trucuri de [filtare avansată](https://www.wains.be/pub/networking/tcpdump_advanced_filters.txt)

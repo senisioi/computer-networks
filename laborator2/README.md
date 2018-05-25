@@ -1,34 +1,34 @@
 # Laborator 2
 
 ## Cuprins
-- [Introducere si IDE](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#intro)
+- [Introducere și IDE](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#intro)
 - [python 2.7 basics](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#basics)
-- [Exercitii python](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#exercitii_python)
+- [Exerciții python](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#exercitii_python)
 - [Socket API](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#socket)
 - [UDP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#udp)
-- [Exercitii socket UDP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#exercitii_udp)
+- [Exerciții socket UDP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#exercitii_udp)
 - [TCP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#tcp)
-- [Exercitii socket TCP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#exercitii_tcp)
+- [Exerciții socket TCP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#exercitii_tcp)
 
 
 <a name="intro"></a> 
 ## Introducere
-In cadrul acestui capitol vom lucra cu [python](http://www.bestprogramminglanguagefor.me/why-learn-python), un limbaj de programare foarte simplu pe care il vom folosi pentru a crea si trimite pachete pe retea.
+În cadrul acestui capitol vom lucra cu [python](http://www.bestprogramminglanguagefor.me/why-learn-python), un limbaj de programare foarte simplu pe care îl vom folosi pentru a crea și trimite pachete pe rețea.
 
-Pentru debug si autocomplete, este bine sa avem un editor si [IDE pentru acest limbaj](https://wiki.python.org/moin/IntegratedDevelopmentEnvironments). In cadrul orelor vom lucra cu [wingide](http://wingware.com/downloads/wing-personal), dar pe calculatoarele voastre personale puteti lucra cu orice alt editor. 
-Pentru a instala wingide fara permisiuni de administrator, putem rula:
+Pentru debug și autocomplete, este bine să avem un editor și [IDE pentru acest limbaj](https://wiki.python.org/moin/IntegratedDevelopmentEnvironments). În cadrul orelor vom lucra cu [wingide](http://wingware.com/downloads/wing-personal), dar pe calculatoarele voastre personale puteți lucra cu orice alt editor. 
+Pentru a instala wingide făra permisiuni de administrator, putem rula:
 ```bash
 wget https://gist.githubusercontent.com/senisioi/7d3d8a223f23d8bc9a21464dbe5f7e47/raw/e6657e66c441e2554fb8d3777783ca0eb6a2c985/install-wing.sh
 bash install-wing.sh
 ```
-[Scriptul](https://gist.github.com/senisioi/772b4b87b4fb52b96e6b83a22a4299b5) va instala editorul in directorul $HOME. 
-Pentru a lansa wingide, putem sa rulam in terminal:
+[Scriptul](https://gist.github.com/senisioi/772b4b87b4fb52b96e6b83a22a4299b5) va instala editorul în directorul $HOME. 
+Pentru a lansa wingide, putem să rulam în terminal:
 ```bash
 wing-personal
 ```
-Daca aplicatia nu exista, puteti sa o adaugati in path sau puteti incerca sa o instalati din nou.
+Dacă aplicația nu există, puteți să o adăugați în path sau puteți încerca să o instalați din nou.
 
-Pentru a face editorul sa arate mai bine, rulati din linia de comanda:
+Pentru a face editorul să arate mai bine, rulați din linia de comandă:
 ```bash
 cat <<EOF >> ~/.wingpersonal6/preferences
 [user-preferences]
@@ -68,7 +68,7 @@ d = {'grupa': 123, "nr_studenti": 10}
 print d['grupa'], d['nr_studenti']
 ```
 
-#### [for](https://www.tutorialspoint.com/python/python_for_loop.htm) si [while](https://www.tutorialspoint.com/python/python_while_loop.htm)
+#### [for](https://www.tutorialspoint.com/python/python_for_loop.htm) și [while](https://www.tutorialspoint.com/python/python_while_loop.htm)
 ```python
 lista = [1,5,7,8,2,5,2]
 for element in lista:
@@ -104,7 +104,7 @@ else:
     print "nimic nu e adevarat"
 ```
 
-#### [functii](https://www.tutorialspoint.com/python/python_functions.htm)
+#### [funcții](https://www.tutorialspoint.com/python/python_functions.htm)
 ```python
 def functie(param = 'oooo'):
     '''dockblock sunt comments in care explicam
@@ -156,7 +156,7 @@ for element in "hello world":
 def main():
     print "functia main"
 
-# un if care verifica daca scriptul este importat sau apelat ca main
+# un if care verifică dacă scriptul este importat sau apelat ca main
 if __name__ == '__main__':
     main()
  ```
@@ -182,20 +182,20 @@ print g.numar_studenti
 print G.nume
 ```
 
-<a name="exercitii_python"></a> 
-### Exercitii
-1. Creati un script de python care printeaza toate literele unui text, cate o litera pe secunda, folosind `time.sleep(1)`.
-2. Rulati scriptul anterior intr-un container.
-3. Folosind [command](https://docs.docker.com/compose/compose-file/compose-file-v2/#command), modificati docker-compose.yml pentru a lansa acel script ca proces al containerului.
+<a name="exerciții_python"></a> 
+### Exerciții
+1. Creați un script de python care printează toate literele unui text, câte o literă pe secunda, folosind `time.sleep(1)`.
+2. Rulați scriptul anterior într-un container.
+3. Folosind [command](https://docs.docker.com/compose/compose-file/compose-file-v2/#command), modificați docker-compose.yml pentru a lansa acel script ca proces al containerului.
 
 <a name="socket"></a> 
 ## Socket API
-Este un [API](https://www.youtube.com/watch?v=s7wmiS2mSXY) disponibil in mai toate limbajele de programare cu care putem implementa comunicarea pe retea la un nivel mai inalt. Semnificatia flag-urilor este cel mai bine explicata in tutoriale de [unix sockets](https://www.tutorialspoint.com/unix_sockets/socket_core_functions.htm) care acopera partea de C. In limbajul [python](https://docs.python.org/2/library/socket.html) avem la dispozitie exact aceleasi functii si flag-uri ca in C iar interpretarea lor nu tine de un limbaj de programare particular.
+Este un [API](https://www.youtube.com/watch?v=s7wmiS2mSXY) disponibil în mai toate limbajele de programare cu care putem implementa comunicarea pe rețea la un nivel mai înalt. Semnificația flag-urilor este cel mai bine explicată în tutoriale de [unix sockets](https://www.tutorialspoint.com/unix_sockets/socket_core_functions.htm) care acoperă partea de C. În limbajul [python](https://docs.python.org/2/library/socket.html) avem la dispoziție exact aceleași funcții și flag-uri ca în C iar interpretarea lor nu ține de un limbaj de programare particular.
 
 <a name="udp"></a> 
 ### User Datagram Protocol - [UDP](https://tools.ietf.org/html/rfc768)
 
-Este un protocol simplu la [nivelul transport](https://www.youtube.com/watch?v=hi9BVTNvl4c&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C&index=50). Header-ul acestuia include portul sursa, portul destinatie, lungime si un checksum optional:
+Este un protocol simplu la [nivelul transport](https://www.youtube.com/watch?v=hi9BVTNvl4c&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C&index=50). Header-ul acestuia include portul sursă, portul destinație, lungime și un checksum opțional:
 ```
   0      7 8     15 16    23 24    31
   +--------+--------+--------+--------+
@@ -209,9 +209,9 @@ Este un protocol simplu la [nivelul transport](https://www.youtube.com/watch?v=h
   |          data octets ...
   +---------------- ...
 ```
-Cateva caracteristi ale protocolului sunt descrise [aici](https://en.wikipedia.org/wiki/User_Datagram_Protocol#Attributes) iar partea de curs este acoperita in mare parte [aici](https://www.youtube.com/watch?v=Z1HggQJG0Fc&index=51&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C).
+Câteva caracteristi ale protocolului sunt descrise [aici](https://en.wikipedia.org/wiki/User_Datagram_Protocol#Attributes) iar partea de curs este acoperită în mare parte [aici](https://www.youtube.com/watch?v=Z1HggQJG0Fc&index=51&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C).
 
-Server-ul se instantiaza cu [AF_INET](https://stackoverflow.com/questions/1593946/what-is-af-inet-and-why-do-i-need-it) si SOCK_DGRAM (datagrams - connectionless, unreliable messages of a fixed maximum length) pentru UDP:
+Server-ul se instanțiază cu [AF_INET](https://stackoverflow.com/questions/1593946/what-is-af-inet-and-why-do-i-need-it) și SOCK_DGRAM (datagrams - connectionless, unreliable messages of a fixed maximum length) pentru UDP:
 ```python
 # UDP socket 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -230,7 +230,7 @@ sent = sock.sendto(data, address)
 sock.close()
 ```
 
-Clientul trebuie sa stie la ce adresa ip si pe ce port sa comunice cu serverul:
+Clientul trebuie să știe la ce adresă ip și pe ce port să comunice cu serverul:
 ```python
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -244,17 +244,17 @@ data, server = sock.recvfrom(4096)
 sock.close()
 ```
 
-O diagrama a procesului anterior este reprezentata aici:
+O diagramă a procesului anterior este reprezentată aici:
 ![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/laborator2/UDPsockets.jpg)
 
 
 <a name="exercitii_udp"></a> 
-### Exercitii
-1. Pe container-ul rt1 rulati [udp_server.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_server.py), [udp_client.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_client.py). 
-2. Incercati sa folositi udp_client.py pentru a va conecta de pe sistemul host la container-ul rt1. Verificati documentatia de la [ports](https://docs.docker.com/compose/compose-file/compose-file-v2/#ports)
-3. Care este portul destinatie pe care il foloseste server-ul pentru a trimite un mesaj clientului?
-4. Modificati mesajul client-ului ca acesta sa fie citit ca parametru al scriptului (`sys.argv[1]`). Transmiteti mesaje de la un container la altul folosind *udp_server.py* si *udp_client.py*.
-5. Utilizati `tcpdump -nvvX -i any udp port 10000` pentru a scana mesajele UDP care circula pe portul 10000.
+### Exerciții
+1. Pe container-ul rt1 rulați [udp_server.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_server.py), [udp_client.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_client.py). 
+2. Încercați să folosiți udp_client.py pentru a vă conecta de pe sistemul host la container-ul rt1. Verificați documentația de la [ports](https://docs.docker.com/compose/compose-file/compose-file-v2/#ports)
+3. Care este portul destinație pe care ăl folosește server-ul pentru a trimite un mesaj clientului?
+4. Modificați mesajul client-ului ca acesta să fie citit ca parametru al scriptului (`sys.argv[1]`). Transmiteți mesaje de la un container la altul folosind *udp_server.py* și *udp_client.py*.
+5. Utilizați `tcpdump -nvvX -i any udp port 10000` pentru a scana mesajele UDP care circulă pe portul 10000.
 
 
 <a name="tcp"></a> 
@@ -285,9 +285,9 @@ Header-ul acestuia este mai complex:
 ```
 
 
-Cateva caracteristi ale protocolului sunt descrise [aici](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_segment_structure) iar partea de curs este acoperita in mare parte [aici](https://www.youtube.com/watch?v=c6gHTlzy-7Y&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C&index=52).
+Câteva caracteristici ale protocolului sunt descrise [aici](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#TCP_segment_structure) iar partea de curs este acoperită în mare parte [aici](https://www.youtube.com/watch?v=c6gHTlzy-7Y&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C&index=52).
 
-Server-ul se instantiaza cu [AF_INET](https://stackoverflow.com/questions/1593946/what-is-af-inet-and-why-do-i-need-it) si SOCK_STREAM (fiindca TCP opereaza la nivel de [byte streams](https://softwareengineering.stackexchange.com/questions/216597/what-is-a-byte-stream-actually))
+Server-ul se instanțiază cu [AF_INET](https://stackoverflow.com/questions/1593946/what-is-af-inet-and-why-do-i-need-it) și SOCK_STREAM (fiindcă TCP operează la nivel de [byte streams](https://softwareengineering.stackexchange.com/questions/216597/what-is-a-byte-stream-actually))
 
 ```python
 # TCP socket 
@@ -308,7 +308,7 @@ while True:
 sock.close()
 ```
 
-Clientul trebuie sa stie la ce adresa ip si pe ce port sa comunice cu serverul:
+Clientul trebuie să știe la ce adresă ip și pe ce port să comunice cu serverul:
 ```python
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -322,14 +322,14 @@ sock.connect(server_address)
 sock.close()
 ```
 
-O diagrama a procesului anterior este reprezentata aici:
+O diagramă a procesului anterior este reprezentată aici:
 ![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/laborator2/TCPsockets.png)
 
 
-<a name="exercitii_tcp"></a> 
-### Exercitii
-1. In containerul rt1 rulati `tcpdump -Snnt tcp` si tot in rt1 rulati un server tcp. Din container-ul rt2, creati o conexiune. Urmariti [three-way handshake](https://www.geeksforgeeks.org/computer-network-tcp-3-way-handshake-process/) si inchiderea conexiunii la nivel de pachete.
-2. Pentru a observa retransmisiile, putem introduce un delay artificial sau putem ignora anumite pachete pe retea. Pentru asta, folosim un tool linux numit [netem](https://wiki.linuxfoundation.org/networking/netem) sau mai pe scurt [aici](https://stackoverflow.com/questions/614795/simulate-delayed-and-dropped-packets-on-linux). Aplicati o regula de ignorare a 1% din pachetele care circula pe eth0 folosind: `tc qdisc add dev eth0 root netem loss 0.1%`. Rulati comanda `tc -s qdisc` pentru a vedea filtrul adaugat pe eth0. Puteti modifica filtrul prin `tc qdisc change dev eth0 root netem loss 75%` sau puteti sa stergeti regulile folosind: `tc qdisc del dev eth0 root netem`. Puteti rula *netem* pornind un nou bash shell cu user root pe rt1, pastrati deschise tcpdump si server-ul. Conectati client-ul si observati pachetele care circula pe eth0.
+<a name="exerciții_tcp"></a> 
+### Exerciții
+1. În containerul rt1 rulați `tcpdump -Snnt tcp` și tot în rt1 rulați un server tcp. Din container-ul rt2, creați o conexiune. Urmăriți [three-way handshake](https://www.geeksforgeeks.org/computer-network-tcp-3-way-handshake-process/) și închiderea conexiunii la nivel de pachete.
+2. Pentru a observa retransmisiile, putem introduce un delay artificial sau putem ignora anumite pachete pe rețea. Pentru asta, folosim un tool linux numit [netem](https://wiki.linuxfoundation.org/networking/netem) sau mai pe scurt [aici](https://stackoverflow.com/questions/614795/simulate-delayed-and-dropped-packets-on-linux). Aplicați o regulă de ignorare a 1% din pachetele care circulă pe eth0 folosind: `tc qdisc add dev eth0 root netem loss 0.1%`. Rulați comanda `tc -s qdisc` pentru a vedea filtrul adăugat pe eth0. Puteți modifica filtrul prin `tc qdisc change dev eth0 root netem loss 75%` sau puteți să ștergeți regulile folosind: `tc qdisc del dev eth0 root netem`. Puteți rula *netem* pornind un nou bash shell cu user root pe rt1, păstrați deschise tcpdump și server-ul. Conectați client-ul și observați pachetele care circulă pe eth0.
 
 <a name="shake"></a> 
 ### 3-way handshake
@@ -345,9 +345,9 @@ SYN-ACK:
 ACK:
    IP 172.111.0.14.59004 > 198.13.0.14.10000: Flags [.], ack 409643425, win 229, length 0
 
-Trimite un octet cu PSH si intervalul de secventa de dimensiune 1:
+Trimite un octet cu PSH și intervalul de secventă de dimensiune 1:
    IP 172.111.0.14.59004 > 198.13.0.14.10000: Flags [P.], seq 2416620957:2416620958, ack 409643425, win 229, length 1
 
-ACK cu sequence capatul intervalului care semnifica: am primit octeti pana la 2416620957, astept de la 2416620958 inainte:
+ACK cu sequence capătul intervalului care semnifică: am primit octeți pana la 2416620957, aștept de la 2416620958 înainte:
     IP 198.13.0.14.10000 > 172.111.0.14.59004: Flags [.], ack 2416620958, win 227, length 0
 ```
