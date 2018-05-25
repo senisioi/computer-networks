@@ -5,18 +5,18 @@
 - [Materiale de curs](http://nlp.unibuc.ro/people/liviu.html#Courses)
 - Cursul de [Computer Networks](https://www.youtube.com/watch?v=xKNPTYtTnAo&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C), University of Washington
 
-## Inainte de a incepe
+## Înainte de a începe
 Pentru acest laborator, vom avea nevoie de:
 - [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
-- [docker-compose](https://docs.docker.com/compose/install/) - este deja adaugat in acest repository
-- dupa instalarea docker, trebuie sa adauga userul cu care lucram in grupul de docker `sudo usermod -aG docker $USER`
+- [docker-compose](https://docs.docker.com/compose/install/) - este deja adăugat în acest repository
+- după instalarea docker, trebuie să adăugați userul cu care lucrăm în grupul de docker `sudo usermod -aG docker $USER`
 
-## Concepte de baza
-O masina virtuala de docker o vom numi container sau serviciu. Pentru a porni o masina virtuala, trebuie sa folosim [docker build](https://docs.docker.com/engine/reference/commandline/build/) pentru a construi o imagine cu un sistem de operare care sa fie utilizat pe acea masina. Comanda de build utilizeaza fisierul [./docker/Dockerfile](https://github.com/senisioi/computer-networks/blob/master/docker/Dockerfile) care defineste ce sistem de operare folosim, ce aplicatii vor fi instalate si ce useri vor exista pe containerele care ruleaza acea imagine. 
+## Concepte de bază
+O masină virtuală de docker o vom numi container sau serviciu. Pentru a porni o masină virtuală, trebuie să folosim [docker build](https://docs.docker.com/engine/reference/commandline/build/) pentru a construi o imagine cu un sistem de operare care să fie utilizat pe acea masină. Comanda de build utilizează fișierul [./docker/Dockerfile](https://github.com/senisioi/computer-networks/blob/master/docker/Dockerfile) care definește ce sistem de operare folosim, ce aplicații vor fi instalate și ce useri vor exista pe containerele care rulează acea imagine. 
 
-Comanda [docker-compose up -d](https://docs.docker.com/compose/reference/up/), va citi fisierul [docker-compose.yml](https://github.com/senisioi/computer-networks/blob/master/docker-compose.yml) din path-ul de unde rulam comanda si va lansa containere dupa cum sunt definite in fisier in sectiunea *services*: rt1, rt2, etc..
-Containere care sunt configurate sa ruleze o imagine data (in cazul nostru *baseimage*, imaginea construita la pasul anterior), sa fie conectate la o retea (in cazul nostru reteaua *dmz*) sau sa aiba definite [un mount](https://unix.stackexchange.com/questions/3192/what-is-meant-by-mounting-a-device-in-linux) local.
-Comanda docker-compose pe linux nu se instaleaza default cu docker, ci trebuie [sa o instalam separat](https://docs.docker.com/compose/install/). In cazul nostru, comanda se gaseste chiar in directorul computer-networks, in acest repository. Asa ca daca nu aveti comanda instalata, o puteti rula din acest director folosind calea relativa `./docker-compose`.
+Comanda [docker-compose up -d](https://docs.docker.com/compose/reference/up/), va citi fișierul [docker-compose.yml](https://github.com/senisioi/computer-networks/blob/master/docker-compose.yml) din path-ul de unde rulăm comanda și va lansa containere după cum sunt definite în fișier în secțiunea *services*: rt1, rt2, etc..
+Containere care sunt configurate să ruleze o imagine dată (în cazul nostru *baseimage*, imaginea construită la pasul anterior), să fie conectate la o rețea (în cazul nostru rețeaua *dmz*) sau să aibă definite [un mount](https://unix.stackexchange.com/questions/3192/what-is-meant-by-mounting-a-device-in-linux) local.
+Comanda docker-compose pe linux nu se instalează default cu docker, ci trebuie [să o instalăm separat](https://docs.docker.com/compose/install/). În cazul nostru, comanda se găsește chiar în directorul computer-networks, în acest repository. Așa că dacă nu aveți comanda instalată, o puteți rula din acest director folosind calea relativă `./docker-compose`.
 
 
 ## Starting up
@@ -28,7 +28,7 @@ docker-compose up -d
 ```
 
 
-## Comenzi de baza de docker
+## Comenzi de bază de docker
 ```bash
 # list your images
 docker image ls
