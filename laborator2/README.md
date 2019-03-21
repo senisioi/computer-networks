@@ -212,6 +212,8 @@ Este un protocol simplu la [nivelul transport](https://www.youtube.com/watch?v=h
 Câteva caracteristi ale protocolului sunt descrise [aici](https://en.wikipedia.org/wiki/User_Datagram_Protocol#Attributes) iar partea de curs este acoperită în mare parte [aici](https://www.youtube.com/watch?v=Z1HggQJG0Fc&index=51&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C).
 
 Server-ul se instanțiază cu [AF_INET](https://stackoverflow.com/questions/1593946/what-is-af-inet-and-why-do-i-need-it) și SOCK_DGRAM (datagrams - connectionless, unreliable messages of a fixed maximum length) pentru UDP:
+
+Python 2
 ```python
 # UDP socket 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -230,7 +232,29 @@ sent = sock.sendto(data, address)
 sock.close()
 ```
 
+Python 3
+```python
+import socket
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+port = 10000
+adresa = 'localhost'
+server_address = (adresa, port)
+sock.bind(server_address)
+
+data, address = sock.recvfrom(4096)
+
+print(data, address)
+
+sent = sock.sendto(data, address)
+
+sock.close()
+```
+
 Clientul trebuie să știe la ce adresă ip și pe ce port să comunice cu serverul:
+
+Python 2
 ```python
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
@@ -238,8 +262,28 @@ port = 10000
 adresa = 'localhost'
 server_address = (adresa, port)
 
-sent = sock.sendto(mesaj, server_address)
+sent = sock.sendto('mesaj', server_address)
 data, server = sock.recvfrom(4096)
+
+print data, server
+
+sock.close()
+```
+
+Python 3
+```python
+import socket
+
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+port = 10000
+adresa = 'localhost'
+server_address = (adresa, port)
+
+sent = sock.sendto('mesaj'.encode('utf-8'), server_address)
+data, server = sock.recvfrom(4096)
+
+print(data, server)
 
 sock.close()
 ```
