@@ -1,29 +1,26 @@
-# Tema 1
+# Tema 2
 
 ## Informații temă
-Tema va fi livrată sub forma unui link/URL de git. Secțiunea de mai jos **[Instrucțiuni git](https://github.com/senisioi/computer-networks/tree/master/tema1#git)** conține toate informațiile de care aveți nevoie pentru a crea un repository și pentru a uploada fișierele pe git. Dacă întâmpinați orice fel de probleme sau erori, vă rog sa-mi scrieți pe mail. În repository veți adăuga cateva fișiere de log-uri și un *docker-compose.yml* după cum este explicat în cerințele de mai jos.
-Link-ul către repository îl trimiteți pe mail cu subject "tema1 retele 2019 Prenume Nume GRUPA".
-Deadline: **TBA**. Orice zi de întârziere se penalizează cu un punct.
+Puteți lucra în echipe de 2 persoane.
+Deadline: **28 aprilie 2019**, tema trebuie prezentată în timpul laboratorului
 
 
+## Cerință
+În directorul cu tema2 aveti un fisier docker-compose.yml în care sunt definite două servicii: tm1 și tm2. Acestea folosesc o imagine care se construieste pe baza fisierului `docker/Dockerfile-tema2`. Pentru a construi imaginea și porni containerele, puteți să rulați `docker-compose up -d` cu un terminal aflat in folderul tema2 sau, in cazul în care aplicația docker-compose nu este instalată în $PATH, puteți să executați aplicația din directorul superior: `../docker-compose up -d`.
 
-<a name="git"></a>
-## Adăugați totul pe git
-#### Instrucțiuni git
-Dacă nu ați mai lucrat cu git, puteți urma pasii:
+În directorul `src` aveți un server, un client udp și un fișier `util.py` cu o funcție care face conversia unui pachet UDP în șiruri de octeți pentru calculul sumei de control. 
 
-1. Creați-vă un cont pe [github.com](https://github.com/). Dacă doriți, puteți folosi și alți provideri (gitlab, bitbucket etc.), dar pașii următori sunt pentru github.
-1. Creați un nou [repository](https://help.github.com/articles/create-a-repo/) de git.
-2. [Clonați-l](https://help.github.com/articles/cloning-a-repository/) în calculatorul vostru apoi dați cd în directorul clonat. Clonarea se face cu `git clone URL`, unde URL e link-ul către repository.
-3. Să presupunem că ați rezolvat tema, ați creat fisierle *docker-compose.yml* și cele care conțin log-urile containerelor. Copiați fișierele de logs \*.log și docker-compose.yml în folderul unde ați clonat repository-ul vostru de pe git.
-4. Adăugați fișierele în repository [folosind linia de comanda](https://help.github.com/articles/adding-a-file-to-a-repository-using-the-command-line/):
+1. (2p) citiți despre metoda de calcul a sumei de control pentru UDP; metoda este descrisă in [RFC1071](https://tools.ietf.org/html/rfc1071) din 1988 sau puteți vedea un exemplu [aici](https://www.securitynik.com/2015/08/calculating-udp-checksum-with-taste-of.html)
+2. (2p) completați secțiunile TODO din fișierul src/util.py 
+3. (2p) implementați funcția `calculeaza_checksum` din fișierul serverului de UDP
+4. (2p) verificați corectitudinea implementării prin rularea serverului pe containerul tm2, tot pe tm2 rulați `tcpdump -i any -vvv -nn ip and udp` iar pe tm1 rulați clientul udp; daca checksum offloading este activ, aplicația tcpdump afișează un mesaj de eroare cu `bad udp cksum`, a doua valoarea hexadecimală reprezintă suma corectă 
+5. (2p) modificați `docker-compose.yml` și adăugați command pentru a rula: clientul pe tm1, serverul și tcpdump pe tm2; ca sa rulați mai multe comenzi, puteți folosi expresia: bash -c "comanda1 & comanda2". În timpul prezentării rulați `docker-compose up -d && docker-compose logs`
 
-```bash
-git add docker-compose.yml
-git add logs_rt1.log logs_rt2.log logs_rt3.log logs_rt4.log
-git add logs_tn1.log
-git commit -m "Mesaj cu primul meu commit - am rezolvat tema!"
-git push origin master
+#### Exemplu tcpdump bad checksum:
 ```
+	172.20.0.3.48977 > 172.20.0.2.10000: [bad udp cksum 0x5847 -> 0xc14e!] UDP, length 0
+```
+Valoarea corectă este 0xc14e iar mesajul brut conține doar header, cu payload de length 0.
 
+Eroarea de la tcpdump apare datorită faptului că suma este calculată de către NIC prin [checksum offloading](https://wiki.wireshark.org/CaptureSetup/Offloading).
 

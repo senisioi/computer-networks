@@ -1,0 +1,28 @@
+version: '2.1'
+
+services:
+    tm1:
+        build:
+            context: docker
+            dockerfile: Dockerfile-tema2
+        privileged: true
+        depends_on:
+            - "tm2"
+        volumes:
+            - .:/elocal
+        tty: true
+        networks:
+            - dmz
+    tm2:
+        build:
+            context: docker
+            dockerfile: Dockerfile-tema2
+        privileged: true
+        volumes:
+            - .:/elocal
+        tty: true
+        networks:
+            - dmz
+
+networks:
+    dmz: {}
