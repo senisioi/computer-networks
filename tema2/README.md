@@ -7,7 +7,7 @@ Deadline: **25 aprilie 2019**, tema trebuie prezentată în timpul laboratorului
 
 
 ## Cerință
-În directorul cu tema2 aveti un fisier docker-compose.yml în care sunt definite două servicii: tm1 și tm2. Acestea folosesc o imagine care se construieste pe baza fisierului `docker/Dockerfile-tema2`. Pentru a construi imaginea și porni containerele, puteți să rulați `docker-compose up -d` cu un terminal aflat in folderul tema2 sau, in cazul în care aplicația docker-compose nu este instalată în $PATH, puteți să executați aplicația din directorul superior: `../docker-compose up -d`.
+În directorul cu tema2 aveti un fisier docker-compose.yml în care sunt definite două servicii: tm1 și tm2. Acestea folosesc o imagine care se construieste pe baza fisierului `docker/Dockerfile-tema2`. Pentru a construi imaginea și porni containerele, puteți să rulați `docker-compose up -d` cu un terminal aflat in folderul tema2 sau, in cazul în care aplicația docker-compose nu este instalată în $PATH, puteți să executați aplicația din directorul superior: `../docker-compose up -d`
 
 În directorul `src` aveți un server, un client udp și un fișier `util.py` cu o funcție care face conversia unui pachet UDP în șiruri de octeți pentru calculul sumei de control. 
 
