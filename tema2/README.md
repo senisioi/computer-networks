@@ -3,7 +3,7 @@
 ## Informații temă
 Puteți lucra în echipe de 2 persoane.
 
-Deadline: **28 aprilie 2019**, tema trebuie prezentată în timpul laboratorului
+Deadline: **25 aprilie 2019**, tema trebuie prezentată în timpul laboratorului
 
 
 ## Cerință
