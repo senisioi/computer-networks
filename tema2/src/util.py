@@ -5,9 +5,20 @@ logging.basicConfig(format = u'[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s] 
 
 
 def compara_endianness(numar):
+    '''
+    https://en.m.wikipedia.org/wiki/Endianness#Etymology
+        numarul 16 se scrie in binar 10000 (2^4)
+        pe 8 biti, adaugam 0 pe pozitiile mai mari: 00010000
+        pe 16 biti, mai adauga un octet de 0 pe pozitiile mai mari: 00000000 00010000
+        daca numaratoarea incepe de la dreapta la stanga:
+            reprezentarea Big Endian (Network Order) este: 00000000 00010000
+                - cel mai semnificativ bit are adresa cea mai mica
+            reprezentarea Little Endian este: 00010000 00000000
+                - cel mai semnificativ bit are adresa cea mai mare 
+    '''
     print "Numarul: ", numar
     print "Network Order (Big Endian): ", [bin(ord(byte)) for byte in struct.pack('!H', numar)]
-    print "Little Endian: ", [bin(ord(byte)) for byte in struct.pack('H', numar)]
+    print "Little Endian: ", [bin(ord(byte)) for byte in struct.pack('<H', numar)]
 
 
 
@@ -105,4 +116,4 @@ def construieste_mesaj_raw(ip_src, ip_dst, port_s, port_d, mesaj, protocol = soc
 
 
 if __name__ == '__main__':
-    compara_endianness(10000)
+    compara_endianness(16)
