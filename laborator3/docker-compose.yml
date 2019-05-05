@@ -1,8 +1,11 @@
 version: '2.1'
 
 services:
-    rt1:
-        image: baseimage:latest
+    server:
+        build:
+            context: docker
+            dockerfile: Dockerfile-lab3
+        privileged: true
         volumes:
             - ..:/elocal
         tty: true
@@ -14,10 +17,12 @@ services:
             net:
               ipv4_address: 198.13.0.14
         depends_on:
-            - "rt2"
+            - "router"
         command: bash -c "ip route add 172.111.0.0/16 via 198.13.0.1 && iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP && sleep infinity"
-    mid1:
-        image: baseimage:latest
+    middle:
+        build:
+            context: docker
+            dockerfile: Dockerfile-lab3
         volumes:
             - ..:/elocal
         tty: true
@@ -29,12 +34,14 @@ services:
             net:
               ipv4_address: 198.13.0.15
         depends_on:
-            - "rt2"
+            - "router"
         sysctls:
           - net.ipv4.ip_forward=1
         command: bash -c "ip route add 172.111.0.0/16 via 198.13.0.1 && iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP && sleep infinity"
-    rt2:
-        image: baseimage:latest
+    router:
+        build:
+            context: docker
+            dockerfile: Dockerfile-lab3
         volumes:
             - ..:/elocal
         tty: true
@@ -49,9 +56,11 @@ services:
               ipv4_address: 198.13.0.1
         sysctls:
           - net.ipv4.ip_forward=1
-        command: bash -c "tc qdisc add dev eth0 root netem loss 50% && tc qdisc add dev eth1 root netem loss 50% && sleep infinity"
-    rt3:
-        image: baseimage:latest
+        #command: bash -c "tc qdisc add dev eth0 root netem loss 50% && tc qdisc add dev eth1 root netem loss 50% && sleep infinity"
+    client:
+        build:
+            context: docker
+            dockerfile: Dockerfile-lab3
         volumes:
             - ..:/elocal
         tty: true
@@ -63,8 +72,8 @@ services:
             dmz:
               ipv4_address: 172.111.0.14
         depends_on:
-            - "rt2"
-            - "rt1"
+            - "router"
+            - "server"
         command: bash -c "ip route add 198.13.0.0/16 via 172.111.0.1 && iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP && sleep infinity"
 networks:
     dmz:

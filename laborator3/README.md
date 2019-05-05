@@ -1,7 +1,16 @@
 # Laborator 3 
 
-## Înainte de a începe
-Trebuie să reconstruim imaginea folosind [Dockerfile din laborator3](https://github.com/senisioi/computer-networks/blob/master/laborator3/docker/Dockerfile) care are configurat deja `USER root` și instalarea pentru tcpdump.
+## Cuprins
+- [Introducere](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#intro)
+- [TCP segment](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#tcp)
+- [IPv4 datagram](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#ip)
+- [IPv6 datagram](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#ipv6)
+- [Ethernet frame](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#ether)
+- [Scapy tutorial](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#scapy)
+
+<a name="intro"></a> 
+## Introducere
+Trebuie să avem pregătită o imagine care este deja configurată cu `USER root` și tcpdump.
 ```
 cd computer-networks
 
@@ -14,9 +23,6 @@ docker network prune
 # lucrăm cu ../docker-compose doar din laborator3
 cd laborator3
 
-# reconstruim imaginea cu --no-cache în caz de eroare
-docker build --no-cache -t baseimage ./docker/
-
 # pentru a porni containerle, rulăm docker-compose din directorul superior cu:
 ../docker-compose up -d
 
@@ -24,11 +30,9 @@ docker build --no-cache -t baseimage ./docker/
 # ./docker-compose -f laborator3/docker-compose.yml up -d
 ```
 
-## Cuprins
-- [TCP segment](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#tcp)
-- [IP datagram](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#ip)
-- [Ethernet frame](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#ether)
-- [Scapy tutorial](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#scapy)
+Fișierul `docker-compose.yml` definește 4 containere `server, router, client, middle` având ip-uri fixe în subneturi diferite, iar `router` este un container care funcționează ca router între cele două subrețele. Observați în command pentru server: `ip route add 172.111.0.0/16 via 198.13.0.1` adăugarea unei rute către subnetul în care se află clientul via ip-ul containerului router.
+Serviciile router și middle sunt setate să facă forwarding `net.ipv4.ip_forward=1`. Prin comanda comentată de la router, poate fi programat să renunțe la pachete cu o probabilitate de 50%: `tc qdisc add dev eth0 root netem loss 50% && tc qdisc add dev eth1 root netem loss 50%`. Puteți folosi această setare dacă doriți să verificați retransmiterea mesajelor în cazul TCP.
+Nu în ultimul rând, pentru a putea face handshake programatic, trebuie să dezactivăm regula automată de reset a sistemului de operare: `iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP`.
 
 
 <a name="tcp"></a> 
@@ -55,18 +59,18 @@ docker build --no-cache -t baseimage ./docker/
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 ```
 
-Prima specificație a protocolului TCP a fost în: 
-- [RFC793](https://tools.ietf.org/html/rfc793).
+Prima specificație a protocolului TCP a fost în [RFC793](https://tools.ietf.org/html/rfc793)
+- Foarte bine explicat [aici](http://zwerd.com/2017/11/24/TCP-connection.html) si [aici](http://www.firewall.cx/networking-topics/protocols/tcp.html)
 - [RFC2581](https://tools.ietf.org/html/rfc2581) conține informațiile cu privire la congestion control
 - Source Port și Destination Port sunt porturile sursa și destinație pentru conexiunea curentă
-- [Sequence și Acknowledgment](http://packetlife.net/blog/2010/jun/7/understanding-tcp-sequence-acknowledgment-numbers/) sunt folosite pentru indicarea secvenței de bytes transmisă și notificarea că acea secvență a fost primită
+- [Sequence și Acknowledgment](http://www.firewall.cx/networking-topics/protocols/tcp/134-tcp-seq-ack-numbers.html) sunt folosite pentru indicarea secvenței de bytes transmisă și notificarea că acea secvență a fost primită
 - Data offset - dimensiunea header-ului în multipli de 32 de biți
 - Res - 3 biți rezervați
 - NS, CWR, ECE - biți pentru notificarea explicită a existenței congestionării [ECN](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-ECN_OS_RFC-793_3540.htm), explicat mai bine și [aici](http://blog.catchpoint.com/2015/10/30/tcp-flags-cwr-ece/). NS e o sumă binară pentru sigurantă, CWR - indică necesitatea micsorării ferestrei de congestionare iar ECE este un bit de echo care indică prezența congestionarii.
-- URG, ACK, PSH, RST, SYN, FIN - [flags](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-Flags_OS_RFC-793_3540.htm)
+- URG, ACK, PSH, RST, SYN, FIN - [flags](http://www.firewall.cx/networking-topics/protocols/tcp/136-tcp-flag-options.html)
 - Window Size - folosit pentru [flow control](http://www.ccs-labs.org/teaching/rn/animations/flow/), exemplu [aici](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-Window-Size_OS_RFC-793.htm)
-- Urgent Pointer - mai multe detalii in [RFC6093](https://tools.ietf.org/html/rfc6093), pe scurt explicat [aici](http://packetlife.net/blog/2011/mar/2/tcp-flags-psh-and-urg/) și un exemplu de funcționare [aici](https://osqa-ask.wireshark.org/questions/25929/tcp-urgent-pointer-and-urgent-data).
-- Opțiuni - sunt opționale, iar o [listă completă de opțiuni se găsește aici](http://www.networksorcery.com/enp/Protocol/tcp.htm#Options). Probabil cele mai importante sunt prezentate pe scurt în [acest tutorial](http://www.firewall.cx/networking-topics/protocols/tcp/138-tcp-options.html): [Maximum Segment Size](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00005.html), [Window Scaling](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00009.html), Selective Acknowledgement, [Timestamps](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00011.html) (pentru round-trip-time), și NOP (no option pentru separare între opțiuni). 
+- Urgent Pointer - mai multe detalii in [RFC6093](https://tools.ietf.org/html/rfc6093), pe scurt explicat [aici](http://www.firewall.cx/networking-topics/protocols/tcp/137-tcp-window-size-checksum.html).
+- Opțiuni - o [listă completă de opțiuni se găsește aici](http://www.networksorcery.com/enp/Protocol/tcp.htm#Options). Probabil cele mai importante sunt prezentate pe scurt în [acest tutorial](http://www.firewall.cx/networking-topics/protocols/tcp/138-tcp-options.html): [Maximum Segment Size](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00005.html), [Window Scaling](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00009.html), Selective Acknowledgement, [Timestamps](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00011.html) (pentru round-trip-time), și NOP (no option pentru separare între opțiuni). 
 - Checksum - suma în complement fată de 1 a bucăților de câte 16 biți, complementatî cu 1, vezi mai multe detalii [aici](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation) și [RFC1071 aici](https://tools.ietf.org/html/rfc1071)
 Se calculează din concatenarea: unui pseudo-header de IP [adresa IP sursă, IP dest (32 biti fiecare), placeholder (8 biti setati pe 0), [protocol](https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers) (8 biti), și lungimea în bytes a întregii secțiuni TCP sau UDP (16 biti)], TCP sau UDP header cu checksum setat pe 0, și secțiunea de date. Pentru simplitate, mai jos este redată secțiunea pentru care calculăm checksum la UDP: IP pseudo-header + UDP header + Data.
 ```
@@ -169,7 +173,7 @@ Prima specificație a protocolului IP a fost în:
 - Fragment Offset - offset-ul unui fragment curent în raport cu fragmentul inițial, măsurat în multiplu de 8 octeți (64 biți).
 - Time to Live (TTL) -  numărul maxim de routere prin care poate trece IP datagram pâna în punctul în care e discarded
 - Protocol - indică codul [protocolului](https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers) din interiorul secvenței de date
-- Header checksum - aceeași metodă de checksum ca la [TCP si UDP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation), adică suma în complement 1, a fragmentelor de câte 16 biți, dar în cazul acesta se aplică doar pentru header. Această sumă este puțin redundantă având în vedere că se mai calculează o dată peste pseudoheader-ul de la TCP sau UDP.
+- Header checksum - aceeași metodă de checksum ca la [TCP si UDP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation), adică suma în complement 1, a fragmentelor de câte 16 biți, dar în cazul acesta se aplică **doar pentru header**. Această sumă este puțin redundantă având în vedere că se mai calculează o dată peste pseudoheader-ul de la TCP sau UDP.
 - Source/Destination Address - adrese ip pe 32 de biți
 - Options - prezintă diverse riscuri, [conform wikipedia](https://en.wikipedia.org/wiki/IPv4#Options) sau acestui [raport](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2005/EECS-2005-24.pdf). Mai multe informații despre rolul acestora puteți găsi [aici](http://www.tcpipguide.com/free/t_IPDatagramOptionsandOptionFormat.htm), [aici](http://www.cc.ntut.edu.tw/~kwke/DC2006/ipo.pdf) și specificația completă [aici](http://www.networksorcery.com/enp/protocol/ip.htm#Options).
 
@@ -199,6 +203,62 @@ ip.show()
 # pentru a seta DSCP cu cod AF32 pentru video streaming și ECN cu notificare de congestie: ip.tos = int('011100' + '11', 2)
 ```
 
+<a name="ipv6"></a> 
+### [Internet Protocol Datagram v6 - IPv6](https://tools.ietf.org/html/rfc2460#page-4)
+```
+  0                   1                   2                   3   Offs.
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |Version| Traffic Class |           Flow Label                  |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |         Payload Length        |  Next Header  |   Hop Limit   |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                                                               |
+ -                                                               -
+ |                                                               |
+ -                         Source Address                        -
+ |                                                               |
+ -                                                               -
+ |                                                               |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                                                               |
+ -                                                               -
+ |                                                               |
+ -                      Destination Address                      -
+ |                                                               |
+ -                                                               -
+ |                                                               |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+```
+Prima specificație a protocolului IPv6 a fost în 1998 [rfc2460](https://tools.ietf.org/html/rfc2460): 
+- Version - 6 pentru ipv6
+- Traffic Class        8-bit [traffic class field](https://tools.ietf.org/html/rfc2460#section-7), similar cu [DSCP](https://en.wikipedia.org/wiki/Differentiated_services) 
+- Flow Label           [20-bit flow label](https://tools.ietf.org/html/rfc2460#section-6), semantica definită [aici](https://tools.ietf.org/html/rfc2460#page-30)
+- Payload Length       16-bit unsigned integer care include si extra headerele adaugate
+- Next Header          8-bit selector similar cu câmpul Protocol din IPv4
+- Hop Limit            8-bit unsigned integer similar cu câmpul TTL din IPv4
+- Source Address       128-bit addresă sursă
+- Destination Address  128-bit addresă destinație
+- Headerul poate fi extins prin adăugarea mai multor headere in payload, vezi [aici](https://tools.ietf.org/html/rfc2460#page-6)
+- Pseudoheaderul pentru checksum-ul calculat de layerele de transport se formează diferit, vezi [aici](https://tools.ietf.org/html/rfc2460#page-27)
+- Adresele sunt stocate in 8 grupuri de câte 16 biti: `fe80:cd00:0000:0000:1257:0000:0000:729c`
+- Numărul total de adrese IPv6 este 340282366920938463463374607431768211456, suficient pentru toate device-urile existente
+- Adresa IPv6 pentru loopback localhost este `::1/128` 
+- Dublu `::` este o variantă prin care se prescurtează secventele continue cele mai din stânga de `0`, adresa de mai sus este prescurtată: `fe80:cd00::1257:0:0:729c`
+
+
+```python
+IPv6().show()
+###[ IPv6 ]### 
+  version= 6
+  tc= 0
+  fl= 0
+  plen= None
+  nh= No Next Header
+  hlim= 64
+  src= ::1
+  dst= ::1
+```
 
 <a name="ether"></a> 
 ### [Ethernet Frame](https://en.wikipedia.org/wiki/Ethernet_frame#Structure)
@@ -295,10 +355,63 @@ Pentru a trimite pachete la nivelul legatură de date, completând manual câmpu
 - `answered, unanswered = srp()` - send_receive_ethernet trimite pachete la layer 2 și înregistrează și răspunsurile
 - `answer = srp1()` - send_receive_1_ethernet la fel ca srp, dar înregistreazî doar primul răspuns
 
+###### Exemplu ping
+```python
+ICMP().show()
+###[ ICMP ]### 
+  type= echo-request
+  code= 0
+  chksum= None
+  id= 0x0
+  seq= 0x0
+
+icmp = ICMP(type = 'echo-request')
+ip = IP(dst = "137.254.16.101")
+pachet = ip / icmp
+rec = sr1(pachet)
+rec.show()
+
+###[ IP ]### 
+  version= 4
+  ihl= 5
+  tos= 0x0
+  len= 28
+  id= 48253
+  flags= DF
+  frag= 0
+  ttl= 242
+  proto= icmp
+  chksum= 0x23e7
+  src= 137.254.16.101
+  dst= 1.15.3.1
+  \options\
+###[ ICMP ]### 
+     type= echo-reply
+     code= 0
+     chksum= 0x0
+     id= 0x0
+     seq= 0x0
+```
+
+###### Exemplu DNS request
+```python
+ip = IP(dst = '8.8.8.8')
+transport = UDP(dport = 53)
+
+dns = DNS(rd = 1)
+dns_query = DNSQR(qname = 'fmi.unibuc.ro')
+dns.qd = dns_query
+
+answer = sr1(ip / transport / dns)
+print (answer[DNS].summary())
+```
+
+
 ### Exerciții
 1. Folosiți exemplul de mai sus pentru a trimite mesaje între serverul pe UDP și scapy.
-2. Rulați 3-way handshake între rt1 și mid1 folosind containerele definite în laborator3, astfel: containerul rt1 va rula laborator2/tcp_server.py pe adresa '0.0.0.0', iar în containerul mid1 rulați scapy (puteți folosi comanda: `docker-compose exec --user root mid1 scapy`) și configurați fișierul din [laborator3/src/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/master/laborator3/src/tcp_handshake.py) pentru a face 3-way handshake.
+2. Rulați 3-way handshake între server și client folosind containerele definite în laborator3, astfel: containerul server va rula laborator2/tcp_server.py pe adresa '0.0.0.0', iar în containerul client rulați scapy (puteți folosi comanda: `docker-compose exec --user root mid1 scapy`) și configurați fișierul din [laborator3/src/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/master/laborator3/src/tcp_handshake.py) pentru a face 3-way handshake.
 3. Configurați opțiunea pentru Maximum Segment Size (MSS) astfel încat să îl notificați pe server că segmentul maxim este de 1 byte. Puteți să-l configurați cu 0?
 4. Trimiteți un mesaj serverului folosind flag-ul PSH.
 5. Setați flag-urile ECN în IP și flag-ul ECE in TCP pentru a notifica serverul de congestionarea rețelei.
 6. [TCP Syn Scanning](https://scapy.readthedocs.io/en/latest/usage.html#syn-scans) - folosiți scapy pentru a crea un pachet cu IP-ul destinație 193.226.51.6 (site-ul facultății) și un layer de TCP cu dport=(10, 500) pentru a afla care porturi sunt deschise comunicării cu TCP pe site-ul facultății.
+7. Urmăriți mai multe exemple din scapy [aici](https://scapy.readthedocs.io/en/latest/usage.html#simple-one-liners)
