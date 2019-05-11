@@ -64,5 +64,5 @@ Scrieti un script care să trimită pachete `ARP` cu operația `reply` în loop 
 3. adăugați la command pentru containerul `client` să execute tcp_client.py din laborator2, modificat astfel încât să se conecteze la server și să trimită un mesaj
 
 ###### (1p) Prezentați rezultatul din logs
-1. rulați totul folosind `docker-compose up -d` și prezentați output-ul din `docker-compose logs`
+1. rulați totul folosind `docker-compose up -d` și prezentați output-ul din `docker-compose logs`. Dacă atacul a avut succes, containerul middle care execută tcpdump ar trebui să fie capabil să intercepteze pachetele dintre server și client.
 
