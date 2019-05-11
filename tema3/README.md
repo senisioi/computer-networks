@@ -17,7 +17,7 @@ Pentru simplitate, puteți folosi containerele server și middle din rețeaua ne
 - (1p) faceți trei transmisii a câte un byte (o literă) folosind funcția `sr1` și afișați răspunsul pentru fiecare, apoi transmiteți 3 bytes
 - (1p) în cele din urmă, inițializați finalizarea conexiunii FIN, FIN-ACK, ACK din codul scapy
 
-Pentru testare, și prezentare la laborator, tot procesul de la handhsake pâna la reset trebuie înregistrat cu `tcpdump -Snnt tcp` pe ambele containere.
+Pentru testare, și prezentare la laborator, tot procesul de la handhsake pâna la finalizare trebuie înregistrat cu `tcpdump -Snnt tcp` pe ambele containere.
 
 
 #### 2. [Address Resolution Protocol](http://www.erg.abdn.ac.uk/users/gorry/course/inet-pages/arp.html) (3p.)
