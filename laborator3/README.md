@@ -282,7 +282,9 @@ IPv6().show()
  |     Interpacket Gap  - interval de timp |
  *----*----*----*----*----*----*----*-------
  ```
-La nivelurile legatură de date și fizic, avem standardele [IEEE 802](https://ieeexplore.ieee.org/browse/standards/get-program/page/series?id=68) care ne definesc structurile frame-urilor. Fiecare secventă de 4 liniuțe reprezintă un octet (nu un bit ca in diagramele anterioare). 
+La nivelurile legatură de date și fizic, avem standardele [IEEE 802](https://ieeexplore.ieee.org/browse/standards/get-program/page/series?id=68) care ne definesc structurile frame-urilor. Pentru nivelul data link, puteti găsi și [aici mai multe detalii explicate](https://notes.shichao.io/tcpv1/ch3/).
+
+Fiecare secventă de 4 liniuțe reprezintă un octet (nu un bit ca in diagramele anterioare) iar headerul cuprinde:
 - [preambulul](https://networkengineering.stackexchange.com/questions/24842/how-does-the-preamble-synchronize-other-devices-receiving-clocks) are o dimensiune de 7 octeți, fiecare octet de forma 10101010, și este folosit pentru sincronizarea ceasului receiver-ului. Mai multe detalii despre ethernet în acest [clip](https://www.youtube.com/watch?v=5u52wbqBgEY).
 - SF (start of frame) reprezinta un octet (10101011) care delimitează start of frame
 - [adresele MAC](http://www.dcs.gla.ac.uk/~lewis/networkpages/m04s03EthernetFrame.htm), sursă și destinație, sunt reprezentate pe 6 octeți
