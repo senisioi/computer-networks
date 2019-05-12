@@ -11,9 +11,9 @@ Pentru rezolvarea temei, utilizați containerele definite în docker-compose.yml
 #### 1. Handcrafted TCP (3p.)
 Modificați tcp_server.py din laborator 2 astfel încat serverul să accepte o singură conexiune pe care să o mențină deschisă și să afișeze constant tot ce primește. Serverul face recv(1) la cate un byte, îl printează și trimite înapoi litera 'Q'. Puteți șterge partea în care serverul execută time.sleep (linia 20).
 
-Pentru simplitate, puteți folosi containerele server și middle din rețeaua net. Rulați în containerul `server` serverul vostru modificat.
+Pentru simplitate, puteți folosi containerele `server` și `client`. Rulați în containerul `server` serverul vostru modificat.
 
-- (1p) pe `middle` faceți [3-way handshake](https://github.com/senisioi/computer-networks/blob/master/laborator3/src/tcp_handshake.py) cu serverul, setați opțiunea [Maximum Segment Size](https://www.incapsula.com/blog/mtu-mss-explained.html) `MSS = 2` (vezi exemplu în [laborator3](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#tcp_options)). 
+- (1p) pe `client` faceți [3-way handshake](https://github.com/senisioi/computer-networks/blob/master/laborator3/src/tcp_handshake.py) cu serverul, setați opțiunea [Maximum Segment Size](https://www.incapsula.com/blog/mtu-mss-explained.html) `MSS = 2` (vezi exemplu în [laborator3](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#tcp_options)). 
 - (1p) faceți trei transmisii a câte un byte (o literă) folosind funcția `sr1` și afișați răspunsul pentru fiecare, apoi transmiteți 3 bytes
 - (1p) în cele din urmă, inițializați finalizarea conexiunii FIN, FIN-ACK, ACK din codul scapy
 
@@ -65,4 +65,3 @@ Scrieti un script care să trimită pachete `ARP` cu operația `reply` în loop 
 
 ###### (1p) Prezentați rezultatul din logs
 1. rulați totul folosind `docker-compose up -d` și prezentați output-ul din `docker-compose logs`. Dacă atacul a avut succes, containerul middle care execută tcpdump ar trebui să fie capabil să intercepteze pachetele dintre server și client.
-
