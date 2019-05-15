@@ -1,4 +1,4 @@
-nu # Tema 3
+# Tema 3
 
 ## Informații temă
 Tema aceasta poate fi rezolvată în echipe de maxim 3 studenți, fiecare trebuie să prezinte individual câte un punct.
