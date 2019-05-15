@@ -1,9 +1,9 @@
-# Tema 3
+nu # Tema 3
 
 ## Informații temă
 Tema aceasta poate fi rezolvată în echipe de maxim 3 studenți, fiecare trebuie să prezinte individual câte un punct.
 
-**Deadline**: (~~28 - 29 mai~~ la laboratoarele grupelor) **4 - 5 iunie**, sau marti si miercuri intre 12:00 si 15:00 la 322
+**Deadline**: (~~28 - 29 mai~~) **4 - 5 iunie** intre 12:00 si 15:00 la 322, sau marti si miercuri la laborator
 
 ## Cerințe temă (1 p. oficiu)
 Pentru rezolvarea temei, utilizați containerele definite în docker-compose.yml din laborator3.
