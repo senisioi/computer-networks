@@ -1,5 +1,10 @@
 # 2019 computer networks lab
 
+## Things to Checkout
+- [liminal festival](http://liminal.ro/2019/#theunseen) Performing Surgery on Your Inner Reality
+- [DefCamp](https://def.camp/) the most important annual conference on Hacking & Information Security in Central Eastern Europe
+- [Defcon](https://www.defcon.org/) hacker comunity conference
+- [ODD](oddweb.org) a space for theoretical discussion and social gatherings of all kinds
 
 ## Curs
 - [Materiale de curs](http://nlp.unibuc.ro/people/liviu.html#Courses)
