@@ -1,4 +1,4 @@
-# Laborator 3 
+# Capitolul 3 
 
 ## Cuprins
 - [Introducere](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#intro)

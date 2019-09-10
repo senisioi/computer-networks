@@ -1,4 +1,4 @@
-# Laborator 2
+# Capitolul 2
 
 ## Cuprins
 - [Introducere și IDE](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#intro)

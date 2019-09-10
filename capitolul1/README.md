@@ -1,4 +1,4 @@
-## Laborator 1
+## Capitolul 1
 
 <a name="clean_all"></a> 
 ### În prealabil
