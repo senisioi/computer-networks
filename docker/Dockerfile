@@ -4,10 +4,30 @@ MAINTAINER Sergiu Nisioi <sergiu.nisioi@fmi.unibuc.ro>
 
 USER root
 
-RUN apt-get update 
-RUN apt-get install -y build-essential git net-tools arp-scan nmap rtpflood python python-pip
-RUN pip install scapy
+RUN apt-get update && apt-get install -y build-essential git net-tools arp-scan nmap rtpflood python3 python3-pip
+RUN apt-get update && apt-get install -y tcpdump ethtool
 
-RUN useradd -u 1000 -m rtuser
-USER rtuser
-WORKDIR /home/rtuser
+# move tcpdump from the default location to /usr/local
+RUN mv /usr/sbin/tcpdump /usr/local/bin
+# add the new location to the PATH in case it's not there
+ENV PATH="/usr/local/bin:${PATH}"
+
+RUN apt-get update && apt-get install -y graphviz imagemagick texlive
+
+RUN git clone https://github.com/senisioi/scapy.git && cd scapy && python3 setup.py install
+
+RUN pip3 install cryptography matplotlib graphviz vpython
+RUN pip3 install PyX geoip2
+
+RUN wget https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz 
+RUN tar -xvf GeoLite2-City.tar.gz && mv GeoLite2-City_20190409/GeoLite2-City.mmdb /GeoLite2-City.mmdb
+
+RUN apt-get update && apt-get install -y libgeos-* proj-* libproj-dev
+
+RUN pip3 install scipy cartopy
+
+RUN apt-get update && apt-get install -y python3-tk
+
+#RUN mkdir -p /root/.config/matplotlib
+#RUN echo "backend : Agg" > /root/.config/matplotlib/matplotlibrc
+

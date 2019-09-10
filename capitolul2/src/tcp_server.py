@@ -20,6 +20,6 @@ while True:
     time.sleep(15)
     data = conexiune.recv(1024)
     logging.info('Content primit: "%s"', data)
-    conexiune.send("Server - OK")
+    conexiune.send(b"Server - OK")
     conexiune.close()
 sock.close()

@@ -2,7 +2,7 @@
 
 ## Cuprins
 - [Introducere și IDE](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#intro)
-- [python 2.7 basics](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#basics)
+- [python 3 basics](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#basics)
 - [Exerciții python](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#exercitii_python)
 - [Socket API](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#socket)
 - [UDP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#udp)
@@ -39,11 +39,11 @@ EOF
 ```
 
 <a name="basics"></a> 
-## [python 2.7 basics](https://www.tutorialspoint.com/python/python_variable_types.htm)
+## [python 3 basics](https://www.tutorialspoint.com/python/python_variable_types.htm)
 ```python
 # comment pentru hello world
 variabila = 'hello "world"'
-print variabila
+print (variabila)
 
 # int:
 x = 1 + 1
@@ -72,17 +72,17 @@ print d['grupa'], d['nr_studenti']
 ```python
 lista = [1,5,7,8,2,5,2]
 for element in lista:
-    print element
+    print (element)
 
 for idx, element in enumerate(lista):
-    print idx, element
+    print (idx, element)
 
 for idx in range(0, len(lista)):
-    print lista[idx]
+    print (lista[idx])
 
 idx = 0
 while idx < len(lista):
-    print lista[idx]
+    print (lista[idx])
     idx += 1 
 ```
 
@@ -95,13 +95,13 @@ while idx < len(lista):
 '''
 x = 1
 y = 2
-print x + y
+print (x + y)
 if (x == 1 and y == 2) or (x==2 and y == 1):
-    print " x e egal cu:", x, ' si y e egal cu: ', y
+    print (" x e egal cu:", x, ' si y e egal cu: ', y)
 elif x == y:
-    print 'sunt la fel'
+    print ('sunt la fel')
 else:
-    print "nimic nu e adevarat"
+    print ("nimic nu e adevarat")
 ```
 
 #### [funcții](https://www.tutorialspoint.com/python/python_functions.htm)
@@ -213,26 +213,6 @@ Câteva caracteristi ale protocolului sunt descrise [aici](https://en.wikipedia.
 
 Server-ul se instanțiază cu [AF_INET](https://stackoverflow.com/questions/1593946/what-is-af-inet-and-why-do-i-need-it) și SOCK_DGRAM (datagrams - connectionless, unreliable messages of a fixed maximum length) pentru UDP:
 
-Python 2
-```python
-# UDP socket 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-port = 10000
-adresa = 'localhost'
-server_address = (adresa, port)
-sock.bind(server_address)
-
-data, address = sock.recvfrom(4096)
-
-print data, address
-
-sent = sock.sendto(data, address)
-
-sock.close()
-```
-
-Python 3
 ```python
 import socket
 
@@ -253,24 +233,6 @@ sock.close()
 ```
 
 Clientul trebuie să știe la ce adresă ip și pe ce port să comunice cu serverul:
-
-Python 2
-```python
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-port = 10000
-adresa = 'localhost'
-server_address = (adresa, port)
-
-sent = sock.sendto('mesaj', server_address)
-data, server = sock.recvfrom(4096)
-
-print data, server
-
-sock.close()
-```
-
-Python 3
 ```python
 import socket
 

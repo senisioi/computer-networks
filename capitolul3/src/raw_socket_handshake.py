@@ -21,7 +21,7 @@ try:
     # raw socket to provide tcp and ip headers
     s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_TCP)
 except socket.error , msg:
-    print 'Socket could not be created. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
+    print ('Socket could not be created. Error Code : ' + str(msg[0]) + ' Message ' + msg[1])
     sys.exit()
 s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
     
@@ -96,14 +96,14 @@ psh = struct.pack('!4s4sBBH', source_address, dest_address, placeholder, protoco
 psh = psh + tcp_header + user_data
  
 tcp_check = checksum(psh)
-#print tcp_checksum
+#print (tcp_checksum)
  
 # make the tcp header again and fill the correct checksum - remember checksum is NOT in network byte order
 tcp_header = struct.pack('!HHLLBBH' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq, tcp_offset_res, tcp_flags,  tcp_window) + struct.pack('H' , tcp_check) + struct.pack('!H' , tcp_urg_ptr)
  
 # final full packet - syn packets dont have any data
 packet = ip_header + tcp_header + user_data
-#print packet
+#print (packet)
  
 #SYN
 s.sendto(packet, (dest_ip, 0))
@@ -145,13 +145,13 @@ destinat = ip_header_data[9]
 s_addr = socket.inet_ntoa(source);
 d_addr = socket.inet_ntoa(destinat);
 
-print 'Version : ' + str(ip_version) + ' IP Header Length : ' + str(IHL) + ' TTL : ' + str(TTL) + ' Protocol : ' + str(protocol) + ' Source Address : ' + str(s_addr) + ' Destination Address : ' + str(d_addr)
+print ('Version : ' + str(ip_version) + ' IP Header Length : ' + str(IHL) + ' TTL : ' + str(TTL) + ' Protocol : ' + str(protocol) + ' Source Address : ' + str(s_addr) + ' Destination Address : ' + str(d_addr))
 
 
 payload = packet[20:]
 tcp_data = payload[:20]
 
-print len(tcp_data)
+print (len(tcp_data))
 tcp_header = struct.unpack('!HHLLBBHHH', tcp_data)
 
 source_port = tcp_header[0]
@@ -161,8 +161,8 @@ acknowledgement = tcp_header[3]
 doff_reserved = tcp_header[4]
 tcph_length = doff_reserved >> 4
 
-print 'Source Port : ' + str(source_port) + ' Dest Port : ' + str(dest_port) + ' Sequence Number : ' + str(sequence) + ' Acknowledgement : ' + str(acknowledgement) + ' TCP header length : ' + str(tcph_length)
- 
+print ('Source Port : ' + str(source_port) + ' Dest Port : ' + str(dest_port) + ' Sequence Number : ' + str(sequence) + ' Acknowledgement : ' + str(acknowledgement) + ' TCP header length : ' + str(tcph_length))
+
 #################### DATA pack again to prepare the final ACK  #########################
 
 # tcp header fields
@@ -213,7 +213,7 @@ tcp_header = struct.pack('!HHLLBBH' , tcp_source, tcp_dest, tcp_seq, tcp_ack_seq
  
 # final full packet - syn packets dont have any data
 packet = ip_header + tcp_header + user_data
-#print packet
+#print (packet)
  
 #Send the packet finally - the port specified has no effect
 s.sendto(packet, (dest_ip, 0))

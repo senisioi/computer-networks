@@ -16,4 +16,4 @@ dns.qd = dns_query
 pachet = network_layer / transport_layer / dns
 
 answer = sr1(pachet)
-print answer[DNS].summary()
+print (answer[DNS].summary())

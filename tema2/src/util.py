@@ -16,9 +16,9 @@ def compara_endianness(numar):
             reprezentarea Little Endian este: 00010000 00000000
                 - cel mai semnificativ bit are adresa cea mai mare 
     '''
-    print "Numarul: ", numar
-    print "Network Order (Big Endian): ", [bin(ord(byte)) for byte in struct.pack('!H', numar)]
-    print "Little Endian: ", [bin(ord(byte)) for byte in struct.pack('<H', numar)]
+    print ("Numarul: ", numar)
+    print ("Network Order (Big Endian): ", [bin(ord(byte)) for byte in struct.pack('!H', numar)])
+    print ("Little Endian: ", [bin(ord(byte)) for byte in struct.pack('<H', numar)])
 
 
 

@@ -1,7 +1,6 @@
 # 2019 computer networks lab
 
 ## Things to Checkout
-- [liminal festival](http://liminal.ro/2019/#theunseen) Performing Surgery on Your Inner Reality
 - [DefCamp](https://def.camp/) the most important annual conference on Hacking & Information Security in Central Eastern Europe
 - [Defcon](https://www.defcon.org/) hacker comunity conference
 - [ODD](oddweb.org) a space for theoretical discussion and social gatherings of all kinds
@@ -12,15 +11,15 @@
 
 ## Înainte de a începe
 Pentru acest laborator, vom avea nevoie de:
-- [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
+- [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/) sau urmați pașii de [aici](https://gist.github.com/senisioi/0d4326775cade99ce2dec41b8d716b04)
 - [docker-compose](https://docs.docker.com/compose/install/) - este deja adăugat în acest repository
 - după instalarea docker, trebuie să adăugați userul cu care lucrăm în grupul de docker `sudo usermod -aG docker $USER`
 
 ## Concepte de bază
-O masină virtuală de docker o vom numi container sau serviciu. Pentru a porni o masină virtuală, trebuie să folosim [docker build](https://docs.docker.com/engine/reference/commandline/build/) pentru a construi o imagine cu un sistem de operare care să fie utilizat pe acea masină. Comanda de build utilizează fișierul [./docker/Dockerfile](https://github.com/senisioi/computer-networks/blob/master/docker/Dockerfile) care definește ce sistem de operare folosim, ce aplicații vor fi instalate și ce useri vor exista pe containerele care rulează acea imagine. 
+Un container (sau serviciu) docker poate fi pornit (în mod asemănător cu o mașină virtuală) cu o imagine cu un sistem de operare. Pentru a construi imaginea explicit, putem folosi [docker build](https://docs.docker.com/engine/reference/commandline/build/). Comanda build utilizează fișierul [./docker/Dockerfile](https://github.com/senisioi/computer-networks/blob/master/docker/Dockerfile) care definește ce sistem de operare va fi utilizat de container, ce aplicații vor fi pre-instalate și ce useri vor exista pe containerele care rulează acea imagine. 
 
 Comanda [docker-compose up -d](https://docs.docker.com/compose/reference/up/), va citi fișierul [docker-compose.yml](https://github.com/senisioi/computer-networks/blob/master/docker-compose.yml) din path-ul de unde rulăm comanda și va lansa containere după cum sunt definite în fișier în secțiunea *services*: rt1, rt2, etc..
-Containere care sunt configurate să ruleze o imagine dată (în cazul nostru *baseimage*, imaginea construită la pasul anterior), să fie conectate la o rețea (în cazul nostru rețeaua *dmz*) sau să aibă definite [un mount](https://unix.stackexchange.com/questions/3192/what-is-meant-by-mounting-a-device-in-linux) local.
+Containere care sunt configurate să ruleze o imagine dată (în cazul nostru *baseimage*, imaginea construită la pasul anterior) sunt conectate la o rețea (în cazul nostru rețeaua *dmz*) sau și au definite [un mount point](https://unix.stackexchange.com/questions/3192/what-is-meant-by-mounting-a-device-in-linux) local.
 Comanda docker-compose pe linux nu se instalează default cu docker, ci trebuie [să o instalăm separat](https://docs.docker.com/compose/install/). În cazul nostru, comanda se găsește chiar în directorul computer-networks, în acest repository. Așa că dacă nu aveți comanda instalată, o puteți rula din acest director folosind calea relativă `./docker-compose`.
 
 
