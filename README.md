@@ -1,4 +1,4 @@
-# 2019 computer networks lab
+# 2019-2020 computer networks lab
 
 ## Things to Checkout
 - [DefCamp](https://def.camp/) the most important annual conference on Hacking & Information Security in Central Eastern Europe
