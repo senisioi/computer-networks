@@ -1,4 +1,3 @@
 [submodule "vrnetlab"]
 	path = vrnetlab
 	url = https://github.com/plajjan/vrnetlab.git
-	branch = 2020
