@@ -16,9 +16,9 @@ Pentru acest laborator, vom avea nevoie de:
 - după instalarea docker, trebuie să adăugați userul cu care lucrăm în grupul de docker `sudo usermod -aG docker $USER`
 
 ## Concepte de bază
-Un container (sau serviciu) docker poate fi pornit (în mod asemănător cu o mașină virtuală) cu o imagine cu un sistem de operare. Pentru a construi imaginea explicit, putem folosi [docker build](https://docs.docker.com/engine/reference/commandline/build/). Comanda build utilizează fișierul [./docker/Dockerfile](https://github.com/senisioi/computer-networks/blob/master/docker/Dockerfile) care definește ce sistem de operare va fi utilizat de container, ce aplicații vor fi pre-instalate și ce useri vor exista pe containerele care rulează acea imagine. 
+Un container (sau serviciu) docker poate fi pornit (în mod asemănător cu o mașină virtuală) cu o imagine cu un sistem de operare. Pentru a construi imaginea explicit, putem folosi [docker build](https://docs.docker.com/engine/reference/commandline/build/). Comanda build utilizează fișierul [./docker/Dockerfile](https://github.com/senisioi/computer-networks/blob/2020/docker/Dockerfile) care definește ce sistem de operare va fi utilizat de container, ce aplicații vor fi pre-instalate și ce useri vor exista pe containerele care rulează acea imagine. 
 
-Comanda [docker-compose up -d](https://docs.docker.com/compose/reference/up/), va citi fișierul [docker-compose.yml](https://github.com/senisioi/computer-networks/blob/master/docker-compose.yml) din path-ul de unde rulăm comanda și va lansa containere după cum sunt definite în fișier în secțiunea *services*: rt1, rt2, etc..
+Comanda [docker-compose up -d](https://docs.docker.com/compose/reference/up/), va citi fișierul [docker-compose.yml](https://github.com/senisioi/computer-networks/blob/2020/docker-compose.yml) din path-ul de unde rulăm comanda și va lansa containere după cum sunt definite în fișier în secțiunea *services*: rt1, rt2, etc..
 Containere care sunt configurate să ruleze o imagine dată (în cazul nostru *baseimage*, imaginea construită la pasul anterior) sunt conectate la o rețea (în cazul nostru rețeaua *dmz*) sau și au definite [un mount point](https://unix.stackexchange.com/questions/3192/what-is-meant-by-mounting-a-device-in-linux) local.
 Comanda docker-compose pe linux nu se instalează default cu docker, ci trebuie [să o instalăm separat](https://docs.docker.com/compose/install/). În cazul nostru, comanda se găsește chiar în directorul computer-networks, în acest repository. Așa că dacă nu aveți comanda instalată, o puteți rula din acest director folosind calea relativă `./docker-compose`.
 
@@ -80,4 +80,4 @@ docker-compose exec --user root rt1 bash
 - [docker-compose](http://docker-k8s-lab.readthedocs.io/en/latest/docker/docker-compose.html)
 - [Compose Networking](https://runnable.com/docker/docker-compose-networking)
 - [Designing Scalable, Portable Docker Container Networks](https://success.docker.com/article/Docker_Reference_Architecture-_Designing_Scalable,_Portable_Docker_Container_Networks)
-- [Docker Networking Cookbook](https://github.com/TechBookHunter/Free-Docker-Books/blob/master/book/Docker%20Networking%20Cookbook.pdf)
+- [Docker Networking Cookbook](https://github.com/TechBookHunter/Free-Docker-Books/blob/2020/book/Docker%20Networking%20Cookbook.pdf)

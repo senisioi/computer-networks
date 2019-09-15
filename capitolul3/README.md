@@ -1,12 +1,12 @@
 # Capitolul 3 
 
 ## Cuprins
-- [Introducere](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#intro)
-- [TCP segment](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#tcp)
-- [IPv4 datagram](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#ip)
-- [IPv6 datagram](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#ipv6)
-- [Ethernet frame](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#ether)
-- [Scapy tutorial](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#scapy)
+- [Introducere](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#intro)
+- [TCP segment](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#tcp)
+- [IPv4 datagram](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#ip)
+- [IPv6 datagram](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#ipv6)
+- [Ethernet frame](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#ether)
+- [Scapy tutorial](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#scapy)
 
 <a name="intro"></a> 
 ## Introducere
@@ -411,7 +411,7 @@ print (answer[DNS].summary())
 
 ### Exerciții
 1. Folosiți exemplul de mai sus pentru a trimite mesaje între serverul pe UDP și scapy.
-2. Rulați 3-way handshake între server și client folosind containerele definite în capitolul3, astfel: containerul server va rula capitolul2/tcp_server.py pe adresa '0.0.0.0', iar în containerul client rulați scapy (puteți folosi comanda: `docker-compose exec --user root mid1 scapy`) și configurați fișierul din [capitolul3/src/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/master/capitolul3/src/tcp_handshake.py) pentru a face 3-way handshake.
+2. Rulați 3-way handshake între server și client folosind containerele definite în capitolul3, astfel: containerul server va rula capitolul2/tcp_server.py pe adresa '0.0.0.0', iar în containerul client rulați scapy (puteți folosi comanda: `docker-compose exec --user root mid1 scapy`) și configurați fișierul din [capitolul3/src/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/tcp_handshake.py) pentru a face 3-way handshake.
 3. Configurați opțiunea pentru Maximum Segment Size (MSS) astfel încat să îl notificați pe server că segmentul maxim este de 1 byte. Puteți să-l configurați cu 0?
 4. Trimiteți un mesaj serverului folosind flag-ul PSH.
 5. Setați flag-urile ECN în IP și flag-ul ECE in TCP pentru a notifica serverul de congestionarea rețelei.

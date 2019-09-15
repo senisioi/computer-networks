@@ -13,7 +13,7 @@ Modificați tcp_server.py din laborator 2 astfel încat serverul să accepte o s
 
 Pentru simplitate, puteți folosi containerele `server` și `client`. Rulați în containerul `server` serverul vostru modificat.
 
-- (1p) pe `client` faceți [3-way handshake](https://github.com/senisioi/computer-networks/blob/master/capitolul3/src/tcp_handshake.py) cu serverul, setați opțiunea [Maximum Segment Size](https://www.incapsula.com/blog/mtu-mss-explained.html) `MSS = 2` (vezi exemplu în [capitolul3](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#tcp_options)). 
+- (1p) pe `client` faceți [3-way handshake](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/tcp_handshake.py) cu serverul, setați opțiunea [Maximum Segment Size](https://www.incapsula.com/blog/mtu-mss-explained.html) `MSS = 2` (vezi exemplu în [capitolul3](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#tcp_options)). 
 - (1p) faceți trei transmisii a câte un byte (o literă) folosind funcția `sr1` și afișați răspunsul pentru fiecare, apoi transmiteți 3 bytes
 - (1p) în cele din urmă, inițializați finalizarea conexiunii FIN, FIN-ACK, ACK din codul scapy
 
