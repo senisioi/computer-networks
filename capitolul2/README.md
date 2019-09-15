@@ -264,7 +264,7 @@ O diagramă a procesului anterior este reprezentată aici:
 
 
 <a name="tcp"></a> 
-### Trasnmission Control Protocol - [TCP](https://tools.ietf.org/html/rfc793#page-15)
+### Transmission Control Protocol - [TCP](https://tools.ietf.org/html/rfc793#page-15)
 
 Este un protocol mai avansat de la [nivelul transport](http://www.erg.abdn.ac.uk/users/gorry/course/inet-pages/transport.html). 
 Header-ul acestuia este mai complex:
