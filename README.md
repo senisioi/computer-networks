@@ -81,3 +81,4 @@ docker-compose exec --user root rt1 bash
 - [Compose Networking](https://runnable.com/docker/docker-compose-networking)
 - [Designing Scalable, Portable Docker Container Networks](https://success.docker.com/article/Docker_Reference_Architecture-_Designing_Scalable,_Portable_Docker_Container_Networks)
 - [Docker Networking Cookbook](https://github.com/TechBookHunter/Free-Docker-Books/blob/2020/book/Docker%20Networking%20Cookbook.pdf)
+- [Packet Crafting with Scapy](http://www.scs.ryerson.ca/~zereneh/cn8001/CN8001-PacketCraftingUsingScapy-WilliamZereneh.pdf)

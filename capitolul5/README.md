@@ -30,4 +30,6 @@
 ### [HTTP layer folosind scapy](https://github.com/invernizzi/scapy-http)
 - protocolul [HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods) se regăsește la nivelul aplicație
 - puteți folosi scapy pentru a crea requesturi complete către servicii web
+- [HTTP2](https://github.com/secdev/scapy/blob/master/doc/notebooks/HTTP_2_Tuto.ipynb) notebook with scapy
+ 
 
