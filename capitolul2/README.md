@@ -1,14 +1,14 @@
 # Capitolul 2
 
 ## Cuprins
-- [Introducere și IDE](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#intro)
-- [python 3 basics](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#basics)
-- [Exerciții python](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#exercitii_python)
-- [Socket API](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#socket)
-- [UDP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#udp)
-- [Exerciții socket UDP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#exercitii_udp)
-- [TCP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#tcp)
-- [Exerciții socket TCP](https://github.com/senisioi/computer-networks/blob/master/laborator2/README.md#exercitii_tcp)
+- [Introducere și IDE](https://github.com/senisioi/computer-networks/blob/master/capitolul2/README.md#intro)
+- [python 3 basics](https://github.com/senisioi/computer-networks/blob/master/capitolul2/README.md#basics)
+- [Exerciții python](https://github.com/senisioi/computer-networks/blob/master/capitolul2/README.md#exercitii_python)
+- [Socket API](https://github.com/senisioi/computer-networks/blob/master/capitolul2/README.md#socket)
+- [UDP](https://github.com/senisioi/computer-networks/blob/master/capitolul2/README.md#udp)
+- [Exerciții socket UDP](https://github.com/senisioi/computer-networks/blob/master/capitolul2/README.md#exercitii_udp)
+- [TCP](https://github.com/senisioi/computer-networks/blob/master/capitolul2/README.md#tcp)
+- [Exerciții socket TCP](https://github.com/senisioi/computer-networks/blob/master/capitolul2/README.md#exercitii_tcp)
 
 
 <a name="intro"></a> 
@@ -251,12 +251,12 @@ sock.close()
 ```
 
 O diagramă a procesului anterior este reprezentată aici:
-![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/laborator2/UDPsockets.jpg)
+![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/capitolul2/UDPsockets.jpg)
 
 
 <a name="exercitii_udp"></a> 
 ### Exerciții
-1. Pe container-ul rt1 rulați [udp_server.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_server.py), [udp_client.py](https://github.com/senisioi/computer-networks/blob/master/laborator2/src/udp_client.py). 
+1. Pe container-ul rt1 rulați [udp_server.py](https://github.com/senisioi/computer-networks/blob/master/capitolul2/src/udp_server.py), [udp_client.py](https://github.com/senisioi/computer-networks/blob/master/capitolul2/src/udp_client.py). 
 2. Încercați să folosiți udp_client.py pentru a vă conecta de pe sistemul host la container-ul rt1. Verificați documentația de la [ports](https://docs.docker.com/compose/compose-file/compose-file-v2/#ports)
 3. Care este portul destinație pe care ăl folosește server-ul pentru a trimite un mesaj clientului?
 4. Modificați mesajul client-ului ca acesta să fie citit ca parametru al scriptului (`sys.argv[1]`). Transmiteți mesaje de la un container la altul folosind *udp_server.py* și *udp_client.py*.
@@ -329,7 +329,7 @@ sock.close()
 ```
 
 O diagramă a procesului anterior este reprezentată aici:
-![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/laborator2/TCPsockets.png)
+![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/capitolul2/TCPsockets.png)
 
 
 <a name="exerciții_tcp"></a> 

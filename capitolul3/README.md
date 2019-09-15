@@ -1,12 +1,12 @@
 # Capitolul 3 
 
 ## Cuprins
-- [Introducere](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#intro)
-- [TCP segment](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#tcp)
-- [IPv4 datagram](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#ip)
-- [IPv6 datagram](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#ipv6)
-- [Ethernet frame](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#ether)
-- [Scapy tutorial](https://github.com/senisioi/computer-networks/blob/master/laborator3/README.md#scapy)
+- [Introducere](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#intro)
+- [TCP segment](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#tcp)
+- [IPv4 datagram](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#ip)
+- [IPv6 datagram](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#ipv6)
+- [Ethernet frame](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#ether)
+- [Scapy tutorial](https://github.com/senisioi/computer-networks/blob/master/capitolul3/README.md#scapy)
 
 <a name="intro"></a> 
 ## Introducere
@@ -20,14 +20,14 @@ cd computer-networks
 # ștergem rețelele create anterior ca să nu se suprapună cu noile subnets
 docker network prune
 
-# lucrăm cu ../docker-compose doar din laborator3
-cd laborator3
+# lucrăm cu ../docker-compose doar din capitolul3
+cd capitolul3
 
 # pentru a porni containerle, rulăm docker-compose din directorul superior cu:
 ../docker-compose up -d
 
 # sau din directorul computer-networks: 
-# ./docker-compose -f laborator3/docker-compose.yml up -d
+# ./docker-compose -f capitolul3/docker-compose.yml up -d
 ```
 
 Fișierul `docker-compose.yml` definește 4 containere `server, router, client, middle` având ip-uri fixe în subneturi diferite, iar `router` este un container care funcționează ca router între cele două subrețele. Observați în command pentru server: `ip route add 172.111.0.0/16 via 198.13.0.1` adăugarea unei rute către subnetul în care se află clientul via ip-ul containerului router.
@@ -411,7 +411,7 @@ print (answer[DNS].summary())
 
 ### Exerciții
 1. Folosiți exemplul de mai sus pentru a trimite mesaje între serverul pe UDP și scapy.
-2. Rulați 3-way handshake între server și client folosind containerele definite în laborator3, astfel: containerul server va rula laborator2/tcp_server.py pe adresa '0.0.0.0', iar în containerul client rulați scapy (puteți folosi comanda: `docker-compose exec --user root mid1 scapy`) și configurați fișierul din [laborator3/src/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/master/laborator3/src/tcp_handshake.py) pentru a face 3-way handshake.
+2. Rulați 3-way handshake între server și client folosind containerele definite în capitolul3, astfel: containerul server va rula capitolul2/tcp_server.py pe adresa '0.0.0.0', iar în containerul client rulați scapy (puteți folosi comanda: `docker-compose exec --user root mid1 scapy`) și configurați fișierul din [capitolul3/src/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/master/capitolul3/src/tcp_handshake.py) pentru a face 3-way handshake.
 3. Configurați opțiunea pentru Maximum Segment Size (MSS) astfel încat să îl notificați pe server că segmentul maxim este de 1 byte. Puteți să-l configurați cu 0?
 4. Trimiteți un mesaj serverului folosind flag-ul PSH.
 5. Setați flag-urile ECN în IP și flag-ul ECE in TCP pentru a notifica serverul de congestionarea rețelei.

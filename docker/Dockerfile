@@ -4,8 +4,9 @@ MAINTAINER Sergiu Nisioi <sergiu.nisioi@fmi.unibuc.ro>
 
 USER root
 
-RUN apt-get update && apt-get install -y build-essential git net-tools arp-scan nmap rtpflood python3 python3-pip
+RUN apt-get update && apt-get install -y build-essential git net-tools arp-scan python3 python3-pip
 RUN apt-get update && apt-get install -y tcpdump ethtool
+RUN apt-get update && apt-get install -y nmap rtpflood
 
 # move tcpdump from the default location to /usr/local
 RUN mv /usr/sbin/tcpdump /usr/local/bin

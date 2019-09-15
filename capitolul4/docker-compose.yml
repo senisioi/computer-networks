@@ -1,0 +1,33 @@
+version: '2.1'
+
+services:
+    openwrt1:
+        image: vrnetlab/vr-openwrt:18.06.2
+        privileged: true
+        tty: true
+        cap_add:
+          - NET_ADMIN
+          - NET_RAW
+          - SYS_ADMIN
+        networks:
+            net:
+              ipv4_address: 198.166.0.1
+
+    openwrt2:
+        image: openwrt:latest
+        privileged: true
+        tty: true
+        cap_add:
+          - NET_ADMIN
+          - NET_RAW
+          - SYS_ADMIN
+        networks:
+            net:
+              ipv4_address: 198.166.0.2
+networks:
+    net:
+        ipam:
+            driver: default
+            config:
+                - subnet: 198.166.0.0/16
+                  gateway: 198.166.1.1
