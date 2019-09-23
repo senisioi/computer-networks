@@ -56,16 +56,16 @@ tup = (x, xs)
 
 # lista
 l = [1, 2, 2, 3, 3, 4, x, xs, tup]
-print l[2:]
+print (l[2:])
 
 # set
 s = set(l)
-print s
-print s.intersection(set([4, 4, 4, 1]))
+print (s)
+print (s.intersection(set([4, 4, 4, 1])))
 
 # dict:
 d = {'grupa': 123, "nr_studenti": 10}
-print d['grupa'], d['nr_studenti']
+print (d['grupa'], d['nr_studenti'])
 ```
 
 #### [for](https://www.tutorialspoint.com/python/python_for_loop.htm) și [while](https://www.tutorialspoint.com/python/python_while_loop.htm)
@@ -141,9 +141,9 @@ except:
     logging.exception("Un mesaj de exceptie!")
 
 program_name = sys.argv[0]
-print program_name
-print "Exista '/elocal'?", exists('/elocal')
-print os.path.join('usr', 'local', 'bin')
+print (program_name)
+print ("Exista '/elocal'?", exists('/elocal'))
+print (os.path.join('usr', 'local', 'bin'))
 
 for element in "hello world":
     sys.stdout.write(element)
@@ -154,7 +154,7 @@ for element in "hello world":
 #### [main](https://stackoverflow.com/questions/4041238/why-use-def-main)
 ```python
 def main():
-    print "functia main"
+    print ("functia main")
 
 # un if care verifică dacă scriptul este importat sau apelat ca main
 if __name__ == '__main__':
@@ -169,17 +169,17 @@ class Grupa:
         self.nume = nume
         self.numar_student = numar_studenti
     def _metoda_protected(self):
-        print "da"
+        print ("da")
     def __metoda_privata(self):
-        print 'nu'
+        print ('nu')
     def metoda_publica(self):
-        print "yes"
+        print ("yes")
 
 
 g = Grupa('222', '21')
-print g.nume
-print g.numar_studenti
-print G.nume
+print (g.nume)
+print (g.numar_studenti)
+print (G.nume)
 ```
 
 <a name="exerciții_python"></a> 
