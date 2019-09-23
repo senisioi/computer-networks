@@ -251,7 +251,7 @@ sock.close()
 ```
 
 O diagramă a procesului anterior este reprezentată aici:
-![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/capitolul2/UDPsockets.jpg)
+![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/2020/capitolul2/UDPsockets.jpg)
 
 
 <a name="exercitii_udp"></a> 
@@ -329,7 +329,7 @@ sock.close()
 ```
 
 O diagramă a procesului anterior este reprezentată aici:
-![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/master/capitolul2/TCPsockets.png)
+![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/2020/capitolul2/TCPsockets.png)
 
 
 <a name="exerciții_tcp"></a> 
