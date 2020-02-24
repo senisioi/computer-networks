@@ -15,20 +15,17 @@ ENV PATH="/usr/local/bin:${PATH}"
 
 RUN apt-get update && apt-get install -y graphviz imagemagick texlive
 
-RUN git clone https://github.com/senisioi/scapy.git && cd scapy && python3 setup.py install
+RUN ls -1 && git clone https://github.com/senisioi/scapy.git && cd scapy && python3 setup.py install
 
 RUN pip3 install cryptography matplotlib graphviz vpython
 RUN pip3 install PyX geoip2
-
-RUN wget https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz 
-RUN tar -xvf GeoLite2-City.tar.gz && mv GeoLite2-City_20190409/GeoLite2-City.mmdb /GeoLite2-City.mmdb
+RUN wget https://web.archive.org/web/20191227182209/https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
+RUN tar -xvf GeoLite2-City.tar.gz && mv GeoLite2-City_20191224/GeoLite2-City.mmdb /GeoLite2-City.mmdb
 
 RUN apt-get update && apt-get install -y libgeos-* proj-* libproj-dev
 
-RUN pip3 install scipy cartopy
-
+RUN pip3 install scipy
+RUN apt-get update && apt-get install -y libgeos++-dev
+RUN apt-get update && apt-get install -y python3-cartopy
 RUN apt-get update && apt-get install -y python3-tk
-
-#RUN mkdir -p /root/.config/matplotlib
-#RUN echo "backend : Agg" > /root/.config/matplotlib/matplotlibrc
-
+RUN pip3 install notebook
