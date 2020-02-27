@@ -25,7 +25,7 @@ Comanda docker-compose pe linux nu se instalează default cu docker, ci trebuie 
 ## Starting up
 ```bash
 # build the docker image
-docker build -t baseimage ./docker/
+docker build -t baseimage -f ./docker/Dockerfile-small .
 # start services defined in docker-compose.yml
 docker-compose up -d
 ```
