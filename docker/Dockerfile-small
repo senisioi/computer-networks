@@ -1,4 +1,4 @@
-FROM kalilinux/kali-linux-docker
+FROM kalilinux/kali-rolling
 
 MAINTAINER Sergiu Nisioi <sergiu.nisioi@fmi.unibuc.ro>
 
