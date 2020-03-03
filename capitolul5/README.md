@@ -33,3 +33,7 @@
 - [HTTP2](https://github.com/secdev/scapy/blob/master/doc/notebooks/HTTP_2_Tuto.ipynb) notebook with scapy
  
 
+### [MultiPath TCP]
+- [potential issues](https://www.youtube.com/watch?v=Ss2zmwzKG3k) and [presentation](https://www.blackhat.com/docs/us-14/materials/us-14-Pearce-Multipath-TCP-Breaking-Todays-Networks-With-Tomorrows-Protocols.pdf) 
+- [scapy tools for MPTCP](https://github.com/Neohapsis/mptcp-abuse)
+- [basics](http://www.diva-portal.org/smash/get/diva2:934158/FULLTEXT01.pdf)

@@ -1,4 +1,4 @@
-# Tema 2
+# Tema 2 (pentru anul 2018-2019)
 
 ## Informații temă
 Puteți lucra în echipe de 2 persoane.
