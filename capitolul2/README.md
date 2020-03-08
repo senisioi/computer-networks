@@ -195,10 +195,10 @@ print (G.nume)
 ## HTTP/S requests
 Intrati in  browser si apasati tasta F12. Accesati pagina http://fmi.unibuc.ro/ro si urmariti in tabul Network
 request-urile HTTP.
-- What is [HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
-- [Metode HTTP](http://httpbin.org/#/HTTP_Methods\)
-- What is [HTTPS](https://robertheaton.com/2014/03/27/how-does-https-actually-work/)
-- video despre HTTPS [aici](https://www.youtube.com/watch?v=T4Df5_cojAs)
+- Protocolul [HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
+- [Metode HTTP](http://httpbin.org/#/HTTP_Methods)
+- Protocolul [HTTPS](https://robertheaton.com/2014/03/27/how-does-https-actually-work/)
+- Video despre HTTPS [aici](https://www.youtube.com/watch?v=T4Df5_cojAs)
 
 ```python
 import requests
