@@ -1,0 +1,26 @@
+version: '2.1'
+
+services:
+    rt1:
+        image: snisioi/cap2:latest
+        volumes:
+            - .:/elocal
+        tty: true
+        networks:
+            - dmz
+        ports:
+         - "8001:8001"
+    rt2:
+        image: snisioi/cap2:latest
+        volumes:
+            - .:/elocal
+        tty: true
+        networks:
+            - dmz
+networks:
+    dmz:
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.111.111.0/16 
+                  gateway: 172.111.111.1

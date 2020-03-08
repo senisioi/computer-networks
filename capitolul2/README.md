@@ -1,14 +1,17 @@
 # Capitolul 2
 
 ## Cuprins
-- [Introducere și IDE](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/README.md#intro)
-- [python 3 basics](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/README.md#basics)
-- [Exerciții python](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/README.md#exercitii_python)
-- [Socket API](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/README.md#socket)
-- [UDP](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/README.md#udp)
-- [Exerciții socket UDP](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/README.md#exercitii_udp)
-- [TCP](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/README.md#tcp)
-- [Exerciții socket TCP](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/README.md#exercitii_tcp)
+- [Introducere și IDE](#intro)
+- [python 3 basics](#basics)
+  - [Exerciții python](#exercitii_python)
+- [HTTP/S requests](#https)
+  - [DNS over HTTPS](#doh)
+  - [Exerciții HTTP](#exercitii_http)
+- [Socket API](#socket)
+- [UDP](#udp)
+  - [Exerciții socket UDP](#exercitii_udp)
+- [TCP](#tcp)
+  - [Exerciții socket TCP](#exercitii_tcp)
 
 
 <a name="intro"></a> 
@@ -182,11 +185,59 @@ print (g.numar_studenti)
 print (G.nume)
 ```
 
-<a name="exerciții_python"></a> 
-### Exerciții
+<a name="exercitii_python"></a>
+### Exerciții python
 1. Creați un script de python care printează toate literele unui text, câte o literă pe secunda, folosind `time.sleep(1)`.
 2. Rulați scriptul anterior într-un container.
 3. Folosind [command](https://docs.docker.com/compose/compose-file/compose-file-v2/#command), modificați docker-compose.yml pentru a lansa acel script ca proces al containerului.
+
+<a name="https"></a>
+## HTTP/S requests
+Intrati in  browser si apasati tasta F12. Accesati pagina http://fmi.unibuc.ro/ro si urmariti in tabul Network
+request-urile HTTP.
+- What is [HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
+- [Metode HTTP](http://httpbin.org/#/HTTP_Methods\)
+- What is [HTTPS](https://robertheaton.com/2014/03/27/how-does-https-actually-work/)
+- video despre HTTPS [aici](https://www.youtube.com/watch?v=T4Df5_cojAs)
+
+```python
+import requests
+from bs4 import BeautifulSoup
+
+# dictionar cu headerul HTTP sub forma de chei-valori
+headers = {
+    "Accept": "text/html",
+    "Accept-Language": "en-US,en",
+    "Cookie": "__utmc=177244722",
+    "Host": "fmi.unibuc.ro",
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.79 Safari/537.36"
+}
+
+response = requests.get('http://fmi.unibuc.ro/ro', headers=headers)
+print (response.text[:200])
+
+# proceseaza continutul html
+supa = BeautifulSoup(response.text)
+
+# cauta div cu class cst2
+div = supa.find('div', {'class': 'cst2'})
+paragraph = div.find('p')
+
+print (paragraph.text)
+```
+<a name="doh"></a>
+### [DNS over HTTPS](https://datatracker.ietf.org/doc/rfc8484/?include_text=1)
+Pentru securitare și privacy, sunt dezvoltate metode noi care encriptează cererile către DNS.
+DNS over HTTPS sau DoH este explicat in detaliu [aici](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/). 
+Privacy-ul oferit de DoH poate fi exploatat și de [malware](https://www.zdnet.com/article/first-ever-malware-strain-spotted-abusing-new-doh-dns-over-https-protocol/) iar mai multe detalii despre securitatea acestuia pot fi citite [aici](https://secure64.com/wp-content/uploads/2019/06/doh-dot-investigation-6.pdf).
+
+<a name="exercitii_http"></a>
+### Exerciții HTTP/S
+1. Cloudflare are un serviciu DoH care ruleaza pe IP-ul [1.1.1.1](https://blog.cloudflare.com/announcing-1111/). Urmăriți [aici documentația](https://developers.cloudflare.com/1.1.1.1/dns-over-https/json-format/) pentru request-uri de tip GET către cloudflare-dns și scrieți o funcție care returnează adresa IP pentru un nume dat ca parametru. Indicații: setați header-ul cu {'accept': 'application/dns-json'}. 
+2. Executati pe containerul `rt1` scriptul 'simple_flask.py' care deserveste API HTTP pentru GET si POST. Daca accesati in browser [http://localhost:8001](http://localhost:8001) ce observati?
+3. Conectați-vă la containerul `docker-compose exec rt2 bash`. Testati conexiunea catre API-ul care ruleaza pe rt1 folosind curl: `curl -X POST http://rt1:8001/post  -d '{"value": 10}' -H 'Content-Type: application/json'`. Scrieti o metoda POST care ridică la pătrat un numărul definit în `value`. Apelați-o din cod folosind python requests.
+4. Urmăriți alte exemple de request-uri pe [HTTPbin](http://httpbin.org/)
+
 
 <a name="socket"></a> 
 ## Socket API
@@ -332,8 +383,8 @@ O diagramă a procesului anterior este reprezentată aici:
 ![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/2020/capitolul2/TCPsockets.png)
 
 
-<a name="exerciții_tcp"></a> 
-### Exerciții
+<a name="exercitii_tcp"></a> 
+### Exerciții TCP
 1. În containerul rt1 rulați `tcpdump -Snnt tcp` și tot în rt1 rulați un server tcp. Din container-ul rt2, creați o conexiune. Urmăriți [three-way handshake](https://www.geeksforgeeks.org/computer-network-tcp-3-way-handshake-process/) și închiderea conexiunii la nivel de pachete.
 2. Pentru a observa retransmisiile, putem introduce un delay artificial sau putem ignora anumite pachete pe rețea. Pentru asta, folosim un tool linux numit [netem](https://wiki.linuxfoundation.org/networking/netem) sau mai pe scurt [aici](https://stackoverflow.com/questions/614795/simulate-delayed-and-dropped-packets-on-linux). Aplicați o regulă de ignorare a 1% din pachetele care circulă pe eth0 folosind: `tc qdisc add dev eth0 root netem loss 0.1%`. Rulați comanda `tc -s qdisc` pentru a vedea filtrul adăugat pe eth0. Puteți modifica filtrul prin `tc qdisc change dev eth0 root netem loss 75%` sau puteți să ștergeți regulile folosind: `tc qdisc del dev eth0 root netem`. Puteți rula *netem* pornind un nou bash shell cu user root pe rt1, păstrați deschise tcpdump și server-ul. Conectați client-ul și observați pachetele care circulă pe eth0.
 
