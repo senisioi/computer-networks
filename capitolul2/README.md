@@ -24,7 +24,7 @@ yes | docker network prune
 
 # pentru a suprascrie modificările locale
 git fetch --all
-git reset --hard origin/master
+git reset --hard origin/2020
 
 cd capitolul2
 
