@@ -10,7 +10,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 port = 10000
 adresa = 'localhost'
 server_address = (adresa, port)
-mesaj = sys.argv[0]
+mesaj = sys.argv[1]
 
 try:
     logging.info('Trimitem mesajul "%s" catre %s', mesaj, adresa)

@@ -31,7 +31,10 @@ cd capitolul3
 ```
 
 Fișierul `docker-compose.yml` definește 4 containere `server, router, client, middle` având ip-uri fixe în subneturi diferite, iar `router` este un container care funcționează ca router între cele două subrețele. Observați în command pentru server: `ip route add 172.111.0.0/16 via 198.13.0.1` adăugarea unei rute către subnetul în care se află clientul via ip-ul containerului router.
-Serviciile router și middle sunt setate să facă forwarding `net.ipv4.ip_forward=1`. Prin comanda comentată de la router, poate fi programat să renunțe la pachete cu o probabilitate de 50%: `tc qdisc add dev eth0 root netem loss 50% && tc qdisc add dev eth1 root netem loss 50%`. Puteți folosi această setare dacă doriți să verificați retransmiterea mesajelor în cazul TCP.
+Serviciile router și middle sunt setate să facă forwarding `net.ipv4.ip_forward=1`. 
+
+Pentru a observa retransmisiile, putem introduce un delay artificial sau putem ignora anumite pachete pe rețea. Folosim un tool linux numit [netem](https://wiki.linuxfoundation.org/networking/netem) sau mai pe scurt [aici](https://stackoverflow.com/questions/614795/simulate-delayed-and-dropped-packets-on-linux). Prin comanda comentată de la router, poate fi programat să renunțe la pachete cu o probabilitate de 50%: `tc qdisc add dev eth0 root netem loss 50% && tc qdisc add dev eth1 root netem loss 50%`. Puteți folosi această setare dacă doriți să verificați retransmiterea mesajelor în cazul TCP.
+
 Nu în ultimul rând, pentru a putea face handshake programatic, trebuie să dezactivăm regula automată de reset a sistemului de operare: `iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP`.
 
 
