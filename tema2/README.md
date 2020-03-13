@@ -65,7 +65,7 @@ Am aflat de metodele HTTP, GET, POST, PUT, DELETE si de [PATCH](http://httpbin.o
 1. Executați serverul apoi clientul fie într-un container de docker fie pe calculatorul vostru personal: `python3 udp_server.py` și `python3 udp_client.py "mesaj de trimis"`.
 
 Printscreen cu rezultatul:
-![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/2020/tema2/udp_img.png)
+![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/2020/tema2/udp_img.jpg)
 
 ---
 
@@ -139,7 +139,7 @@ daca mers la UDP, aici nu mai e necesar
 4. Într-un alt terminal, în containerul rt2 rulați clientul: `docker-compose exec rt1 bash -c "python3 /elocal/src/tcp_client.py TCP_MESAJ"`
 
 Printscreen cu rezultatul:
-![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/2020/tema2/udp_img.png)
+![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/2020/tema2/udp_img.jpg)
 
 ---
 
