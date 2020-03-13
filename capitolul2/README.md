@@ -16,9 +16,18 @@
 
 <a name="intro"></a> 
 ## Introducere
-În cadrul acestui capitol vom lucra cu [python](http://www.bestprogramminglanguagefor.me/why-learn-python), un limbaj de programare foarte simplu pe care îl vom folosi pentru a crea și trimite pachete pe rețea. De asemenea, in cadrul acestui capitol folosim orchestratia de containere definită [aici](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/docker-compose.yml). Pentru a rula această orchestrație, este suficient să:
+În cadrul acestui capitol vom lucra cu [python](http://www.bestprogramminglanguagefor.me/why-learn-python), un limbaj de programare simplu pe care îl vom folosi pentru a crea și trimite pachete pe rețea. De asemenea, in cadrul acestui capitol folosim orchestratia de containere definită [aici](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/docker-compose.yml). Pentru a rula această orchestrație, este suficient să:
 ```bash
-cd computer-networks/capitolul2
+cd computer-networks/
+docker-compose down
+yes | docker network prune
+
+# pentru a suprascrie modificările locale
+git fetch --all
+git reset --hard origin/2020
+
+cd capitolul2
+
 # ../ este optional daca nu exista aplicatia docker-compose in $PATH
 ../docker-compose up -d
 ```
