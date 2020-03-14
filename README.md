@@ -1,12 +1,16 @@
 # 2019-2020 computer networks lab
 
+[![Gitter](https://badges.gitter.im/unibuc-computer-networks/2020.svg)](https://gitter.im/unibuc-computer-networks/2020?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+
 ## Things to Checkout
 - [DefCamp](https://def.camp/) the most important annual conference on Hacking & Information Security in Central Eastern Europe
 - [Defcon](https://www.defcon.org/) hacker comunity conference
 
-## Curs
+## Bibliografie curs
 - [Materiale de curs](http://nlp.unibuc.ro/people/liviu.html#Courses)
 - Cursul de [Computer Networks](https://www.youtube.com/watch?v=xKNPTYtTnAo&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C), University of Washington
+- [Computer Networks: A Systems Approach](https://book.systemsapproach.org/foundation.html)
 
 ## Înainte de a începe
 Pentru acest laborator, vom avea nevoie de:
