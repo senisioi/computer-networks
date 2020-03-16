@@ -1,12 +1,12 @@
 # Capitolul 3 
 
 ## Cuprins
-- [Introducere](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#intro)
-- [TCP segment](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#tcp)
-- [IPv4 datagram](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#ip)
-- [IPv6 datagram](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#ipv6)
-- [Ethernet frame](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#ether)
-- [Scapy tutorial](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/README.md#scapy)
+- [Introducere](#intro)
+- [TCP segment](#tcp)
+- [IPv4 datagram](#ip)
+- [IPv6 datagram](#ipv6)
+- [Ethernet frame](#ether)
+- [Scapy tutorial](#scapy)
 
 <a name="intro"></a> 
 ## Introducere
@@ -23,14 +23,14 @@ docker network prune
 # lucrăm cu ../docker-compose doar din capitolul3
 cd capitolul3
 
-# pentru a porni containerle, rulăm docker-compose din directorul superior cu:
-../docker-compose up -d
+# pentru a porni containerle putem pune ../ inainte de comanda
+docker-compose up -d
 
 # sau din directorul computer-networks: 
 # ./docker-compose -f capitolul3/docker-compose.yml up -d
 ```
 
-Fișierul `docker-compose.yml` definește 4 containere `server, router, client, middle` având ip-uri fixe în subneturi diferite, iar `router` este un container care funcționează ca router între cele două subrețele. Observați în command pentru server: `ip route add 172.111.0.0/16 via 198.13.0.1` adăugarea unei rute către subnetul în care se află clientul via ip-ul containerului router.
+Fișierul `docker-compose.yml` definește 4 containere `server, router, client, middle` având ip-uri fixe în subneturi diferite, iar `router` este un container care funcționează ca router între cele două subrețele. Observați în command pentru server: `ip route add 172.10.0.0/16 via 198.10.0.1` adăugarea unei rute către subnetul în care se află clientul via ip-ul containerului router.
 Serviciile router și middle sunt setate să facă forwarding `net.ipv4.ip_forward=1`. 
 
 Pentru a observa retransmisiile, putem introduce un delay artificial sau putem ignora anumite pachete pe rețea. Folosim un tool linux numit [netem](https://wiki.linuxfoundation.org/networking/netem) sau mai pe scurt [aici](https://stackoverflow.com/questions/614795/simulate-delayed-and-dropped-packets-on-linux). Prin comanda comentată de la router, poate fi programat să renunțe la pachete cu o probabilitate de 50%: `tc qdisc add dev eth0 root netem loss 50% && tc qdisc add dev eth1 root netem loss 50%`. Puteți folosi această setare dacă doriți să verificați retransmiterea mesajelor în cazul TCP.
@@ -315,20 +315,20 @@ WARNING: Mac address to reach destination not found. Using broadcast.
 <a name="scapy"></a> 
 ### [Scapy](https://scapy.readthedocs.io/en/latest/usage.html#starting-scapy)
 Este o unealtă de python pe care o putem folosi pentru a construi pachete și configura manual headerele mesajelor transmise. 
-Presupunem că am deschis scapy în rt1 (`docker-compose exec --user root rt1 scapy`) și vrem să trimitem un mesaj prin UDP unui server care rulează pe rt3 și care ascultă pe portul 10000. 
+Presupunem că am deschis scapy în client (`docker-compose exec client scapy`) și vrem să trimitem un mesaj prin UDP unui server și care ascultă pe portul 10000. 
 ```python
-# presupunem că rulam serverul pe rt1 și scapy pe mid1
+# presupunem că rulam serverul pe server
 
 udp_layer = UDP()
 udp_layer.sport = 54321
 udp_layer.dport = 10000
 
 ip_layer = IP()
-ip_layer.src = '198.13.0.15'
-ip_layer.dst = '198.13.0.14'
+ip_layer.src = '172.10.0.2'
+ip_layer.dst = '198.10.0.2'
 
 mesaj = Raw()
-mesaj.load = "impachetat manual"
+mesaj.load = "payload manual"
 
 # folosim operatorul / pentru a stivui layerele
 # sau pentru a adăuga layerul cel mai din dreapta
@@ -346,7 +346,7 @@ print ans
 # ans conține o listă de tupluri [(request1, response1), (request2, response2)]
 # răspunsul la primul requeste este mesajul primit de la server:
 print ans[0][1]
-# <IP  version=4L ihl=5L tos=0x0 len=38 id=44462 flags=DF frag=0L ttl=63 proto=udp chksum=0x1b80 src=172.111.0.14 dst=198.13.0.14 options=[] |<UDP  sport=10000 dport=54312 len=18 chksum=0x72bc |<Raw  load='am primit' |>>>
+# <IP  version=4L ihl=5L tos=0x0 len=38 id=44462 flags=DF frag=0L ttl=63 proto=udp chksum=0x1b80 src=172.10.0.2 dst=198.10.0.14 options=[] |<UDP  sport=10000 dport=54312 len=18 chksum=0x72bc |<Raw  load='am primit' |>>>
 
 ```
 
