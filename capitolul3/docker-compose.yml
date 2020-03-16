@@ -3,8 +3,8 @@ version: '2.1'
 services:
     server:
         build:
-            context: docker
-            dockerfile: Dockerfile-lab3
+            context: .
+            dockerfile: docker/Dockerfile-lab3
         privileged: true
         volumes:
             - ..:/elocal
@@ -18,11 +18,11 @@ services:
               ipv4_address: 198.10.0.2
         depends_on:
             - "router"
-        command: /elocal/src/server.sh
+        command: /server.sh
     middle:
         build:
-            context: docker
-            dockerfile: Dockerfile-lab3
+            context: .
+            dockerfile: docker/Dockerfile-lab3
         volumes:
             - ..:/elocal
         tty: true
@@ -37,11 +37,11 @@ services:
             - "router"
         sysctls:
           - net.ipv4.ip_forward=1
-        command: /elocal/src/server.sh
+        command: /server.sh
     router:
         build:
-            context: docker
-            dockerfile: Dockerfile-lab3
+            context: .
+            dockerfile: docker/Dockerfile-lab3
         volumes:
             - ..:/elocal
         tty: true
@@ -56,7 +56,7 @@ services:
               ipv4_address: 198.10.0.1
         sysctls:
           - net.ipv4.ip_forward=1
-        #command: /elocal/src/drop_packages.sh
+        #command: /drop_packages.sh
     client:
         build:
             context: docker
@@ -74,7 +74,7 @@ services:
         depends_on:
             - "router"
             - "server"
-        command: /elocal/src/client.sh
+        command: /client.sh
 networks:
     subnet1:
         ipam:
