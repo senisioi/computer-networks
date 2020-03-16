@@ -16,7 +16,7 @@ services:
             - .:/elocal
         tty: true
         networks:
-            - dmz
+            - cap2net
 networks:
     cap2net:
         ipam:
