@@ -59,8 +59,8 @@ services:
         #command: /drop_packages.sh
     client:
         build:
-            context: docker
-            dockerfile: Dockerfile-lab3
+            context: .
+            dockerfile: docker/Dockerfile-lab3
         volumes:
             - ..:/elocal
         tty: true
