@@ -69,7 +69,7 @@ services:
           - NET_RAW
           - SYS_ADMIN
         networks:
-            subnet2:
+            subnet1:
               ipv4_address: 172.10.0.2
         depends_on:
             - "router"
