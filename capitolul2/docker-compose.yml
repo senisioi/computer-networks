@@ -7,7 +7,7 @@ services:
             - .:/elocal
         tty: true
         networks:
-            - dmz
+            - cap2net
         ports:
          - "8001:8001"
     rt2:
@@ -18,9 +18,9 @@ services:
         networks:
             - dmz
 networks:
-    dmz:
+    cap2net:
         ipam:
             driver: default
             config:
-                - subnet: 172.111.111.0/16 
-                  gateway: 172.111.111.1
+                - subnet: 172.9.0.0/16 
+                  gateway: 172.9.1.1

@@ -14,11 +14,11 @@ services:
           - NET_RAW
           - SYS_ADMIN
         networks:
-            net:
-              ipv4_address: 198.13.0.14
+            subnet2:
+              ipv4_address: 198.10.0.2
         depends_on:
             - "router"
-        command: bash -c "ip route add 172.111.0.0/16 via 198.13.0.1 && iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP && sleep infinity"
+        command: /elocal/src/server.sh
     middle:
         build:
             context: docker
@@ -31,13 +31,13 @@ services:
           - NET_RAW
           - SYS_ADMIN
         networks:
-            net:
-              ipv4_address: 198.13.0.15
+            subnet2:
+              ipv4_address: 198.10.0.3
         depends_on:
             - "router"
         sysctls:
           - net.ipv4.ip_forward=1
-        command: bash -c "ip route add 172.111.0.0/16 via 198.13.0.1 && iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP && sleep infinity"
+        command: /elocal/src/server.sh
     router:
         build:
             context: docker
@@ -50,13 +50,13 @@ services:
           - NET_RAW
           - SYS_ADMIN
         networks:
-            dmz:
-              ipv4_address: 172.111.0.1
-            net:
-              ipv4_address: 198.13.0.1
+            subnet1:
+              ipv4_address: 172.10.0.1
+            subnet2:
+              ipv4_address: 198.10.0.1
         sysctls:
           - net.ipv4.ip_forward=1
-        #command: bash -c "tc qdisc add dev eth0 root netem loss 50% && tc qdisc add dev eth1 root netem loss 50% && sleep infinity"
+        #command: /elocal/src/drop_packages.sh
     client:
         build:
             context: docker
@@ -69,22 +69,22 @@ services:
           - NET_RAW
           - SYS_ADMIN
         networks:
-            dmz:
-              ipv4_address: 172.111.0.14
+            subnet2:
+              ipv4_address: 172.10.0.2
         depends_on:
             - "router"
             - "server"
-        command: bash -c "ip route add 198.13.0.0/16 via 172.111.0.1 && iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP && sleep infinity"
+        command: /elocal/src/client.sh
 networks:
-    dmz:
+    subnet1:
         ipam:
             driver: default
             config:
-                - subnet: 172.111.111.0/16
-                  gateway: 172.111.111.1
-    net:
+                - subnet: 172.10.0.0/16
+                  gateway: 172.10.1.1
+    subnet2:
         ipam:
             driver: default
             config:
-                - subnet: 198.13.13.0/16
-                  gateway: 198.13.13.1
+                - subnet: 198.10.0.0/16
+                  gateway: 198.10.1.1

@@ -11,7 +11,7 @@ RUN mv /usr/sbin/tcpdump /usr/local/bin
 # add the new location to the PATH in case it's not there
 ENV PATH="/usr/local/bin:${PATH}"
 
-RUN pip3 install cryptography notebook
+RUN pip3 install notebook bs4 connexion[swagger-ui] flask
 
 RUN git clone https://github.com/senisioi/scapy.git && cd scapy && python3 setup.py install
 
