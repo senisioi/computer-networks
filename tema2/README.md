@@ -7,7 +7,7 @@ Deadline: **27 martie 2020**, se va lucra individual.
 **UPDATE**: Predarea soluției se va face într-un repository de github.
 Pentru a va inscrie folositi acest link: [https://classroom.github.com/a/9xUyiMpD](https://classroom.github.com/a/9xUyiMpD)
 
-În repository scrieti sub forma de text sau markdown rezultatele voastre, puteți adăuga printscreen-uri din terminal, bucăți de cod și observații sau explicații pentru soluționarea exercițiilor. Link-ul către repostiroy îl puteți trimite pe mail la adresa: sergiu . nisioi  fmi.unibuc.ro.
+În repository scrieti sub forma de text sau markdown rezultatele voastre, puteți adăuga printscreen-uri din terminal, bucăți de cod și observații sau explicații pentru soluționarea exercițiilor. 
 
 Pentru printscreen, asigurați-vă că este vizibil usernameul cu care faceți apelulrile din terminal.
 
