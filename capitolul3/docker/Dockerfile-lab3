@@ -6,5 +6,8 @@ USER root
 
 RUN apt-get update && apt-get install -y iptables iproute2
 
+RUN pip3 install --upgrade python-iptables
+
+
 COPY src/*.sh /
 
