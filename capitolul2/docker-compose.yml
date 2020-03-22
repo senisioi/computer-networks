@@ -10,6 +10,7 @@ services:
             - cap2net
         ports:
          - "8001:8001"
+         - "8001:8001/udp"
     rt2:
         image: snisioi/cap2:latest
         volumes:
