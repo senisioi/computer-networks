@@ -238,7 +238,7 @@ Mai jos este redată secțiunea pentru care calculăm checksum la UDP: IP pseudo
 ```
 
 #### Exemplu de calcul pentru checksum
-În exemplul următor presupunem limităm suma de control la maxim 3 biți și facem adunarea numerelor a și b în complement față de 1:
+În exemplul următor presupunem că limităm suma de control la maxim 3 biți și facem adunarea numerelor a și b în complement față de 1:
 ```python
 max_biti = 3
 
