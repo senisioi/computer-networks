@@ -429,7 +429,12 @@ Prima specificație a protocolului TCP a fost în [RFC793](https://tools.ietf.or
 - URG, ACK, PSH, RST, SYN, FIN - [flags](http://www.firewall.cx/networking-topics/protocols/tcp/136-tcp-flag-options.html)
 - Window Size - folosit pentru [flow control](http://www.ccs-labs.org/teaching/rn/animations/flow/), exemplu [aici](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-Window-Size_OS_RFC-793.htm)
 - Urgent Pointer - mai multe detalii in [RFC6093](https://tools.ietf.org/html/rfc6093), pe scurt explicat [aici](http://www.firewall.cx/networking-topics/protocols/tcp/137-tcp-window-size-checksum.html).
-- Opțiuni - o [listă completă de opțiuni se găsește aici](http://www.networksorcery.com/enp/Protocol/tcp.htm#Options). Probabil cele mai importante sunt prezentate pe scurt în [acest tutorial](http://www.firewall.cx/networking-topics/protocols/tcp/138-tcp-options.html): [Maximum Segment Size](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00005.html), [Window Scaling](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00009.html), Selective Acknowledgement, [Timestamps](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00011.html) (pentru round-trip-time), și NOP (no option pentru separare între opțiuni). 
+- Opțiuni - o [listă completă de opțiuni se găsește aici](http://www.networksorcery.com/enp/Protocol/tcp.htm#Options). Probabil cele mai importante sunt prezentate pe scurt în [acest tutorial](http://www.firewall.cx/networking-topics/protocols/tcp/138-tcp-options.html): 
+  - [Maximum Segment Size](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00005.html)
+  - [Window Scaling](https://cloudshark.io/articles/tcp-window-scaling-examples/)
+  - [Selective Acknowledgment](https://packetlife.net/blog/2010/jun/17/tcp-selective-acknowledgments-sack/) 
+  - [Timestamps](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00011.html) (pentru round-trip-time)
+  - NOP (no operation pentru separare între opțiuni). 
 - Checksum - suma în complement fată de 1 a bucăților de câte 16 biți, complementatî cu 1, vezi mai multe detalii [aici](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation) și [RFC1071 aici](https://tools.ietf.org/html/rfc1071)
 Se calculează din concatenarea: unui pseudo-header de IP [adresa IP sursă, IP dest (32 biti fiecare), placeholder (8 biti setati pe 0), [protocol](https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers) (8 biti), și lungimea în bytes a întregii secțiuni TCP sau UDP (16 biti)], TCP sau UDP header cu checksum setat pe 0, și secțiunea de date.
 
@@ -464,7 +469,143 @@ s.send(b'octeti')
 <a name="#tcp_raw_socket"></a> 
 ### Raw Socket TCP
 Un exemplu de 3-way handshake facut cu Raw Socket este în directorul [capitolul3/src/raw_socket_handshake.py](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/raw_socket_handshake.py)
+Putem instantia un socket brut pentru a capta mesaje TCP de pe orice port:
+```python
 
+# instantierea obiectului cu SOCK_RAW si IPPROTO_TCP
+s = socket.socket(socket.AF_INET, socket.SOCK_RAW, proto=socket.IPPROTO_TCP)
+data, adresa = s.recvfrom(65535)
+
+# daca din router apelam catre server: sock.connect(('server', 2222)), acesta va primi:
+(b'E\x00\x00<;\xb9@\x00@\x06r\xeb\xc6\n\x00\x01\xc6\n\x00\x02\xb1\x16\x08\xae;\xde\x84\xca\x00\x00\x00\x00\xa0\x02\xfa\xf0\x8cF\x00\x00\x02\x04\x05\xb4\x04\x02\x08\nSJ\xb6$\x00\x00\x00\x00\x01\x03\x03\x07', ('198.10.0.1', 0))
+
+tcp_part = data[20:]
+# ignoram headerul de IP de 20 de bytes si extrage header TCP fara optiuni
+tcp_header_fara_optiuni = struct.unpack('!HHLLHHHH', tcp_part[:20])
+source_port, dest_port, sequence_nr, ack_nr, doff_res_flags, window, checksum, urgent_ptr = tcp_header_fara_optiuni
+
+print("Port sursa: ", source_port)
+print("Port destinatie: ", dest_port)
+print("Sequence number: ", sequence_nr)
+print("Acknowledgment number: ", ack_nr)
+data_offset = doff_res_flags >> 12
+print("Data Offset: ", data_offset) # la cate randuri de 32 de biti sunt datele
+
+offset_in_bytes = (doff_res_flags >> 12) * 4
+if doff_res_flags >> 12 > 5:
+  print("TCP header are optiuni, datele sunt abia peste  ", offset_in_bytes, " bytes")
+
+NCEUAPRSF = doff_res_flags & 0b1111111 # & cu 7 de 1: 1111111
+print("NS: ", (NCEUAPRSF >> 8) & 1 )
+print("CWR: ", (NCEUAPRSF >> 7) & 1 )
+print("ECE: ", (NCEUAPRSF >> 6) & 1 )
+print("URG: ", (NCEUAPRSF >> 5) & 1 )
+print("ACK: ", (NCEUAPRSF >> 4) & 1 )
+print("PSH: ", (NCEUAPRSF >> 3) & 1 )
+print("RST: ", (NCEUAPRSF >> 2) & 1 )
+print("SYN: ", (NCEUAPRSF >> 1) & 1 )
+print("FIN: ", (NCEUAPRSF & 1))
+
+print("Window: ", window)
+print("Checksum: ", checksum)
+print("Urgent Pointer: ", urgent_ptr)
+
+optiuni_tcp = tcp_part[20:offset_in_bytes]
+
+# urmarim documentul de aici: https://www.iana.org/assignments/tcp-parameters/tcp-parameters.xhtml
+
+
+option = optiuni_tcp[0]
+print (option) 
+2 # option 2 inseamna MSS, Maximum Segment Size
+'''
+https://tools.ietf.org/html/rfc793#page-18
++--------+--------+---------+--------+
+|Kind=2  |Length=4|   max seg size   |
++--------+--------+---------+--------+
+'''
+option_len = optiuni_tcp[1]
+print(option_len)
+4 # MSS are dimensiunea 4
+# valoarea optiunii este de la 2 la option_len
+option_value = optiuni_tcp[2:option_len]
+# MSS e pe 16 biti:
+print(struct.unpack('!H', option_value))
+1460 # MSS similar cu MTU
+
+# continuam cu urmatoarea optiune
+optiuni_tcp = optiuni_tcp[option_len:]
+option = optiuni_tcp[0]
+print (option) 
+4 # option 4 inseamna SACK Permitted
+'''
+https://tools.ietf.org/html/rfc2018#page-3
+https://packetlife.net/blog/2010/jun/17/tcp-selective-acknowledgments-sack/
++---------+---------+
+| Kind=4  | Length=2|
++---------+---------+
+'''
+option_len = optiuni_tcp[1]
+print(option_len)
+2 # SACK Permitted are dimensiunea 2
+# asta inseamna ca e un flag boolean fara alte valori aditionale
+
+# continuam cu urmatoarea optiune
+optiuni_tcp = optiuni_tcp[option_len:]
+option = optiuni_tcp[0]
+print (option) 
+8 # option 8 inseamna Timestamps
+'''
+https://tools.ietf.org/html/rfc7323#page-12
++-------+-------+---------------------+---------------------+
+|Kind=8 |Leng=10|   TS Value (TSval)  |TS Echo Reply (TSecr)|
++-------+-------+---------------------+---------------------+
+    1       1              4                     4
+'''
+option_len = optiuni_tcp[1]
+print(option_len)
+10 # Timestamps are dimensiunea 10 bytes
+# are doua valori stocate fiecare pe cate 4 bytes
+valori = struct.unpack('!II', optiuni_tcp[2:option_len])
+print (valori)
+(1397405220, 0) # valorile Timestamp
+
+# continuam cu urmatoarea optiune
+optiuni_tcp = optiuni_tcp[option_len:]
+option = optiuni_tcp[0]
+print (option) 
+1 # option 1 inseamna No-Operation
+'''
+asta inseamna ca nu folosim optiunea si trecem mai departe
+https://tools.ietf.org/html/rfc793#page-18
+'''
+
+# continuam cu urmatoarea optiune
+optiuni_tcp = optiuni_tcp[1:]
+option = optiuni_tcp[0]
+print (option) 
+3 # option 3 inseamna Window Scale
+'''
+https://tools.ietf.org/html/rfc7323#page-8
++---------+---------+---------+
+| Kind=3  |Length=3 |shift.cnt|
++---------+---------+---------+
+'''
+option_len = optiuni_tcp[1]
+print(option_len)
+3 # lungime 3, deci reprezentarea valorii este pe un singur byte
+valoare = struct.unpack('!B', optiuni_tcp[2:option_len])
+print(valoare)
+7 # Campul Window poate fi scalat cu valoarea Window * 2^WindowScaleOption
+
+# continuam cu urmatoarea optiune
+optiuni_tcp = optiuni_tcp[option_len:]
+option = optiuni_tcp[0]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+IndexError: index out of range
+# nu mai sunt optiuni, deci lista s-a incheiat
+```
 
 <a name="tcp_scapy"></a> 
 ### TCP object in scapy:
@@ -544,51 +685,57 @@ Prima specificație a protocolului IP a fost în:
 - ECN - definit în [RFC3186](https://tools.ietf.org/html/rfc3168) este folosit de către routere, pentru a notifica transmițătorii cu privire la existența unor congestionări pe rețea. Setarea flag-ului pe 11 (Congestion Encountered - CE), va determina layer-ul TCP să își seteze ECE, CWR și NS.
 - Total length - lumgimea totală in octeti, cu header și date pentru întreg-ul datagram
 - Identification - un id care este folosit pentru idenficarea pachetelor fragmentate
-- Flags - flag-uri de fragmentare, bitul 0 e rezervat, bitul 1 indică DF - don't fragment, iar bitul 2 setat, ne spune că mai urmează fragmente.
+- [Flags](https://en.wikipedia.org/wiki/IPv4#Flags) - flag-uri de fragmentare, bitul 0 e rezervat, bitul 1 indică DF - don't fragment, iar bitul 2 setat, ne spune că mai urmează fragmente.
 - Fragment Offset - offset-ul unui fragment curent în raport cu fragmentul inițial, măsurat în multiplu de 8 octeți (64 biți).
 - Time to Live (TTL) -  numărul maxim de routere prin care poate trece IP datagram pâna în punctul în care e discarded
 - Protocol - indică codul [protocolului](https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers) din interiorul secvenței de date
 - Header checksum - aceeași metodă de checksum ca la [TCP si UDP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation), adică suma în complement 1, a fragmentelor de câte 16 biți, dar în cazul acesta se aplică **doar pentru header**. Această sumă este puțin redundantă având în vedere că se mai calculează o dată peste pseudoheader-ul de la TCP sau UDP.
 - Source/Destination Address - adrese ip pe 32 de biți
-- Options - prezintă diverse riscuri, [conform wikipedia](https://en.wikipedia.org/wiki/IPv4#Options) sau acestui [raport](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2005/EECS-2005-24.pdf). Mai multe informații despre rolul acestora puteți găsi [aici](http://www.tcpipguide.com/free/t_IPDatagramOptionsandOptionFormat.htm), [aici](http://www.cc.ntut.edu.tw/~kwke/DC2006/ipo.pdf) și specificația completă [aici](http://www.networksorcery.com/enp/protocol/ip.htm#Options).
+- [Options](https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml) - sunt opțiuni la nivelul IP. Mai multe informații despre rolul acestora puteți găsi [aici](http://www.tcpipguide.com/free/t_IPDatagramOptionsandOptionFormat.htm), [aici](http://www.cc.ntut.edu.tw/~kwke/DC2006/ipo.pdf) și specificația completă [aici](http://www.networksorcery.com/enp/protocol/ip.htm#Options). E bine de știut că unele opțiuni prezintă și riscuri de securitate [conform wikipedia](https://en.wikipedia.org/wiki/IPv4#Options) sau acestui [raport](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2005/EECS-2005-24.pdf). 
 
 <a name="ip_raw_socket"></a> 
 ### IPv4 Object from Raw Socket
-Cel mai simplu este să citim headerul de IP dintr-un pachet UDP raw socket:
+Folosim datele ca octeti din exemplul cu UDP Raw Socket de mai sus:
 ```python
 import socket
+import struct
 
-# instantierea obiectului cu SOCK_RAW si IPPROTO_UDP
-s = socket.socket(socket.AF_INET, socket.SOCK_RAW, proto=socket.IPPROTO_UDP)
+data = b'E\x00\x00!\xc2\xd2@\x00@\x11\xeb\xe1\xc6\n\x00\x01\xc6\n\x00\x02\x08\xae\t\x1a\x00\r\x8c6salut'
 
-# recvfrom citeste din buffer 16 octeti indiferent de port
-date, adresa = s.recvfrom(16)
-# daca in buffer sunt mai mult de 16 bytes, recvfrom va citi doar 16 iar restul vor fi discarded
-
-
-# presupunem ca un client trimite mesajul 'salut' de pe adresa routerului: sendto(b'salut', ('server', 2222)) 
-# datele arata ca niste siruri de bytes cu payload salut
-print(date)
-b'E\x00\x00!\xc2\xd2@\x00@\x11\xeb\xe1\xc6\n\x00\x01\xc6\n\x00\x02\x08\xae\t\x1a\x00\r\x8c6salut'
-
-# adresa sursa pare sa aiba portul 0
-print (adresa)
-('198.10.0.1', 0)
-
-# datele au o lungime de 33 de bytes
-# 20 de bytes header IP, 8 bytes header UDP, 5 bytes mesajul salut
-print(len(data))
-33
-
-# extragem headerul de IP:
+# extragem headerul de baza de IP:
 ip_header = struct.unpack('!BBHHHBBH4s4s', data[:20])
 ip_ihl_ver, ip_dscp_ecn, ip_tot_len, ip_id, ip_frag, ip_ttl, ip_proto, ip_check, ip_saddr, ip_daddr = ip_header
 
-print(socket.inet_ntoa(ip_saddr))
-'198.10.0.1'
+print("Versiune IP: ", ip_ihl_ver >> 4)
+print("Internet Header Length: ", ip_ihl_ver & 0b1111) # & cu 1111 pentru a extrage ultimii 4 biti
+print("DSCP: ", ip_dscp_ecn >> 2)
+print("ECN: ", ip_dscp_ecn & 0b111111) # & cu 111111
+print("Total Length: ", ip_tot_len)
+print("ID: ", ip_id)
+print("Flags: ",  bin(ip_frag >> 13))
+print("Fragment Offset: ",  ip_frag & 0b111) # & cu 111
+print("Time to Live: ",  ip_ttl)
+print("Protocol nivel superior: ",  ip_proto)
+print("Checksum: ",  ip_check)
+print("Adresa sursa: ", socket.inet_ntoa(ip_saddr))
+print("Adresa destinatie: ", socket.inet_ntoa(ip_daddr))
 
-print(socket.inet_ntoa(ip_daddr))
-'198.10.0.2'
+if ip_ihl_ver & (16 - 1) == 5:
+  print ("header-ul de IP nu are optiuni")
+
+Versiune IP:  4
+Internet Header Length:  5
+DSCP:  0
+ECN:  0
+Total Length:  33
+ID:  49874
+Flags:  0b10
+Fragment Offset:  0
+Time to Live:  64
+Protocol nivel superior:  17
+Checksum:  60385
+Adresa sursa:  198.10.0.1
+Adresa destinatie:  198.10.0.2
 ``` 
 
 
