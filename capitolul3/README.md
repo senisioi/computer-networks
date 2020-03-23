@@ -10,11 +10,12 @@
   - [UDP Raw Socket](#udp_raw_socket)
   - [UDP Scapy](#udp_scapy)
 - [TCP Segment](#tcp)
+  - [TCP Options](#tcp_options)
   - [TCP Retransmissions](#tcp_retransmission)
   - [TCP Socket](#tcp_socket)
   - [TCP Raw Socket](#tcp_raw_socket)
   - [TCP Scapy](#tcp_scapy)
-  - [TCP Options](#tcp_options)
+  - [TCP Options in Scapy](#tcp_options_scapy)
 - [IPv4 Datagram](#ipv4)
   - [IPv4 Raw Socket](#ip_raw_socket)
   - [IPv4 Scapy](#ip_scapy)
@@ -433,7 +434,7 @@ Prima specificație a protocolului TCP a fost în [RFC793](https://tools.ietf.or
 Se calculează din concatenarea: unui pseudo-header de IP [adresa IP sursă, IP dest (32 biti fiecare), placeholder (8 biti setati pe 0), [protocol](https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers) (8 biti), și lungimea în bytes a întregii secțiuni TCP sau UDP (16 biti)], TCP sau UDP header cu checksum setat pe 0, și secțiunea de date.
 
 
-<a name="tcp_options"</a> 
+<a name="tcp_options"></a> 
 ### Optiuni TCP
 O [listă completă de opțiuni se găsește aici](http://www.networksorcery.com/enp/Protocol/tcp.htm#Options) si [aici](https://www.iana.org/assignments/tcp-parameters/tcp-parameters.xhtml). Optiunile au coduri, dimensiuni si specificatii particulare.
 Probabil cele mai importante sunt prezentate pe scurt în [acest tutorial](http://www.firewall.cx/networking-topics/protocols/tcp/138-tcp-options.html): 
