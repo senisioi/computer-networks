@@ -201,17 +201,15 @@ b'\x00\x01\x00\x00'
 
 Toate câmpurile din header-ul UDP sunt reprezentate pe câte 16 biți sau 2 octeți:
 ```
-  0      7 8     15 16    23 24      31
-  +--------+--------+--------+--------+
-  |     Source      |   Destination   |
-  |      Port       |      Port       |
-  +--------+--------+--------+--------+
-  |                 |                 |
-  |     Length      |    Checksum     |
-  +--------+--------+--------+--------+
-  |
-  |       data octets / payload
-  +---------------- ...
+  0               1               2               3              4
+  0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -----------------
+ |          Source Port          |       Destination Port        |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-   UDP header
+ |          Length               |          Checksum             |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -----------------
+ |                       payload/data                            |     mesaj 
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -----------------
 ```
 - Portul sursă și destinație în acest caz poate fi între 0 și 65535, nr maxim pe 16 biți. [Portul 0](https://www.lifewire.com/port-0-in-tcp-and-udp-818145) este rezervat iar o parte din porturi cu valori până la 1024 sunt [well-known](https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Well-known_ports) și rezervate de către sistemul de operare. Pentru a putea aloca un astfel de port de către o aplicație client, este nevoie de drepturi de administrator.
 - Length reprezintă lungimea în bytes a headerului și segmentului de date. Headerul este împărțit în 4 cîmpuri de 16 biți, deci are 8 octeți în total.
@@ -222,8 +220,8 @@ Se calculează din concatenarea: unui pseudo-header de IP [adresa IP sursă, IP 
 
 Mai jos este redată secțiunea pentru care calculăm checksum la UDP: IP pseudo-header + UDP header + Data.
 ```
-  0                   1                   2                   3   
-  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  0               1               2               3              4
+  0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -----------------
  |                       Source Address                          |
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
@@ -238,6 +236,46 @@ Mai jos este redată secțiunea pentru care calculăm checksum la UDP: IP pseudo
  |                       payload/data                            |  Transport data
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -----------------
 ```
+
+#### Exemplu de calcul pentru checksum
+În exemplul următor presupunem limităm suma de control la maxim 3 biți și facem adunarea numerelor a și b în complement față de 1:
+```python
+max_biti = 3
+
+# 7 e cel mai mare nr pe 3 biti
+max_nr = (1 << max_biti) - 1
+print (max_nr, ' ', bin(max_nr))
+7   0b111
+
+a = 5 # binar 101
+b = 5 # binar 101
+'''
+suma in complement de 1:
+  101+
+  101
+-------
+1|010
+-------
+  010+
+  001
+-------
+ =011
+valorile care depasesc 3 biti sunt mutate la coada si adunate din nou
+'''
+suma_in_complement_de_1 = (a + b) % max_nr
+print (bin(suma_in_complement_de_1))
+0b11
+
+# checksum reprezinta suma in complement de 1 cu toti bitii complementati 
+checksum = max_nr - suma_in_complement_de_1
+print (bin(checksum))
+0b100
+# sau
+checksum = ~(-suma_in_complement_de_1)
+print (bin(checksum))
+0b100
+```
+
 
 <a name="#udp_socket"></a> 
 ### Socket UDP
@@ -359,8 +397,8 @@ pachete[UDP][0].show()
 <a name="tcp"></a> 
 ## [TCP Segment](https://tools.ietf.org/html/rfc793#page-15)
 ```
-  0                   1                   2                   3   Offs.
-  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 
+  0               1               2               3              4 Offs.
+  0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
  |          Source Port          |       Destination Port        |  1
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
@@ -479,8 +517,8 @@ tcp.option = [(optiune, valoare)]
 <a name="ipv4"></a> 
 ## [Internet Protocol Datagram v4 - IPv4](https://tools.ietf.org/html/rfc791#page-11)
 ```
-  0                   1                   2                   3   Offs.
-  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  0               1               2               3              4 Offs.
+  0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
  |Version|  IHL  |     DSCP  |ECN|          Total Length         |  1
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
@@ -584,8 +622,8 @@ ip.show()
 <a name="ipv6"></a> 
 ## [Internet Protocol Datagram v6 - IPv6](https://tools.ietf.org/html/rfc2460#page-4)
 ```
-  0                   1                   2                   3   Offs.
-  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+  0               1               2               3              4 Offs.
+  0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
  |Version| Traffic Class |           Flow Label                  |
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
@@ -641,25 +679,25 @@ IPv6().show()
 <a name="ether"></a> 
 ## [Ethernet Frame](https://en.wikipedia.org/wiki/Ethernet_frame#Structure)
 ```
-    0    1    2    3    4    5    6    7    Octet nr.
- *----*----*----*----*----*----*----*----*
- |            Preabmle              | SF |
- *----*----*----*----*----*----*----*----*
- |          Source MAC         |
- *----*----*----*----*----*----*
- |     Destination MAC         |
- *----*----*----*----*----*----*
- | 802-1Q (optional) |
- *----*----*----*----*
- | EthType |
- *----*----*----*--------------------------------------------
- |   Application + TCP + IP data / payload (max 1500 octets)
- *----*----*----*--------------------------------------------
- |  32-bit CRC  |
- *----*----*----*----*----*----*----*-------
- |     Interpacket Gap  - interval de timp |
- *----*----*----*----*----*----*----*-------
- ```
+      0    1    2    3    4    5    6    7    Octet nr.
+   *----*----*----*----*----*----*----*----*
+F  |            Preabmle              | SF | preambul: 7x 10101010, SF: 10101011
+   *----*----*----*----*----*----*----*----*
+DL |          Source MAC         |           MAC sursa: 02:42:c6:0a:00:02
+   *----*----*----*----*----*----*      
+DL |     Destination MAC         |           MAC dest:  02:42:c6:0a:00:01 (gateway)
+   *----*----*----*----*----*----*
+DL | 802-1Q (optional) |
+   *----*----*----*----*
+DL | EthType |                               0x0800 pt IPv4, 0x0806 pt ARP, 0x86DD pt IPv6
+   *----*----*----*---------------------------------------
+DL |   Application payload + TCP + IP (max 1500 octets)      <--- maximum transmission unit (MTU)
+   *----*----*----*---------------------------------------
+DL |  32-bit CRC  |                                          <--- cod de detectare erori
+   *----*----*----*----*----*----*----*-------
+F  |     Interpacket Gap  - interval de timp |
+   *----*----*----*----*----*----*----*-------
+```
 La nivelurile legatură de date și fizic, avem standardele [IEEE 802](https://ieeexplore.ieee.org/browse/standards/get-program/page/series?id=68) care ne definesc structurile frame-urilor. Pentru nivelul data link, puteti găsi și [aici mai multe detalii explicate](https://notes.shichao.io/tcpv1/ch3/).
 
 Fiecare secventă de 4 liniuțe reprezintă un octet (nu un bit ca in diagramele anterioare) iar headerul cuprinde:
