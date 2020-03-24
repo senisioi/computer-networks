@@ -504,7 +504,7 @@ offset_in_bytes = (doff_res_flags >> 12) * 4
 if doff_res_flags >> 12 > 5:
   print("TCP header are optiuni, datele sunt abia peste  ", offset_in_bytes, " bytes")
 
-NCEUAPRSF = doff_res_flags & 0b1111111 # & cu 7 de 1: 1111111
+NCEUAPRSF = doff_res_flags & 0b111111111 # & cu 9 de 1
 print("NS: ", (NCEUAPRSF >> 8) & 1 )
 print("CWR: ", (NCEUAPRSF >> 7) & 1 )
 print("ECE: ", (NCEUAPRSF >> 6) & 1 )
@@ -715,8 +715,8 @@ ip_ihl_ver, ip_dscp_ecn, ip_tot_len, ip_id, ip_frag, ip_ttl, ip_proto, ip_check,
 
 print("Versiune IP: ", ip_ihl_ver >> 4)
 print("Internet Header Length: ", ip_ihl_ver & 0b1111) # & cu 1111 pentru a extrage ultimii 4 biti
-print("DSCP: ", ip_dscp_ecn >> 2)
-print("ECN: ", ip_dscp_ecn & 0b111111) # & cu 111111
+print("DSCP: ", ip_dscp_ecn >> 6)
+print("ECN: ", ip_dscp_ecn & 0b11) # & cu 11 pt ultimii 2 biti
 print("Total Length: ", ip_tot_len)
 print("ID: ", ip_id)
 print("Flags: ",  bin(ip_frag >> 13))
