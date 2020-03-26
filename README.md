@@ -8,8 +8,9 @@
 - [Defcon](https://www.defcon.org/) hacker comunity conference
 
 ## Bibliografie curs
-- [Materiale de curs](http://nlp.unibuc.ro/people/liviu.html#Courses)
-- Cursul de [Computer Networks](https://www.youtube.com/watch?v=xKNPTYtTnAo&list=PLfgkuLYEOvGMWvHRgFAcjN_p3Nzbs1t1C), University of Washington
+- [Materiale video](https://github.com/senisioi/computer-networks/blob/2020/curs/README.md)
+- [Prezentare curs](http://nlp.unibuc.ro/people/liviu.html#Courses)
+- Cursul de [Computer Networks](https://media.pearsoncmg.com/ph/streaming/esm/tanenbaum5e_videonotes/tanenbaum_videoNotes.html), University of Washington
 - [Computer Networks: A Systems Approach](https://book.systemsapproach.org/foundation.html)
 
 ## Înainte de a începe
