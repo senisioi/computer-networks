@@ -1,12 +1,29 @@
 Tanenbaum, Wetherall Computer Networks 5e
 =========================================
+
+
 Materiale online de curs:
 - [carte pdf](http://www.uoitc.edu.iq/images/documents/informatics-institute/exam_materials/Computer%20Networks%20-%20A%20Tanenbaum%20-%205th%20edition.pdf)
 - [sursa video lectures](https://media.pearsoncmg.com/ph/streaming/esm/tanenbaum5e_videonotes/tanenbaum_videoNotes.html)
 - [slide-urile de la curs](http://nlp.unibuc.ro/people/liviu.html#Courses)
 - [Computer Networks: A Systems Approach](https://book.systemsapproach.org/foundation.html)
 
-[Introduction, Protocols and Layering](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=25)
+## Cuprins
+- [Introduction, Protocols and Layering](#intro)
+- [Physical Layer (optional)](#nivel_fizic)
+- [Link Layer, Part A pdf](#datalink_a)
+- [Link Layer, Part B](#datalink_b)
+- [Packet Forwarding and Internetworking](#forwarding)
+- [Routing](#routing)
+- [Transport Layer, Reliable Transport](#trans)
+- [Congestion Control](#congestion)
+- [Web and Content Distribution](#web)
+- [Quality of Service](#qos)
+- [Network Security](#security)
+
+
+<a name="intro"></a> 
+Introduction, Protocols and Layering [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=25)
 ------------------------------------
 
 [1-1 Goals and Motivation](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.1-1_Goals_and_Motivation__/ph/streaming/esm/tanenbaum5e_videonotes/1_1_goals_motivation_cn5e.m4v "1-1 Goals and Motivation")  
@@ -19,7 +36,8 @@ Materiale online de curs:
 [1-8 History of the Internet](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.1-8_History_of_the_Internet__/ph/streaming/esm/tanenbaum5e_videonotes/1_8_internet_history_cn5e.m4v "1-8 History of the Internet")  
 [1-9 Lecture Outline](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.1-9_Lecture_Outline__/ph/streaming/esm/tanenbaum5e_videonotes/1_9_lecture_outline_cn5e.m4v "1-9 Lecture Outline")
 
-[Physical Layer (optional)](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=113)
+<a name="nivel_fizic"></a> 
+Physical Layer (optional) [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=113)
 --------------
 
 [2-1 Overview of the Physical Layer](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-1_Overview_of_the_Physical_Layer__/ph/streaming/esm/tanenbaum5e_videonotes/2_1_physical_overview_cn5e.m4v "2-1 Overview of the Physical Layer")  
@@ -28,7 +46,8 @@ Materiale online de curs:
 [2-4 Modulation](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-4_Modulation__/ph/streaming/esm/tanenbaum5e_videonotes/2_4_modulation_cn5e.m4v "2-4 Modulation")  
 [2-5 Fundamental Limits](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-5_Fundamental_Limits__/ph/streaming/esm/tanenbaum5e_videonotes/2_5_limits_cn5e.m4v "2-5 Fundamental Limits")
 
-[Link Layer, Part A](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=218)
+<a name="datalink_a"></a> 
+Link Layer, Part A [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=218)
 ------------------
 
 [3a-1 Overview of the Link Layer](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-1_Overview_of_the_Link_Layer__/ph/streaming/esm/tanenbaum5e_videonotes/3a_1_link_overview_cn5e.m4v "3a-1 Overview of the Link Layer")  
@@ -37,7 +56,9 @@ Materiale online de curs:
 [3a-4 Error Detection](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-4_Error_Detection__/ph/streaming/esm/tanenbaum5e_videonotes/3a_4_error_detection_cn5e.m4v "3a-4 Error Detection")  
 [3a-5 Error Correction](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-5_Error_Correction__/ph/streaming/esm/tanenbaum5e_videonotes/3a_5_error_correction_cn5e.m4v "3a-5 Error Correction")
 
-[Link Layer, Part B](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=281)
+
+<a name="datalink_b"></a> 
+Link Layer, Part B [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=281)
 ------------------
 
 [3b-1 Overview of the Link Layer](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-1_Overview_of_the_Link_Layer__/ph/streaming/esm/tanenbaum5e_videonotes/3b_1_link_overview_cn5e.m4v "3b-1 Overview of the Link Layer")  
@@ -49,7 +70,9 @@ Materiale online de curs:
 [3b-7 LAN Switches](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-7_LAN_Switches__/ph/streaming/esm/tanenbaum5e_videonotes/3b_7_switches_cn5e.m4v "3b-7 LAN Switches")  
 [3b-8 Switch Spanning Tree](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-8_Switch_Spanning_Tree__/ph/streaming/esm/tanenbaum5e_videonotes/3b_8_spanning_tree_cn5e.m4v "3b-8 Switch Spanning Tree")
 
-[Packet Forwarding and Internetworking](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=379)
+
+<a name="forwarding"></a> 
+Packet Forwarding and Internetworking [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=379)
 -------------------------------------
 
 [4-1 Network Layer Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.4-1_Network_Layer_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/4_1_network_overview_cn5e.m4v "4-1 Network Layer Overview")  
@@ -63,7 +86,9 @@ Materiale online de curs:
 [4-9 IP Version 6](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.4-9_IP_Version_6__/ph/streaming/esm/tanenbaum5e_videonotes/4_9_ipv6_cn5e.m4v "4-9 IP Version 6")  
 [4-10 Network Address Translation](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.4-10_Network_Address_Translation__/ph/streaming/esm/tanenbaum5e_videonotes/4_10_nat_cn5e.m4v "4-10 Network Address Translation")
 
-[Routing](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=386)
+
+<a name="routing"></a>
+Routing [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=386)
 -------
 
 [5-1 Routing Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.5-1_Routing_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/5_1_routing_overview_cn5e.m4v "5-1 Routing Overview")  
@@ -77,9 +102,11 @@ Materiale online de curs:
 [5-9 Hierarchical Routing](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.5-9_Hierarchical_Routing__/ph/streaming/esm/tanenbaum5e_videonotes/5_9_hierarchical_cn5e.m4v "5-9 Hierarchical Routing")  
 [5-10 IP Prefix Aggregation and Subnets](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.5-10_IP_Prefix_Aggregation_and_Subnets__/ph/streaming/esm/tanenbaum5e_videonotes/5_10_aggregation_cn5e.m4v "5-10 IP Prefix Aggregation and Subnets")  
 [5-11 Routing with Multiple Parties](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.5-11_Routing_with_Multiple_Parties__/ph/streaming/esm/tanenbaum5e_videonotes/5_11_policy_cn5e.m4v "5-11 Routing with Multiple Parties")  
-[5-12 Border Gateway Protocol (BGP)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.5-12_Border_Gateway_Protocol_(BGP)__/ph/streaming/esm/tanenbaum5e_videonotes/5_12_bgp_cn5e.m4v "5-12 Border Gateway Protocol (BGP)")
+[5-12 Border Gateway Protocol BGP](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.5-12_Border_Gateway_Protocol_(BGP)__/ph/streaming/esm/tanenbaum5e_videonotes/5_12_bgp_cn5e.m4v "5-12 Border Gateway Protocol (BGP)")
 
-[Transport Layer, Reliable Transport](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=519)
+
+<a name="trans"></a> 
+Transport Layer, Reliable Transport [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=519)
 -----------------------------------
 
 [6-1 Transport Layer Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-1_Transport_Layer_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/6_1_transport_overview_cn5e.m4v "6-1 Transport Layer Overview")  
@@ -91,7 +118,8 @@ Materiale online de curs:
 [6-7 Retransmission Timeouts](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-7_Retransmission_Timeouts__/ph/streaming/esm/tanenbaum5e_videonotes/6_7_timeouts_cn5e.m4v "6-7 Retransmission Timeouts")  
 [6-8 Transmission Control Protocol (TCP)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-8_Transmission_Control_Protocol_(TCP)__/ph/streaming/esm/tanenbaum5e_videonotes/6_8_tcp_cn5e.m4v "6-8 Transmission Control Protocol (TCP)")
 
-[Congestion Control](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=554)
+<a name="congestion"></a> 
+Congestion Control [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=554)
 ------------------
 
 [7-1 Congestion Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-1_Congestion_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/7_1_congestion_overview_cn5e.m4v "7-1 Congestion Overview")  
@@ -103,7 +131,8 @@ Materiale online de curs:
 [7-7 TCP Fast Retransmit / Fast Recovery](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-7_TCP_Fast_Retransmit_-_Fast_Recovery__/ph/streaming/esm/tanenbaum5e_videonotes/7_7_fast_recovery_cn5e.m4v "7-7 TCP Fast Retransmit / Fast Recovery")  
 [7-8 Explicit Congestion Notification (ECN)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-8_Explicit_Congestion_Notification_(ECN)__/ph/streaming/esm/tanenbaum5e_videonotes/7_8_ecn_cn5e.m4v "7-8 Explicit Congestion Notification (ECN)")
 
-[Web and Content Distribution](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=670)
+<a name="web"></a>
+Web and Content Distribution [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=670)
 ----------------------------
 
 [8-1 Application Layer Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-1_Application_Layer_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/8_1_application_overview_cn5e.m4v "8-1 Application Layer Overview")  
@@ -116,7 +145,9 @@ Materiale online de curs:
 [8-8 Future of HTTP](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-8_Future_of_HTTP__/ph/streaming/esm/tanenbaum5e_videonotes/8_8_http_future_cn5e.m4v "8-8 Future of HTTP")  
 [8-9 Peer-to-Peer Content Delivery (BitTorrent)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-9_Peer-to-Peer_Content_Delivery_(BitTorrent)__/ph/streaming/esm/tanenbaum5e_videonotes/8_9_p2p_cn5e.m4v "8-9 Peer-to-Peer Content Delivery (BitTorrent)")
 
-[Quality of Service](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=721)
+
+<a name="qos"></a>
+Quality of Service [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=721)
 ------------------
 
 [9-1 QOS Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.9-1_QOS_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/9_1_qos_overview_cn5e.m4v "9-1 QOS Overview")  
@@ -127,7 +158,8 @@ Materiale online de curs:
 [9-6 Differentiated Services](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.9-6_Differentiated_Services__/ph/streaming/esm/tanenbaum5e_videonotes/9_6_diffserv_cn5e.m4v "9-6 Differentiated Services")  
 [9-7 Rate and Delay Guarantees](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.9-7_Rate_and_Delay_Guarantees__/ph/streaming/esm/tanenbaum5e_videonotes/9_7_ratedelay_cn5e.m4v "9-7 Rate and Delay Guarantees")
 
-[Network Security](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=787)
+<a name="security"></a>
+Network Security [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=787)
 ----------------
 
 [10-1 Network Security Introduction](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.10-1_Network_Security_Introduction__/ph/streaming/esm/tanenbaum5e_videonotes/10_1_network_security_cn5e.m4v "10-1 Network Security Introduction")  
