@@ -125,8 +125,8 @@ struct.unpack(formatare, sir_de_bytes)
 |`H`|unsigned short|integer|16||
 |`i`|int|integer|32||
 |`I`|unsigned int|integer|32||
-|`l`|long|integer|64||
-|`L`|unsigned long|integer|64||
+|`l`|long|integer|32||
+|`L`|unsigned long|integer|32||
 |`q`|long long|integer|64|(3)|
 |`Q`|unsigned long long|integer|64|(3)|
 |`f`|float|float|32||
