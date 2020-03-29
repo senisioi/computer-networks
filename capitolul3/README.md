@@ -239,7 +239,7 @@ Mai jos este redată secțiunea pentru care calculăm checksum la UDP: IP pseudo
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+- -----------------
 ```
 
-<a name="#checksum"></a> 
+<a name="checksum"></a> 
 #### Exemplu de calcul pentru checksum
 În exemplul următor presupunem că limităm suma de control la maxim 3 biți și facem adunarea numerelor a și b în complement față de 1:
 ```python
