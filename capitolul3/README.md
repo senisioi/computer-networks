@@ -296,7 +296,7 @@ s.sendto(b'bytes', ('adresa', port))
 # nu stim daca mesajul ajunge la destinatie
 ``` 
 
-<a name="#udp_raw_socket"></a> 
+<a name="udp_raw_socket"></a> 
 ### Raw Socket UDP
 Există raw socket cu care putem citi sau trimite pachetele in formă binară. Explicații mai multe puteți găsi și [aici](https://opensourceforu.com/2015/03/a-guide-to-using-raw-sockets/). Pentru a instantia RAW Socket avem nevoie de acces cu drepturi de administrator. Deci este de preferat să lucrăm în containerele de docker: `docker-compose exec server bash`
 
@@ -306,9 +306,8 @@ import socket
 # instantierea obiectului cu SOCK_RAW si IPPROTO_UDP
 s = socket.socket(socket.AF_INET, socket.SOCK_RAW, proto=socket.IPPROTO_UDP)
 
-# recvfrom citeste din buffer 16 octeti indiferent de port
-date, adresa = s.recvfrom(16)
-# daca in buffer sunt mai mult de 16 bytes, recvfrom va citi doar 16 iar restul vor fi discarded
+# recvfrom citeste din buffer 65535 octeti indiferent de port
+date, adresa = s.recvfrom(65535)
 
 
 # presupunem ca un client trimite mesajul 'salut' de pe adresa routerului: sendto(b'salut', ('server', 2222)) 
