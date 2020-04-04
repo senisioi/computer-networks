@@ -21,6 +21,8 @@
   - [IPv4 Raw Socket](#ip_raw_socket)
   - [IPv4 Scapy](#ip_scapy)
 - [IPv6 Datagram](#ipv6)
+  - [IPv6 Socket](#ipv6_socket)
+  - [IPv6 Scapy](#ipv6_scapy)
 - [Ethernet Frame](#ether)
   - [Ethernet Object in Scapy](#ether_scapy)
 - [Scapy Tutorial](#scapy)
@@ -421,7 +423,7 @@ pachete[UDP][0].show()
 ```
 
 Prima specificație a protocolului TCP a fost în [RFC793](https://tools.ietf.org/html/rfc793)
-- Foarte bine explicat [aici](http://zwerd.com/2017/11/24/TCP-connection.html) si [aici](http://www.firewall.cx/networking-topics/protocols/tcp.html)
+- Foarte bine explicat [aici](http://zwerd.com/2017/11/24/TCP-connection.html), [aici](http://www.firewall.cx/networking-topics/protocols/tcp.html) sau în aceste [note de curs](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=25).
 - [RFC2581](https://tools.ietf.org/html/rfc2581) conține informațiile cu privire la congestion control
 - Source Port și Destination Port sunt porturile sursa și destinație pentru conexiunea curentă
 - [Sequence și Acknowledgment](http://www.firewall.cx/networking-topics/protocols/tcp/134-tcp-seq-ack-numbers.html) sunt folosite pentru indicarea secvenței de bytes transmisă și notificarea că acea secvență a fost primită
@@ -434,6 +436,7 @@ Prima specificație a protocolului TCP a fost în [RFC793](https://tools.ietf.or
 - Checksum - suma în complement fată de 1 a bucăților de câte 16 biți, complementatî cu 1, vezi mai multe detalii [aici](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation) și [RFC1071 aici](https://tools.ietf.org/html/rfc1071)
 Se calculează din concatenarea: unui pseudo-header de IP [adresa IP sursă, IP dest (32 biti fiecare), placeholder (8 biti setati pe 0), [protocol](https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers) (8 biti), și lungimea în bytes a întregii secțiuni TCP sau UDP (16 biti)], TCP sau UDP header cu checksum setat pe 0, și secțiunea de date.
 
+În plus, pe lângă proprietățile din antet, protocolul TCP are o serie de opțiuni (explicate mai jos) și o serie de euristici prin care se încearcă detectarea și evitarea congestionării rețeleleor. Explicațiile pe această temă pot fi urmărite în [capitolul din curs despre congesion control](https://github.com/senisioi/computer-networks/tree/2020/curs#congestion) sau în [notele de curs de aici](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=60). Toate se bazează pe specificațiile din [RFC 2581](https://tools.ietf.org/html/rfc2581) sau [RFC 6582](https://tools.ietf.org/html/rfc6582) din 2012.
 
 <a name="tcp_options"></a> 
 ### Optiuni TCP
@@ -663,6 +666,11 @@ valoare = struct.pack(op_format[1], 15)
 tcp.option = [(optiune, valoare)]
 ```
 
+#### Atacuri simple la nivelul TCP
+- [Shrew DoS attack](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=60)
+- [Syn Flooding](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=68)
+
+
 <a name="ipv4"></a> 
 ## [Internet Protocol Datagram v4 - IPv4](https://tools.ietf.org/html/rfc791#page-11)
 ```
@@ -685,11 +693,13 @@ tcp.option = [(optiune, valoare)]
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 
 ```
-Prima specificație a protocolului IP a fost în: 
-- [RFC791](https://tools.ietf.org/html/rfc791).
+Prima specificație a protocolului IP a fost în [RFC791](https://tools.ietf.org/html/rfc791) iar câmpurile sunt explicate foarte bine în aceste [note de curs](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=14).
+
+#### Câmpurile antetului
+
 - Version - 4 pentru ipv4
 - IHL - similar cu Data offset de la TCP, ne spune care este dimnesiunea header-ului în multiplii de 32 de biți. Dacă nu sunt specificate opțiuni, IHL este 5.
-- [DSCP](https://en.wikipedia.org/wiki/Differentiated_services) - în tcpdump mai apare ca ToS (type of service), acest camp a fost definit în [RFC2474](https://tools.ietf.org/html/rfc2474) și setează politici de retransmitere a pachetelor, ca [aici](https://en.wikipedia.org/wiki/Differentiated_services#Commonly_used_DSCP_values). Aici puteți găsi un [ghid de setare pentru DSCP](https://tools.ietf.org/html/rfc4594#page-19).
+- [DSCP](https://en.wikipedia.org/wiki/Differentiated_services) - în tcpdump mai apare ca ToS (type of service), acest camp a fost definit în [RFC2474](https://tools.ietf.org/html/rfc2474) și setează politici de retransmitere a pachetelor, ca [aici](https://en.wikipedia.org/wiki/Differentiated_services#Commonly_used_DSCP_values). Aici puteți găsi un [ghid de setare pentru DSCP](https://tools.ietf.org/html/rfc4594#page-19). Câmpul acesta are un rol important în prioritizarea pachetelor de tip video, voce sau streaming.
 - ECN - definit în [RFC3186](https://tools.ietf.org/html/rfc3168) este folosit de către routere, pentru a notifica transmițătorii cu privire la existența unor congestionări pe rețea. Setarea flag-ului pe 11 (Congestion Encountered - CE), va determina layer-ul TCP să își seteze ECE, CWR și NS.
 - Total length - lumgimea totală in octeti, cu header și date pentru întreg-ul datagram
 - Identification - un id care este folosit pentru idenficarea pachetelor fragmentate
@@ -774,6 +784,12 @@ ip.show()
 # pentru a seta DSCP cu cod AF32 pentru video streaming și ECN cu notificare de congestie: ip.tos = int('011100' + '11', 2)
 ```
 
+#### Atacuri simple folosind IP
+- [IP Spoofing](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=71)
+- [IP Spoofing Mitigation](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=84)
+- [Network Ingress Filtering: Defeating Denial of Service Attacks which employ IP Source Address Spoofing](https://tools.ietf.org/html/bcp38)
+
+
 <a name="ipv6"></a> 
 ## [Internet Protocol Datagram v6 - IPv6](https://tools.ietf.org/html/rfc2460#page-4)
 ```
@@ -801,10 +817,13 @@ ip.show()
  |                                                               |
  -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
 ```
-Prima specificație a protocolului IPv6 a fost în 1998 [rfc2460](https://tools.ietf.org/html/rfc2460): 
+Prima specificație a protocolului IPv6 a fost în 1998 [rfc2460](https://tools.ietf.org/html/rfc2460) iar detaliile despre semnificația câmpurilor se găsesc în aceste [note de curs](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=23).
+
+#### Câmpurile antetului IPv6
+
 - Version - 6 pentru ipv6
 - Traffic Class        8-bit [traffic class field](https://tools.ietf.org/html/rfc2460#section-7), similar cu [DSCP](https://en.wikipedia.org/wiki/Differentiated_services) 
-- Flow Label           [20-bit flow label](https://tools.ietf.org/html/rfc2460#section-6), semantica definită [aici](https://tools.ietf.org/html/rfc2460#page-30)
+- Flow Label           [20-bit flow label](https://tools.ietf.org/html/rfc2460#section-6), semantica definită [aici](https://tools.ietf.org/html/rfc2460#page-30), este folosit și în instanțierea socketului prin IPv6.
 - Payload Length       16-bit unsigned integer care include si extra headerele adaugate
 - Next Header          8-bit selector similar cu câmpul Protocol din IPv4
 - Hop Limit            8-bit unsigned integer similar cu câmpul TTL din IPv4
@@ -817,9 +836,81 @@ Prima specificație a protocolului IPv6 a fost în 1998 [rfc2460](https://tools.
 - Adresa IPv6 pentru loopback localhost este `::1/128` 
 - Dublu `::` este o variantă prin care se prescurtează secventele continue cele mai din stânga de `0`, adresa de mai sus este prescurtată: `fe80:cd00::1257:0:0:729c`
 
-
+<a name="ipv6_socket" ></a>
+### IPv6 Socket
+#### Server
 ```python
-IPv6().show()
+import socket
+import sys
+# try to detect whether IPv6 is supported at the present system and
+# fetch the IPv6 address of localhost.
+if not socket.has_ipv6:
+   print("Nu putem folosi IPv6")
+   sys.exit(1)
+
+# "::0" este echivalent cu 0.0.0.0
+infos = socket.getaddrinfo("::0", 8080, socket.AF_INET6, 0, socket.IPPROTO_TCP, socket.AI_CANONNAME)
+# [(<AddressFamily.AF_INET6: 10>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('::', 8080, 0, 0))]
+# info contine o lista de parametri, pentru fiecare interfata, cu care se poate instantia un socket
+print (len(infos))
+1
+
+info = infos[0]
+adress_family = info[0].value # AF_INET
+socket_type = info[1].value # SOCK_STREAM
+protocol = info[2].value # IPPTROTO_TCP == 6
+cannonical_name = info[3] # tot ::0 adresa de echivalenta cu 0.0.0.0
+adresa_pt_bind = info[4] # tuplu ('::', 8080, 0, 0):
+'''
+Metodele de setare a adreselor (bind, connect, sendto) 
+pentru socketul IPv6 sunt un tuplu cu urmatoarele valori:
+- adresa_IPv6               ::0
+- port                      8080
+- flow_label ca in header   0
+- scope-id - id pt NIC      0
+mai multe detalii: https://stackoverflow.com/a/11930859
+'''
+
+# instantiem socket TCP cu AF_INET6
+s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, proto=socket.IPPROTO_TCP)
+
+# executam bind pe tuplu ('::', 8080, 0, 0)
+s.bind(adresa_pt_bind)
+
+# restul e la fel ca la IPv4
+s.listen(1)
+conn, addr = s.accept()
+print(conn.recv(1400))
+conn.send(b'am primit mesajul')
+conn.close()
+s.close()
+```
+
+#### Client
+```python
+import socket
+import sys
+# try to detect whether IPv6 is supported at the present system and
+# fetch the IPv6 address of localhost.
+if not socket.has_ipv6:
+   print("Nu putem folosi IPv6")
+   sys.exit(1)
+
+s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, proto=socket.IPPROTO_TCP)
+adresa = ('::', 8080, 0, 0)
+s.connect(adresa)
+
+# restul e la fel ca la IPv4
+s.send(b'Salut prin IPv6')
+print (s.recv(1400))
+s.close()
+```
+
+<a name="ipv6_scapy" ></a>
+### IPv6 Scapy
+```python
+ip = IPv6()
+ip.show()
 ###[ IPv6 ]### 
   version= 6
   tc= 0
@@ -829,6 +920,12 @@ IPv6().show()
   hlim= 64
   src= ::1
   dst= ::1
+
+ip.dst = '::1' # localhost
+# trimitem la un server UDP care asteapta pe (::0, 8081, 0, 0)
+udp = UDP(sport=1234, dport=8081)  
+send(ip / udp / b'salut prin ipv6')
+
 ```
 
 <a name="ether"></a> 
@@ -853,12 +950,17 @@ DL |  32-bit CRC  |                                          <--- cod de detecta
 F  |     Interpacket Gap  - interval de timp |
    *----*----*----*----*----*----*----*-------
 ```
-La nivelurile legatură de date și fizic, avem standardele [IEEE 802](https://ieeexplore.ieee.org/browse/standards/get-program/page/series?id=68) care ne definesc structurile frame-urilor. Pentru nivelul data link, puteti găsi și [aici mai multe detalii explicate](https://notes.shichao.io/tcpv1/ch3/).
+La nivelurile legatură de date și fizic, avem standardele [IEEE 802](https://ieeexplore.ieee.org/browse/standards/get-program/page/series?id=68) care ne definesc structurile cadrelor (frames).
+Explicații:
+
+- [Istoria protocolului Ethernet](https://www.enwoven.com/collections/view/1834/timeline).
+- [Cartea albastră a protocolului Ethernet](http://decnet.ipv7.net/docs/dundas/aa-k759b-tk.pdf)
+- [Mai multe detalii](https://notes.shichao.io/tcpv1/ch3/).
 
 Fiecare secventă de 4 liniuțe reprezintă un octet (nu un bit ca in diagramele anterioare) iar headerul cuprinde:
 - [preambulul](https://networkengineering.stackexchange.com/questions/24842/how-does-the-preamble-synchronize-other-devices-receiving-clocks) are o dimensiune de 7 octeți, fiecare octet de forma 10101010, și este folosit pentru sincronizarea ceasului receiver-ului. Mai multe detalii despre ethernet în acest [clip](https://www.youtube.com/watch?v=5u52wbqBgEY).
 - SF (start of frame) reprezinta un octet (10101011) care delimitează start of frame
-- [adresele MAC](http://www.dcs.gla.ac.uk/~lewis/networkpages/m04s03EthernetFrame.htm), sursă și destinație, sunt reprezentate pe 6 octeți
+- [adresele MAC (Media Access Control)](http://www.dcs.gla.ac.uk/~lewis/networkpages/m04s03EthernetFrame.htm), sursă și destinație, sunt reprezentate pe 6 octeți (48 de biți). [Aici puteți citi articolul](https://ethernethistory.typepad.com/papers/HostNumbers.pdf) din 1981 despre specificația adreselor. Există o serie de [adrese rezervate](https://www.cavebear.com/archive/cavebear/Ethernet/multicast.html) pentru
 - [802-1q](https://en.wikipedia.org/wiki/IEEE_802.1Q) este un header pentru rețele locale virtuale (VLAN). Lipsește din scapy, dar poate fi [adaugat manual](https://stackoverflow.com/questions/29133482/scapy-how-to-insert-a-new-layer-802-1q-into-existing-packet).
 - EthType indică codul [protocolului](https://en.wikipedia.org/wiki/EtherType#Examples) din layer-ul superior acestui frame
 - codul [CRC](https://en.wikipedia.org/wiki/Cyclic_redundancy_check#Computation) pentru [polinomul de Ethernet](https://xcore.github.io/doc_tips_and_tricks/crc.html#the-polynomial)
@@ -972,6 +1074,8 @@ rec.show()
 
 <a name="scapy_dns"></a> 
 ### Exemplu DNS request
+
+
 ```python
 ip = IP(dst = '8.8.8.8')
 transport = UDP(dport = 53)

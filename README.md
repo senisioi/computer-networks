@@ -4,15 +4,12 @@
 
 
 ## Things to Checkout
-- [Programul Masteral în Procesarea Limbajului Natural](https://nlp.unibuc.ro/master)
+- ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) [Programul Masteral în Procesarea Limbajului Natural](https://nlp.unibuc.ro/master)
 - [DefCamp](https://def.camp/) the most important annual conference on Hacking & Information Security in Central Eastern Europe
 - [Defcon](https://www.defcon.org/) hacker comunity conference
 
 ## Bibliografie curs
-- [Materiale video](https://github.com/senisioi/computer-networks/blob/2020/curs/README.md)
-- [Prezentare curs](http://nlp.unibuc.ro/people/liviu.html#Courses)
-- Cursul de [Computer Networks](https://media.pearsoncmg.com/ph/streaming/esm/tanenbaum5e_videonotes/tanenbaum_videoNotes.html), University of Washington
-- [Computer Networks: A Systems Approach](https://book.systemsapproach.org/foundation.html)
+- [Capitol separat](https://github.com/senisioi/computer-networks/blob/2020/curs/README.md)
 
 ## Înainte de a începe
 Pentru acest laborator, vom avea nevoie de:
@@ -80,7 +77,7 @@ docker-compose exec rt1 bash
 docker-compose exec --user root rt1 bash
 ```
 
-## References
+## Docker References
 - [docker concepts](https://docs.docker.com/engine/docker-overview/#docker-engine)
 - [docker-compose](http://docker-k8s-lab.readthedocs.io/en/latest/docker/docker-compose.html)
 - [Compose Networking](https://runnable.com/docker/docker-compose-networking)
