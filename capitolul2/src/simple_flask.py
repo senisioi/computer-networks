@@ -14,6 +14,7 @@ Use header: 'Content-Type: application/json'
 @app.route('/post', methods=['POST'])
 def post_method():
     print("Got from user: ", request.get_json())
+    print(request.get_json()['value']*2)
     return jsonify({'got_it': 'yes'})
 
 
@@ -22,4 +23,4 @@ def hello_name(name):
     return "Hello {}!".format(name)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8001)
+    app.run(host='0.0.0.0', port=8008)
