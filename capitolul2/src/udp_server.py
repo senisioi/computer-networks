@@ -7,7 +7,7 @@ logging.basicConfig(format = u'[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s] 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, proto=socket.IPPROTO_UDP)
 
 port = 10000
-adresa = '0.0.0.0'
+adresa = 'localhost'
 server_address = (adresa, port)
 sock.bind(server_address)
 logging.info("Serverul a pornit pe %s si portnul portul %d", adresa, port)
