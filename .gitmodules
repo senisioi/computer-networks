@@ -7,3 +7,6 @@
 [submodule "tema2"]
 	path = tema2
 	url = https://github.com/senisioi/tema2
+[submodule "tema4"]
+	path = tema4
+	url = https://github.com/senisioi/tema4
