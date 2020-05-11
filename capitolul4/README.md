@@ -12,12 +12,18 @@ Această unealtă se găsește ca submodul în reporitoy-ul de git (vezi fișier
 git submodule update --init --recursive
 ```
 
+Posibil ca scripturile din repo să nu funcționeze fără BeautifulSoup și lxml, cel mai bine instalați-l pe host:
+```bash
+pip3 install beautifulsoup4 lxml
+``` 
+
 Vom folosi [openwrt](https://openwrt.org/) un firmare open source pentru embedded devices, în cazul nostru un router. Intrați în directorul corespunzător, downloadați imaginea openwrt și rulați comanda `make build`:
 
 ```bash
-cd openwrt
+cd vrnetlab/openwrt
 wget https://downloads.openwrt.org/releases/18.06.2/targets/x86/64/openwrt-18.06.2-x86-64-combined-ext4.img.gz
 make build
+cd ../..
 ```
 Comanda execută un script în python care downloadează imaginile necesare și construiește imaginea pentru docker. În cazul în care comanda returnează erori, este posibil ca framework-ul BeautifulSoup să nu fie instalat, puteți să îl instalați cu `pip3 install bs4
 `. 
@@ -49,7 +55,8 @@ Putem porni routerele individual folosind `docker run` sau prin intermediul orch
 docker run -d --privileged --name openwrt1 openwrt
 docker run -d --privileged --name openwrt2 openwrt
 # sau
-../docker-compose up -d
+cd capitolul4
+docker-compose up -d
 ```
 Pentru a ne conecta la un router trebuie să folosim aplicația **telnet** pe portul 5000. Fie știm adresele IP ale containerelor din fisierul .yml sau le aflăm cu comanda: `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ID_CONTAINER` 
 
@@ -63,6 +70,8 @@ vrcons capitolul4_openwrt1_1
 Trying 198.166.0.1...
 Connected to 198.166.0.1.
 Escape character is '^]'.
+
+Apasam Ctrl + ] si enter pentru a tasta comenzile urmatoare:
 ```
 
 Conform documentației [openwrt](https://openwrt.org/docs/guide-user/base-system/basic-networking), configurația LAN se definește pe o interfață numită br-lan: `ifconfig br-lan`. Adresa IP a interfeței LAN este 10.0.0.15, dar configurația permanentă se definește prin:
