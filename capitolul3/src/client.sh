@@ -11,4 +11,3 @@ echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 # we need to drop the kernel reset of hand-coded tcp connections
 # https://stackoverflow.com/a/8578541
 iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP
-sleep infinity
