@@ -18,7 +18,7 @@ services:
               ipv4_address: 198.10.0.2
         depends_on:
             - "router"
-        command: /server.sh && sleep infinity
+        command: bash -c "/server.sh && sleep infinity"
     middle:
         build:
             context: .
@@ -37,7 +37,7 @@ services:
             - "router"
         sysctls:
           - net.ipv4.ip_forward=1
-        command: /middle.sh && sleep infinity
+        command: bash -c "/middle.sh && sleep infinity"
     router:
         build:
             context: .
@@ -56,7 +56,7 @@ services:
               ipv4_address: 198.10.0.1
         sysctls:
           - net.ipv4.ip_forward=1
-        command: /router.sh && sleep infinity # && /alter_packages.sh
+        command: bash -c "/router.sh && sleep infinity" # && /alter_packages.sh
     client:
         build:
             context: .
@@ -74,7 +74,7 @@ services:
         depends_on:
             - "router"
             - "server"
-        command: /client.sh && sleep infinity
+        command: bash -c "/client.sh && sleep infinity"
 networks:
     subnet1:
         ipam:
