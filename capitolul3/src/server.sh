@@ -1,6 +1,5 @@
 #!/bin/bash
 set -x
-trap read debug
 # remove default gateway 198.10.1.1
 ip route del default
 # make router container the default router
