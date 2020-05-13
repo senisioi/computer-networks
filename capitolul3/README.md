@@ -27,9 +27,14 @@
   - [Ethernet Object in Scapy](#ether_scapy)
 - [Address Resolution Protocol](#arp)
   - [ARP in Scapy](#arp_scapy)
+- [Intercept Packages](#scapy_nfqueue)
+    - [Block Intercepted Packages](#scapy_nfqueue_block)
 - [Exemple de protocoale în Scapy](#scapy)
   - [Internet Control Message Protocol (ICMP)](#scapy_icmp)
   - [Domain Name System (DNS)](#scapy_dns)
+    - [DNS Request](#scapy_dns_request)
+    - [Micro DNS Server](#scapy_dns_server)
+    - [DNS Spoofing](#scapy_dns_spoofing)
 - [Exerciții](#exercitii)
 
 <a name="intro"></a> 
@@ -1062,6 +1067,58 @@ else:
 În felul acesta putem interoga device-urile din rețea și adresele MAC corespunzătoare. Putem folosi scapy pentru a trimite un broadcast întregului subnet dacă setăm `pdst` cu valoarea subnetului `net`. 
 
 
+<a name="scapy_nfqueue"></a>
+## [Netfilter Queue](https://pypi.org/project/NetfilterQueue/)
+Pentru a modifica pachetele care circulă live pe rețeaua noastră, putem folosi librăria [NetfilterQueue](https://netfilter.org/projects/libnetfilter_queue/) care stochează pachetele într-o coadă. La citirea din coadă, pachetele pot fi acceptate (`packet.accept()`) pentru a fi transmise mai departe sau pot fi blocate (`packet.drop()`), în cazul în care dorim să blocăm anumite tipuri de pachete. Mai multe exemple [în extensia de python](https://pypi.org/project/NetfilterQueue/).
+Pentur a folosi librăria, trebuie să adăugăm o regulă în firewall-ul iptables prin care să redirecționăm toate pachetele către o coadă NETFILTERQUEUE cu un id specific. Acest lucru se poate face din shell:
+```bash
+# toate pachetele de la input se redirectioneaza catre coada 5
+iptables -I INPUT -j NFQUEUE --queue-num 5
+```
+sau din python:
+```python
+import os
+os.system("iptables -I INPUT -j NFQUEUE --queue-num 5")
+```
+
+<a name="scapy_nfqueue_block"></a>
+### Blocarea unui IP
+Ne atașăm containerului server:
+```bash
+docker-compose exec server bash
+```
+
+Dintr-un terminal de python sau dintr-un fișier rulăm:
+
+```python
+from scapy.all import *
+from netfilterqueue import NetfilterQueue as NFQ
+import os
+def proceseaza(pachet):
+    # octeti raw, ca dintr-un raw socket
+    octeti = pachet.get_payload()
+    # convertim octetii in pachet scapy
+    scapy_packet = IP(octeti)
+    scapy_packet.summary()
+    if scapy_packet[IP].src == '198.10.0.2':
+        print("Drop la: ", scapy_packet.summary())
+        pachet.drop()
+    else:
+        print("Accept la: ", scapy_packet.summary())
+        pachet.accept()
+
+queue = NFQ()
+try:
+    os.system("iptables -I INPUT -j NFQUEUE --queue-num 5")
+    # bind trebuie să folosească aceiași coadă ca cea definită în iptables
+    queue.bind(5, proceseaza)
+    queue.run()
+except KeyboardInterrupt:
+    queue.unbind()
+```
+
+
+
 <a name="scapy"></a> 
 ## [Exemple de protocoale în Scapy](https://scapy.readthedocs.io/en/latest/usage.html#starting-scapy)
 
@@ -1131,7 +1188,7 @@ Pentru a trimite pachete la nivelul legatură de date, completând manual câmpu
 
 
 <a name="scapy_icmp"></a> 
-### Internet Control Message Protocol (ICMP)
+### [Internet Control Message Protocol (ICMP)](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
 
 Am discutat despre ICMP și ping pentru a verifica dacă două device-uri pot comunica unul cu altul. Principala funcție a protocolului ICMP este de [a raprota erori](https://www.cloudflare.com/learning/ddos/glossary/internet-control-message-protocol-icmp/) iar [mesajele de control](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages) pot varia de la faptul că un host, port sau protocol este inaccesibil până la notificarea că TTL a expirat în tranzit.
 
@@ -1175,59 +1232,8 @@ rec.show()
      seq= 0x0
 ```
 
-<a name="scapy_nfqueue"></a> 
-### Netfilter Queue
-Pentru a modifica pachetele care circulă live pe rețeaua noastră, putem folosi librăria [NetfilterQueue](https://netfilter.org/projects/libnetfilter_queue/) care stochează pachetele într-o coadă. La citirea din coadă, pachetele pot fi acceptate (`packet.accept()`) pentru a fi transmise mai departe sau pot fi blocate (`packet.drop()`), în cazul în care dorim să blocăm anumite tipuri de pachete. Mai multe exemple [în extensia de python](https://pypi.org/project/NetfilterQueue/).
-Pentur a folosi librăria, trebuie să adăugăm o regulă în firewall-ul iptables prin care să redirecționăm toate pachetele către o coadă NETFILTERQUEUE cu un id specific. Acest lucru se poate face din shell:
-```bash
-# toate pachetele de la input se redirectioneaza catre coada 5
-iptables -I INPUT -j NFQUEUE --queue-num 5
-```
-sau din python:
-```python
-import os
-os.system("iptables -I INPUT -j NFQUEUE --queue-num 5")
-```
-
-
-#### Blocarea IP-ului 198.10.1.1
-Ne atașăm containerului server:
-```bash
-docker-compose exec server bash
-```
-
-Dintr-un terminal de python sau dintr-un fișier rulăm:
-
-```python
-from scapy.all import *
-from netfilterqueue import NetfilterQueue as NFQ
-import os
-def proceseaza(pachet):
-    # octeti raw, ca dintr-un raw socket
-    octeti = pachet.get_payload()
-    # convertim octetii in pachet scapy
-    scapy_packet = IP(octeti)
-    scapy_packet.summary()
-    if scapy_packet[IP].src == '198.10.0.2':
-        print("Drop la: ", scapy_packet.summary())
-        pachet.drop()
-    else:
-        print("Accept la: ", scapy_packet.summary())
-        pachet.accept()
-
-queue = NFQ()
-try:
-    os.system("iptables -I INPUT -j NFQUEUE --queue-num 5")
-    # bind trebuie să folosească aceiași coadă ca cea definită în iptables
-    queue.bind(5, proceseaza)
-    queue.run()
-except KeyboardInterrupt:
-    queue.unbind()
-```
-
-
 <a name="scapy_dns"></a> 
-### Domain Name System
+### [Domain Name System](https://dnsmonitor.com/dns-tutorial-1-the-basics/)
 
 Aici puteți găsi ilustrate informații despre [DNS și DNS over HTTPS](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/).
 În linux există aplicația `dig` cu care putem interoga entries de DNS:
@@ -1269,6 +1275,7 @@ DNS stochează nu doar informații despre IP-ul corespunzător unui hostname, ci
 
 Protocolul pentru DNS lucrează la nivelul aplicației și este standardizat pentru UDP, port 53. Acesta se bazează pe request-response iar în cazul în care nu se primesc răspunsuri după un număr de reîncercări (de multe ori 2), programul anunță că nu poate găsi IP-ul pentru hostname-ul cerut ("can'r resolve"). Headerul protocolului [este definit aici](http://www.networksorcery.com/enp/protocol/dns.htm).
 
+<a name="scapy_dns_request"></a> 
 #### Exemplu DNS request
 ```python
 from scapy.all import *
@@ -1288,7 +1295,8 @@ answer = sr1(ip / transport / dns)
 print (answer[DNS].summary())
 ```
 
-#### Micro DNS
+<a name="scapy_dns_server"></a> 
+#### Micro DNS Server
 Putem scrie un mic exemplu de aplicație care să funcționeze ca DNS care returnează [DNS A records](https://support.dnsimple.com/articles/a-record/). DNS rulează ca UDP pe portul 53:
 ```python
 import socket
@@ -1344,8 +1352,7 @@ simple_udp.close()
 ```
 
 
-
-
+<a name="scapy_dns_spoofing"></a> 
 #### DNS Spoofing
 Dacă intermediem conexiunea între două noduri, putem insera răspunsuri DNS malițioase cu scopul de a determina userii să acceseze pagini false. Pe linux, un DNS customizabil se poate set prin fișierul `/etc/resolv.conf` sau ca în [exemplul de aici](https://unix.stackexchange.com/questions/128220/how-do-i-set-my-dns-when-resolv-conf-is-being-overwritten)).
 
@@ -1419,8 +1426,6 @@ queue.bind(10, detect_and_alter_packet)
 queue.run()
 queue.unbind()
 ```
-
-
 
 
 <a name="exercitii"></a> 
