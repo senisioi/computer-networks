@@ -10,3 +10,7 @@
 [submodule "tema4"]
 	path = tema4
 	url = https://github.com/senisioi/tema4
+[submodule "tema5"]
+	path = tema5
+	url = https://github.com/senisioi/tema5
+	branch = master
