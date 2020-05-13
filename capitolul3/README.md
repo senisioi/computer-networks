@@ -1083,9 +1083,9 @@ os.system("iptables -I INPUT -j NFQUEUE --queue-num 5")
 
 <a name="scapy_nfqueue_block"></a>
 ### Blocarea unui IP
-Ne atașăm containerului server:
+Ne atașăm containerului router:
 ```bash
-docker-compose exec server bash
+docker-compose exec router bash
 ```
 
 Dintr-un terminal de python sau dintr-un fișier rulăm:
@@ -1115,6 +1115,13 @@ try:
     queue.run()
 except KeyboardInterrupt:
     queue.unbind()
+```
+
+Într-un alt terminal ne atașăm containerului server:
+```bash
+docker-compose exec server bash
+# nu va mai merge
+ping router 
 ```
 
 
