@@ -1069,7 +1069,8 @@ else:
 
 <a name="scapy_nfqueue"></a>
 ## [Netfilter Queue](https://pypi.org/project/NetfilterQueue/)
-Pentru a modifica pachetele care circulă live pe rețeaua noastră, putem folosi librăria [NetfilterQueue](https://netfilter.org/projects/libnetfilter_queue/) care stochează pachetele într-o coadă. La citirea din coadă, pachetele pot fi acceptate (`packet.accept()`) pentru a fi transmise mai departe sau pot fi blocate (`packet.drop()`), în cazul în care dorim să blocăm anumite tipuri de pachete. Mai multe exemple [în extensia de python](https://pypi.org/project/NetfilterQueue/).
+Pentru a modifica pachetele care circulă live pe rețeaua noastră, putem folosi librăria [NetfilterQueue](https://netfilter.org/projects/libnetfilter_queue/) care stochează pachetele într-o coadă. La citirea din coadă, pachetele pot fi acceptate (`packet.accept()`) pentru a fi transmise mai departe sau pot fi blocate (`packet.drop()`). În cazul în care dorim să le alterăm în timp real, putem folosi șiruri de octeți pentru a seta payload: `packet.set_payload(bytes(scapy_packet))`, unde payload reprezintă întregul pachet sub formă binară.
+Mai multe exemple puteți găsi [în extensia de python](https://pypi.org/project/NetfilterQueue/).
 Pentur a folosi librăria, trebuie să adăugăm o regulă în firewall-ul iptables prin care să redirecționăm toate pachetele către o coadă NETFILTERQUEUE cu un id specific. Acest lucru se poate face din shell:
 ```bash
 # toate pachetele de la input se redirectioneaza catre coada 5
