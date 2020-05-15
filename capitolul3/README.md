@@ -176,14 +176,14 @@ numar = 16
 octeti = struct.pack('!H', numar)
 print("Network Order: ")
 for byte in octeti:
-  print (bin(byte))
+    print (bin(byte))
 
 
 # impachetam numarul 16 intr-un 'unsigned short' pe 16 biti cu Little Endian
 octeti = struct.pack('<H', numar)
 print("Little Endian: ")
 for byte in octeti:
-  print (bin(byte))
+    print (bin(byte))
 
 # B pentru 8 biti, numere unsigned intre 0-256
 struct.pack('B', 300)
@@ -288,6 +288,8 @@ print (bin(checksum))
 0b100
 ```
 
+##### Exercițiu
+Ce se întamplă dacă suma calculată este exact numărul maxim pe N biți?
 
 <a name="#udp_socket"></a> 
 ### Socket UDP
@@ -856,8 +858,8 @@ import sys
 # try to detect whether IPv6 is supported at the present system and
 # fetch the IPv6 address of localhost.
 if not socket.has_ipv6:
-   print("Nu putem folosi IPv6")
-   sys.exit(1)
+    print("Nu putem folosi IPv6")
+    sys.exit(1)
 
 # "::0" este echivalent cu 0.0.0.0
 infos = socket.getaddrinfo("::0", 8080, socket.AF_INET6, 0, socket.IPPROTO_TCP, socket.AI_CANONNAME)
@@ -904,8 +906,8 @@ import sys
 # try to detect whether IPv6 is supported at the present system and
 # fetch the IPv6 address of localhost.
 if not socket.has_ipv6:
-   print("Nu putem folosi IPv6")
-   sys.exit(1)
+    print("Nu putem folosi IPv6")
+    sys.exit(1)
 
 s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, proto=socket.IPPROTO_TCP)
 adresa = ('::', 8080, 0, 0)
@@ -1057,11 +1059,11 @@ arp = ARP(pdst = '198.13.13.1')
 answered = srp1(eth / arp, timeout = 2)
 
 if answered is not None:
-  print (answered[ARP].psrc)
-  # adresa fizică este:
-  print (answered[ARP].hwsrc)
+    print (answered[ARP].psrc)
+    # adresa fizică este:
+    print (answered[ARP].hwsrc)
 else:
-  print ("Nu a putut fi gasita")  
+    print ("Nu a putut fi gasita")  
 ```
 
 În felul acesta putem interoga device-urile din rețea și adresele MAC corespunzătoare. Putem folosi scapy pentru a trimite un broadcast întregului subnet dacă setăm `pdst` cu valoarea subnetului `net`. 
@@ -1138,27 +1140,27 @@ tcpdump -i any -s 65535 -w example.pcap
 ```python
 packets = rdpcap('example.pcap')
 for pachet in packets:
-  if pachet.haslayer(ARP):
-    pachet.show()
+    if pachet.haslayer(ARP):
+        pachet.show()
 ```
 
-Mai mult, funcția sniff are un parametrul prin care pute trimite o metodă care să proceseze pachetul primit în funcție de conținut:
+Mai mult, funcția sniff are un parametrul prin care putem trimite o metodă care să proceseze pachetul primit în funcție de conținut:
 ```python
 def handler(pachet):
-  if pachet.haslayer(TCP):
-    if pachet[TCP].dport == 80: #or pachet[TCP].dport == 443:
-      if pachet.haslayer(Raw):
-        raw = pachet.getlayer(Raw)
-        print(raw.load)
+    if pachet.haslayer(TCP):
+        if pachet[TCP].dport == 80: #or pachet[TCP].dport == 443:
+            if pachet.haslayer(Raw):
+                raw = pachet.getlayer(Raw)
+                print(raw.load)
 sniff(prn=handler)
 ```
 
-De asemenea, cu scapy putem citi și octeții dintr-un socket raw dacă știm care este primul layer (cel mai de jos):
+Putem converti și octeții obținuți printr-un socket raw dacă știm care este primul layer (cel mai de jos):
 ```python
 # vezi exemplul de mai sus cu UDP Raw Socket
 raw_socket_date = b'E\x00\x00!\xc2\xd2@\x00@\x11\xeb\xe1\xc6\n\x00\x01\xc6\n\x00\x02\x08\xae\t\x1a\x00\r\x8c6salut'
-
-pachet = IP(date)
+# dacă am fi avut un raw_socket care citește și header ehternet, ar fi trebuit să folosim și 
+pachet = IP(raw_socket_date)
 pachet.show()
 ###[ IP ]### 
   version= 4
@@ -1185,13 +1187,13 @@ pachet.show()
 
 
 În scapy avem mai multe funcții de trimitere a pachetelor:
-- `send()` - trimite un pachet pe rețea la nivelul network, iar secțiunea de ethernet este completată de către sistem
-- `answered, unanswered = sr()` - send_receive - trimite pachete pe rețea în loop și înregistrează și răspunsurile primite
-- `answer = sr1()` - send_receive_1 - trimite pe rețea ca sr1, dar înregistrează primul răspuns primit
+- `send()` - trimite un pachet pe rețea la nivelul network (layer 3), iar secțiunea de ethernet este completată de către sistem
+- `answered, unanswered = sr()` - send_receive - trimite pachete pe rețea în loop și înregistrează și răspunsurile primite într-un tuplu (answered, unanswered), unde answered și unanswered reprezintă o listă de tupluri [(pachet_trimis1, răspuns_primit1), ...,(pachet_trimis100, răspuns_primit100)] 
+- `answer = sr1()` - send_receive_1 - trimite pe rețea un pachet și înregistrează primul răspunsul
 
-Pentru a trimite pachete la nivelul legatură de date, completând manual câmpuri din secțiunea Ethernet, avem echivalentul funcțiilor de mai sus:
+Pentru a trimite pachete la nivelul legatură de date (layer 2), completând manual câmpuri din secțiunea Ethernet, avem echivalentul funcțiilor de mai sus:
 - `sendp()` - send_ethernet trimite un pachet la nivelul data-link, cu layer Ether custom
-- `answered, unanswered = srp()` - send_receive_ethernet trimite pachete la layer 2 și înregistrează și răspunsurile
+- `answered, unanswered = srp()` - send_receive_ethernet trimite pachete la layer 2 și înregistrează răspunsurile
 - `answer = srp1()` - send_receive_1_ethernet la fel ca srp, dar înregistreazî doar primul răspuns
 
 
@@ -1348,7 +1350,7 @@ while True:
                                   id = packet[DNS].id, # DNS replies must have the same ID as requests
                                   qr = 1,              # 1 for response, 0 for query 
                                   aa = 0,              # Authoritative Answer
-                                  rcode = 0,           # 0, nicio eroarehttp://www.networksorcery.com/enp/protocol/dns.htm#Rcode,%20Return%20code
+                                  rcode = 0,           # 0, nicio eroare http://www.networksorcery.com/enp/protocol/dns.htm#Rcode,%20Return%20code
                                   qd = packet.qd,      # request-ul original
                                   an = dns_answer)     # obiectul de reply
                print('response:')
@@ -1409,12 +1411,10 @@ def alter_packet(packet):
     # daca nu e site-ul fmi, returnam fara modificari
     if qname != b'fmi.unibuc.ro':
         return packet
-
     # construim un nou raspuns cu rdata
     packet[DNS].an = DNSRR(rrname=qname, rdata='1.1.1.1')
     # set the answer count to 1
     packet[DNS].ancount = 1
-
     # delete checksums and length of packet, because we have modified the packet
     # new calculations are required ( scapy will do automatically )
     del packet[IP].len
@@ -1423,7 +1423,6 @@ def alter_packet(packet):
     del packet[UDP].chksum
     # return the modified packet
     return packet
-
 
 ```
 
@@ -1446,6 +1445,3 @@ queue.unbind()
 6. [TCP Syn Scanning](https://scapy.readthedocs.io/en/latest/usage.html#syn-scans) - folosiți scapy pentru a crea un pachet cu IP-ul destinație 193.226.51.6 (site-ul facultății) și un layer de TCP cu dport=(10, 500) pentru a afla care porturi sunt deschise comunicării cu TCP pe site-ul facultății.
 7. Urmăriți mai multe exemple din scapy [aici](https://scapy.readthedocs.io/en/latest/usage.html#simple-one-liners)
 8. Utilizați NetfilterQueue în containerul `router` pentru a intercepta pachete TCP dintre client și server și pentru a injecta mesaje suplimentare în comunicare.
-
-
-
