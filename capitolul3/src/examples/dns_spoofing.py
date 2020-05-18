@@ -42,6 +42,7 @@ def alter_packet(packet):
     # return the modified packet
     return packet
 
+
 def main():
     queue = NFQ()
     try:
