@@ -405,7 +405,7 @@ pachete[UDP][0].show()
            load= 'salut'
 ```
 
-<a name="#scapy_sniff"></a> 
+<a name="scapy_sniff"></a> 
 ## Funcțiile sniff și send(p), sr(p), sr(p)1 în scapy
 
 Funcția `sniff()` ne permite să captăm pachete în cod cum am face cu wireshark sau tcpdump. De asemenea putem salva captura de pachete în format .pcap cu tcpdump: 
