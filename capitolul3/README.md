@@ -1429,6 +1429,7 @@ except KeyboardInterrupt:
     queue.unbind()
 ```
 
+Testați din containerul `server`: `docker-compose exec server bash -c "ping fmi.unibuc.ro"`
 
 <a name="exercitii"></a> 
 ## Exerciții
