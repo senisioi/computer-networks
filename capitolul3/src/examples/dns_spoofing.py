@@ -42,11 +42,16 @@ def alter_packet(packet):
     # return the modified packet
     return packet
 
+def main():
+    queue = NFQ()
+    try:
+        os.system("iptables -I FORWARD -j NFQUEUE --queue-num 10")
+        # bind trebuie să folosească aceiași coadă ca cea definită în iptables
+        queue.bind(10, detect_and_alter_packet)
+        queue.run()
+    except KeyboardInterrupt:
+        os.system("iptables --flush")
+        queue.unbind()
 
-try:
-    os.system("iptables -I FORWARD -j NFQUEUE --queue-num 10")
-    # bind trebuie să folosească aceiași coadă ca cea definită în iptables
-    queue.bind(10, detect_and_alter_packet)
-    queue.run()
-except KeyboardInterrupt:
-    queue.unbind()
+if __name__ == '__main__':
+    main()
