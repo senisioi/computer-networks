@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # inainte de toate trebuie adaugata o regula de ignorare 
 # a pachetelor RST pe care ni le livreaza kernelul automat
 # iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP

@@ -1,11 +1,5 @@
 # Capitolul 5
 
-
-### [DHCP](http://www.ietf.org/rfc/rfc2131.txt) si [BOOTP](https://tools.ietf.org/html/rfc951)
-- [bootstrap protocol](https://en.wikipedia.org/wiki/Bootstrap_Protocol) a fost înlocuit de [Dynamic Host Configuration Protocol](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol#Operation) pentru asignarea de adrese IPv4 automat device-urilor care se conectează pe rețea
-- pentru cerere de IP flow-ul include pașii pentru discover, offer, request și ack
-- container de docker [aici](https://github.com/networkboot/docker-dhcpd)
-
 ### [Parctical routing attacks](https://microlab.red/2018/04/06/practical-routing-attacks-1-3-rip/)
 - protocoale de rutare și câteva exemple de vulnerabilități ale acestora
 

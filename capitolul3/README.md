@@ -10,6 +10,7 @@
   - [UDP Socket](#udp_socket)
   - [UDP Raw Socket](#udp_raw_socket)
   - [UDP Scapy](#udp_scapy)
+- [Funcțiile sniff și send(p), sr(p), sr(p)1 în scapy](#scapy_sniff)
 - [TCP Segment](#tcp)
   - [TCP Options](#tcp_options)
   - [TCP Retransmissions](#tcp_retransmission)
@@ -404,6 +405,72 @@ pachete[UDP][0].show()
            load= 'salut'
 ```
 
+<a name="#scapy_sniff"></a> 
+## Funcțiile sniff și send(p), sr(p), sr(p)1 în scapy
+
+Funcția `sniff()` ne permite să captăm pachete în cod cum am face cu wireshark sau tcpdump. De asemenea putem salva captura de pachete în format .pcap cu tcpdump: 
+```bash
+tcpdump -i any -s 65535 -w example.pcap
+```
+și putem încărca pachetele în scapy pentru a le procesa:
+```python
+packets = rdpcap('example.pcap')
+for pachet in packets:
+    if pachet.haslayer(ARP):
+        pachet.show()
+```
+
+Mai mult, funcția sniff are un parametrul prin care putem trimite o metodă care să proceseze pachetul primit în funcție de conținut:
+```python
+def handler(pachet):
+    if pachet.haslayer(TCP):
+        if pachet[TCP].dport == 80: #or pachet[TCP].dport == 443:
+            if pachet.haslayer(Raw):
+                raw = pachet.getlayer(Raw)
+                print(raw.load)
+sniff(prn=handler)
+```
+
+Putem converti și octeții obținuți printr-un socket raw dacă știm care este primul layer (cel mai de jos):
+```python
+# vezi exemplul de mai sus cu UDP Raw Socket
+raw_socket_date = b'E\x00\x00!\xc2\xd2@\x00@\x11\xeb\xe1\xc6\n\x00\x01\xc6\n\x00\x02\x08\xae\t\x1a\x00\r\x8c6salut'
+# dacă am fi avut un raw_socket care citește și header ehternet, ar fi trebuit să folosim și 
+pachet = IP(raw_socket_date)
+pachet.show()
+###[ IP ]### 
+  version= 4
+  ihl= 5
+  tos= 0x0
+  len= 33
+  id= 49874
+  flags= DF
+  frag= 0
+  ttl= 64
+  proto= udp
+  chksum= 0xebe1
+  src= 198.10.0.1
+  dst= 198.10.0.2
+  \options\
+###[ UDP ]### 
+     sport= 2222
+     dport= 2330
+     len= 13
+     chksum= 0x8c36
+###[ Raw ]### 
+        load= 'salut'
+```
+
+
+În scapy avem mai multe funcții de trimitere a pachetelor:
+- `send()` - trimite un pachet pe rețea la nivelul network (layer 3), iar secțiunea de ethernet este completată de către sistem
+- `answered, unanswered = sr()` - send_receive - trimite pachete pe rețea în loop și înregistrează și răspunsurile primite într-un tuplu (answered, unanswered), unde answered și unanswered reprezintă o listă de tupluri [(pachet_trimis1, răspuns_primit1), ...,(pachet_trimis100, răspuns_primit100)] 
+- `answer = sr1()` - send_receive_1 - trimite pe rețea un pachet și înregistrează primul răspunsul
+
+Pentru a trimite pachete la nivelul legatură de date (layer 2), completând manual câmpuri din secțiunea Ethernet, avem echivalentul funcțiilor de mai sus:
+- `sendp()` - send_ethernet trimite un pachet la nivelul data-link, cu layer Ether custom
+- `answered, unanswered = srp()` - send_receive_ethernet trimite pachete la layer 2 și înregistrează răspunsurile
+- `answer = srp1()` - send_receive_1_ethernet la fel ca srp, dar înregistreazî doar primul răspuns
 
 
 
@@ -490,7 +557,7 @@ s.send(b'octeti')
 
 <a name="#tcp_raw_socket"></a> 
 ### Raw Socket TCP
-Un exemplu de 3-way handshake facut cu Raw Socket este în directorul [capitolul3/src/raw_socket_handshake.py](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/raw_socket_handshake.py)
+Un exemplu de 3-way handshake facut cu Raw Socket este în directorul [capitolul3/src/examples/raw_socket_handshake.py](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/examples/raw_socket_handshake.py)
 Putem instantia un socket brut pentru a capta mesaje TCP de pe orice port:
 ```python
 
@@ -1129,74 +1196,15 @@ ping router
 ```
 
 
-
 <a name="scapy"></a> 
 ## [Exemple de protocoale în Scapy](https://scapy.readthedocs.io/en/latest/usage.html#starting-scapy)
 
-Funcția `sniff()` ne permite să captăm pachete în cod cum am face cu wireshark sau tcpdump. De asemenea putem salva captura de pachete în format .pcap cu tcpdump: 
-```bash
-tcpdump -i any -s 65535 -w example.pcap
-```
-și putem încărca pachetele în scapy pentru a le procesa:
-```python
-packets = rdpcap('example.pcap')
-for pachet in packets:
-    if pachet.haslayer(ARP):
-        pachet.show()
-```
-
-Mai mult, funcția sniff are un parametrul prin care putem trimite o metodă care să proceseze pachetul primit în funcție de conținut:
-```python
-def handler(pachet):
-    if pachet.haslayer(TCP):
-        if pachet[TCP].dport == 80: #or pachet[TCP].dport == 443:
-            if pachet.haslayer(Raw):
-                raw = pachet.getlayer(Raw)
-                print(raw.load)
-sniff(prn=handler)
-```
-
-Putem converti și octeții obținuți printr-un socket raw dacă știm care este primul layer (cel mai de jos):
-```python
-# vezi exemplul de mai sus cu UDP Raw Socket
-raw_socket_date = b'E\x00\x00!\xc2\xd2@\x00@\x11\xeb\xe1\xc6\n\x00\x01\xc6\n\x00\x02\x08\xae\t\x1a\x00\r\x8c6salut'
-# dacă am fi avut un raw_socket care citește și header ehternet, ar fi trebuit să folosim și 
-pachet = IP(raw_socket_date)
-pachet.show()
-###[ IP ]### 
-  version= 4
-  ihl= 5
-  tos= 0x0
-  len= 33
-  id= 49874
-  flags= DF
-  frag= 0
-  ttl= 64
-  proto= udp
-  chksum= 0xebe1
-  src= 198.10.0.1
-  dst= 198.10.0.2
-  \options\
-###[ UDP ]### 
-     sport= 2222
-     dport= 2330
-     len= 13
-     chksum= 0x8c36
-###[ Raw ]### 
-        load= 'salut'
-```
-
-
-În scapy avem mai multe funcții de trimitere a pachetelor:
-- `send()` - trimite un pachet pe rețea la nivelul network (layer 3), iar secțiunea de ethernet este completată de către sistem
-- `answered, unanswered = sr()` - send_receive - trimite pachete pe rețea în loop și înregistrează și răspunsurile primite într-un tuplu (answered, unanswered), unde answered și unanswered reprezintă o listă de tupluri [(pachet_trimis1, răspuns_primit1), ...,(pachet_trimis100, răspuns_primit100)] 
-- `answer = sr1()` - send_receive_1 - trimite pe rețea un pachet și înregistrează primul răspunsul
-
-Pentru a trimite pachete la nivelul legatură de date (layer 2), completând manual câmpuri din secțiunea Ethernet, avem echivalentul funcțiilor de mai sus:
-- `sendp()` - send_ethernet trimite un pachet la nivelul data-link, cu layer Ether custom
-- `answered, unanswered = srp()` - send_receive_ethernet trimite pachete la layer 2 și înregistrează răspunsurile
-- `answer = srp1()` - send_receive_1_ethernet la fel ca srp, dar înregistreazî doar primul răspuns
-
+<a name="scapy_dhcp"></a> 
+### [Dynamic Host Configuration Protocol](http://www.ietf.org/rfc/rfc2131.txt) si [BOOTP](https://tools.ietf.org/html/rfc951)
+- [bootstrap protocol](https://en.wikipedia.org/wiki/Bootstrap_Protocol) a fost înlocuit de [Dynamic Host Configuration Protocol](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol#Operation) pentru asignarea de adrese IPv4 automat device-urilor care se conectează pe rețea
+- pentru cerere de IP flow-ul include pașii pentru discover, offer, request și ack
+- container de docker [aici](https://github.com/networkboot/docker-dhcpd)
+- [exemplu de cod scapy aici](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/examples/dhcp.py)
 
 <a name="scapy_icmp"></a> 
 ### [Internet Control Message Protocol (ICMP)](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
@@ -1246,7 +1254,8 @@ rec.show()
 <a name="scapy_dns"></a> 
 ### [Domain Name System](https://dnsmonitor.com/dns-tutorial-1-the-basics/)
 
-Aici puteți găsi ilustrate informații despre [DNS și DNS over HTTPS](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/).
+Aici puteți găsi ilustrate informații despre [DNS și DNS over HTTPS](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/). 
+În general, numele care corespund unui server ([Fully Qualified Domain Names](https://kb.iu.edu/d/aiuv)) sunt salvate cu [un punct în plus la sfârșit](https://stackexchange.github.io/dnscontrol/why-the-dot).
 În linux există aplicația `dig` cu care putem interoga entries de DNS:
 ```bash
 # interogam serverul 8.8.8.8 pentur a afla la ce IP este fmi.unibuc.ro
@@ -1393,13 +1402,10 @@ def detect_and_alter_packet(packet):
     scapy_packet = IP(octets)
     # if the packet is a DNS Resource Record (DNS reply)
     # modify the packet
-    if scapy_packet.haslayer(IP) and \
-       scapy_packet.haslayer(UDP) and \ 
-       scapy_packet.haslayer(DNSRR):
+    if scapy_packet.haslayer(IP) and scapy_packet.haslayer(UDP) and scapy_packet.haslayer(DNSRR):
         print("[Before]:", scapy_packet.summary())
         scapy_packet = alter_packet(scapy_packet)
         print("[After ]:", scapy_packet.summary())
-
         # put it back in the queue in the form of octets
         packet.set_payload(bytes(scapy_packet))
     # accept the packet in the queue
@@ -1410,7 +1416,7 @@ def alter_packet(packet):
     # get the DNS question name, the domain name
     qname = packet[DNSQR].qname
     # daca nu e site-ul fmi, returnam fara modificari
-    if qname != b'fmi.unibuc.ro':
+    if qname != b'fmi.unibuc.ro.':
         return packet
     # construim un nou raspuns cu rdata
     packet[DNS].an = DNSRR(rrname=qname, rdata='1.1.1.1')
@@ -1439,7 +1445,7 @@ queue.unbind()
 <a name="exercitii"></a> 
 ## Exerciții
 1. Instanțiați un server UDP și faceți schimb de mesaje cu un client scapy.
-2. Rulați 3-way handshake între server și client folosind containerele definite în capitolul3, astfel: containerul `server` va rula `capitolul2/tcp_server.py` pe adresa '0.0.0.0', iar în containerul `client` configurați și rulați fișierul din [capitolul3/src/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/tcp_handshake.py) pentru a face 3-way handshake.
+2. Rulați 3-way handshake între server și client folosind containerele definite în capitolul3, astfel: containerul `server` va rula `capitolul2/tcp_server.py` pe adresa '0.0.0.0', iar în containerul `client` configurați și rulați fișierul din [capitolul3/src/examples/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/examples/tcp_handshake.py) pentru a face 3-way handshake.
 3. Configurați opțiunea pentru Maximum Segment Size (MSS) astfel încat să îl notificați pe server că segmentul maxim este de 1 byte. Puteți să-l configurați cu 0?
 4. Trimiteți mesaje TCP folosind flag-ul PSH și scapy.
 5. Setați flag-urile ECN în IP și flag-ul ECE in TCP pentru a notifica serverul de congestionarea rețelei.

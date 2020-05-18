@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 '''
 Sample script to send a DHCP discover
 '''
