@@ -3,6 +3,8 @@
 from scapy.all import *
 from netfilterqueue import NetfilterQueue as NFQ
 import os
+
+
 def proceseaza(pachet):
     # octeti raw, ca dintr-un raw socket
     octeti = pachet.get_payload()
@@ -15,6 +17,7 @@ def proceseaza(pachet):
     else:
         print("Accept la: ", scapy_packet.summary())
         pachet.accept()
+
 
 queue = NFQ()
 try:
