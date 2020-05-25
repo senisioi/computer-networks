@@ -1385,7 +1385,7 @@ def detect_and_alter_packet(packet):
     # daca pachetul are layer de IP, UDP si DNSRR (reply)
     if scapy_packet.haslayer(IP) and scapy_packet.haslayer(UDP) and scapy_packet.haslayer(DNSRR):\
         # daca e site-ul fmi, apelam functia care face modificari
-        if packet[DNSQR].qname == b'fmi.unibuc.ro.':
+        if scapy_packet[DNSQR].qname == b'fmi.unibuc.ro.':
             print("[Before]:", scapy_packet.summary())
             # noul scapy_packet este modificat cu functia alter_packet
             scapy_packet = alter_packet(scapy_packet)
