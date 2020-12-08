@@ -4,7 +4,8 @@ relative_links:
   enabled: true
   collections: true
 include:
-  - README.md
+  - index.md
+  - curs/README.md
   - capitolul1/README.md
   - capitolul2/README.md
   - capitolul3/README.md
