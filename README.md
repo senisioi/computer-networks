@@ -1,4 +1,4 @@
-# 2019-2020 computer networks lab
+# 2020-2021 Computer Networks Lab 
 
 [![Gitter](https://badges.gitter.im/unibuc-computer-networks/2020.svg)](https://gitter.im/unibuc-computer-networks/2021?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
