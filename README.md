@@ -1,6 +1,6 @@
 # 2019-2020 computer networks lab
 
-[![Gitter](https://badges.gitter.im/unibuc-computer-networks/2020.svg)](https://gitter.im/unibuc-computer-networks/2020?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Gitter](https://badges.gitter.im/unibuc-computer-networks/2020.svg)](https://gitter.im/unibuc-computer-networks/2021?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 
 ## Things to Checkout
