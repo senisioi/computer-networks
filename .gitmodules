@@ -1,16 +1,3 @@
 [submodule "vrnetlab"]
 	path = vrnetlab
 	url = https://github.com/plajjan/vrnetlab.git
-[submodule "tema3"]
-	path = tema3
-	url = https://github.com/senisioi/tema3
-[submodule "tema2"]
-	path = tema2
-	url = https://github.com/senisioi/tema2
-[submodule "tema4"]
-	path = tema4
-	url = https://github.com/senisioi/tema4
-[submodule "tema5"]
-	path = tema5
-	url = https://github.com/senisioi/tema5
-	branch = master

@@ -28,8 +28,7 @@ git reset --hard origin/2020
 
 cd capitolul2
 
-# ../ este optional daca nu exista aplicatia docker-compose in $PATH
-../docker-compose up -d
+docker-compose up -d
 ```
 
 Pentru debug și autocomplete, este bine să avem un editor și [IDE pentru acest limbaj](https://wiki.python.org/moin/IntegratedDevelopmentEnvironments). În cadrul orelor vom lucra cu [wingide](http://wingware.com/downloads/wing-personal), dar pe calculatoarele voastre personale puteți lucra cu orice alt editor. 

@@ -44,7 +44,7 @@
 cd computer-networks
 
 # ștergem toate containerele create default
-./docker-compose down
+docker-compose down
 
 # ștergem rețelele create anterior ca să nu se suprapună cu noile subnets
 docker network prune
@@ -54,7 +54,7 @@ cd capitolul3
 docker-compose up -d
 
 # sau din directorul computer-networks: 
-# ./docker-compose -f capitolul3/docker-compose.yml up -d
+# docker-compose -f capitolul3/docker-compose.yml up -d
 ```
 
 Fișierul `docker-compose.yml` definește 4 containere `server, router, client, middle` având ip-uri fixe în subneturi diferite, iar `router` este un container care funcționează ca router între cele două subrețele. Observați în [command pentru server](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/server.sh): `ip route add 172.10.0.0/16 via 198.10.0.1` adăugarea unei rute către subnetul în care se află clientul via ip-ul containerului router. De asemenea, în containerul client există o rută către server prin containerul router: `ip route add 198.10.0.0/16 via 172.10.0.1`.
