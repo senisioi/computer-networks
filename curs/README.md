@@ -5,7 +5,6 @@ Tanenbaum, Wetherall Computer Networks 5e
 Materiale online de curs:
 - [carte pdf](http://www.uoitc.edu.iq/images/documents/informatics-institute/exam_materials/Computer%20Networks%20-%20A%20Tanenbaum%20-%205th%20edition.pdf)
 - [sursa video lectures](https://media.pearsoncmg.com/ph/streaming/esm/tanenbaum5e_videonotes/tanenbaum_videoNotes.html)
-- [slide-urile de la curs](http://nlp.unibuc.ro/people/liviu.html#Courses)
 - [Cursul lui Avinash Kak pe securitate](https://engineering.purdue.edu/kak/compsec/NewLectures/)
 - [Computer Networks: A Systems Approach](https://book.systemsapproach.org/foundation.html)
 
