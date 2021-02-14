@@ -10,17 +10,17 @@ Materiale online de curs:
 - [Computer Networks: A Systems Approach](https://book.systemsapproach.org/foundation.html)
 
 ## Cuprins
-- [Introduction, Protocols and Layering](#intro)
-- [Physical Layer (optional)](#nivel_fizic)
-- [Link Layer, Part A pdf](#datalink_a)
-- [Link Layer, Part B](#datalink_b)
-- [Packet Forwarding and Internetworking](#forwarding)
-- [Routing](#routing)
-- [Transport Layer, Reliable Transport](#trans)
-- [Congestion Control](#congestion)
-- [Web and Content Distribution](#web)
-- [Quality of Service](#qos)
-- [Network Security](#security)
+- [I. Introduction, Protocols and Layering](#intro)
+- [II. Web and Content Distribution](#web)
+- [III. Transport Layer, Reliable Transport](#trans)
+- [IV. Congestion Control](#congestion)
+- [V. Packet Forwarding and Internetworking](#forwarding)
+- [VI. Routing](#routing)
+- [VII. Link Layer, Part A pdf](#datalink_a)
+- [VIII. Link Layer, Part B](#datalink_b)
+- [IX. Physical Layer (optional)](#nivel_fizic)
+- [X. Quality of Service](#qos)
+- [XI. Network Security](#security)
 
 
 <a name="intro"></a> 
@@ -37,39 +37,50 @@ Introduction, Protocols and Layering [capitolul în pdf](http://index-of.es/Vari
 [1-8 History of the Internet](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.1-8_History_of_the_Internet__/ph/streaming/esm/tanenbaum5e_videonotes/1_8_internet_history_cn5e.m4v "1-8 History of the Internet")  
 [1-9 Lecture Outline](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.1-9_Lecture_Outline__/ph/streaming/esm/tanenbaum5e_videonotes/1_9_lecture_outline_cn5e.m4v "1-9 Lecture Outline")
 
-<a name="nivel_fizic"></a> 
-Physical Layer (optional) [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=113)
---------------
 
-[2-1 Overview of the Physical Layer](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-1_Overview_of_the_Physical_Layer__/ph/streaming/esm/tanenbaum5e_videonotes/2_1_physical_overview_cn5e.m4v "2-1 Overview of the Physical Layer")  
-[2-2 Media](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-2_Media__/ph/streaming/esm/tanenbaum5e_videonotes/2_2_media_cn5e.m4v "2-2 Media")  
-[2-3 Signals](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-3_Signals__/ph/streaming/esm/tanenbaum5e_videonotes/2_3_signals_cn5e.m4v "2-3 Signals")  
-[2-4 Modulation](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-4_Modulation__/ph/streaming/esm/tanenbaum5e_videonotes/2_4_modulation_cn5e.m4v "2-4 Modulation")  
-[2-5 Fundamental Limits](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-5_Fundamental_Limits__/ph/streaming/esm/tanenbaum5e_videonotes/2_5_limits_cn5e.m4v "2-5 Fundamental Limits")
 
-<a name="datalink_a"></a> 
-Link Layer, Part A [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=218)
+<a name="web"></a>
+Web and Content Distribution [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=670)
+----------------------------
+
+[8-1 Application Layer Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-1_Application_Layer_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/8_1_application_overview_cn5e.m4v "8-1 Application Layer Overview")  
+[8-2 Domain Name System DNS, Part 1](https://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-2_Domain_Name_System_(DNS),_Part_1__/ph/streaming/esm/tanenbaum5e_videonotes/8_2_dns_cn5e.m4v)  
+[8-3 Domain Name System DNS, Part 2](https://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-3_Domain_Name_System_(DNS),_Part%202__/ph/streaming/esm/tanenbaum5e_videonotes/8_3_dns_cn5e.m4v)  
+[8-4 Introduction to HTTP](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-4_Introduction_to_HTTP__/ph/streaming/esm/tanenbaum5e_videonotes/8_4_http_cn5e.m4v "8-4 Introduction to HTTP")  
+[8-5 HTTP Performance](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-5_HTTP_Performance__/ph/streaming/esm/tanenbaum5e_videonotes/8_5_http_performance_cn5e.m4v "8-5 HTTP Performance")  
+[8-6 HTTP Caching and Proxies](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-6_HTTP_Caching_and_Proxies__/ph/streaming/esm/tanenbaum5e_videonotes/8_6_http_caching_cn5e.m4v "8-6 HTTP Caching and Proxies")  
+[8-7 Content Delivery Networks (CDNs)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-7_Content_Delivery_Networks_(CDNs)__/ph/streaming/esm/tanenbaum5e_videonotes/8_7_cdns_cn5e.m4v "8-7 Content Delivery Networks (CDNs)")  
+[8-8 Future of HTTP](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-8_Future_of_HTTP__/ph/streaming/esm/tanenbaum5e_videonotes/8_8_http_future_cn5e.m4v "8-8 Future of HTTP")  
+[8-9 Peer-to-Peer Content Delivery (BitTorrent)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-9_Peer-to-Peer_Content_Delivery_(BitTorrent)__/ph/streaming/esm/tanenbaum5e_videonotes/8_9_p2p_cn5e.m4v "8-9 Peer-to-Peer Content Delivery (BitTorrent)")
+
+
+
+<a name="trans"></a> 
+Transport Layer, Reliable Transport [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=519)
+-----------------------------------
+
+[6-1 Transport Layer Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-1_Transport_Layer_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/6_1_transport_overview_cn5e.m4v "6-1 Transport Layer Overview")  
+[6-2 User Datagram Protocol UDP](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-2_User_Datagram_Protocol%20(UDP)__/ph/streaming/esm/tanenbaum5e_videonotes/6_2_udp_cn5e.m4v)  
+[6-3 Connection Establishment](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-3_Connection_Establishment__/ph/streaming/esm/tanenbaum5e_videonotes/6_3_connection_establish_cn5e.m4v "6-3 Connection Establishment")  
+[6-4 Connection Release](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-4_Connection_Release__/ph/streaming/esm/tanenbaum5e_videonotes/6_4_connection_release_cn5e.m4v "6-4 Connection Release")  
+[6-5 Sliding Window](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-5_Sliding_Window__/ph/streaming/esm/tanenbaum5e_videonotes/6_5_sliding_window_cn5e.m4v "6-5 Sliding Window")  
+[6-6 Flow Control](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-6_Flow_Control__/ph/streaming/esm/tanenbaum5e_videonotes/6_6_flow_control_cn5e.m4v "6-6 Flow Control")  
+[6-7 Retransmission Timeouts](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-7_Retransmission_Timeouts__/ph/streaming/esm/tanenbaum5e_videonotes/6_7_timeouts_cn5e.m4v "6-7 Retransmission Timeouts")  
+[6-8 Transmission Control Protocol (TCP)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-8_Transmission_Control_Protocol_(TCP)__/ph/streaming/esm/tanenbaum5e_videonotes/6_8_tcp_cn5e.m4v "6-8 Transmission Control Protocol (TCP)")
+
+<a name="congestion"></a> 
+Congestion Control [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=554)
 ------------------
 
-[3a-1 Overview of the Link Layer](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-1_Overview_of_the_Link_Layer__/ph/streaming/esm/tanenbaum5e_videonotes/3a_1_link_overview_cn5e.m4v "3a-1 Overview of the Link Layer")  
-[3a-2 Framing](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-2_Framing__/ph/streaming/esm/tanenbaum5e_videonotes/3a_2_framing_cn5e.m4v "3a-2 Framing")  
-[3a-3 Error Coding Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-3_Error_Coding_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/3a_3_error_overview_cn5e.m4v "3a-3 Error Coding Overview")  
-[3a-4 Error Detection](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-4_Error_Detection__/ph/streaming/esm/tanenbaum5e_videonotes/3a_4_error_detection_cn5e.m4v "3a-4 Error Detection")  
-[3a-5 Error Correction](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-5_Error_Correction__/ph/streaming/esm/tanenbaum5e_videonotes/3a_5_error_correction_cn5e.m4v "3a-5 Error Correction")
+[7-1 Congestion Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-1_Congestion_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/7_1_congestion_overview_cn5e.m4v "7-1 Congestion Overview")  
+[7-2 Fairness of Allocations](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-2_Fairness_of_Allocations__/ph/streaming/esm/tanenbaum5e_videonotes/7_2_fairness_cn5e.m4v "7-2 Fairness of Allocations")  
+[7-3 Additive Increase Multiplicative Decrease (AIMD)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-3_Additive_Increase_Multiplicative_Decrease_(AIMD)__/ph/streaming/esm/tanenbaum5e_videonotes/7_3_aimd_cn5e.m4v "7-3 Additive Increase Multiplicative Decrease (AIMD)")  
+[7-4 History of TCP Congestion Control](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-4_History_of_TCP_Congestion_Control__/ph/streaming/esm/tanenbaum5e_videonotes/7_4_tcp_history_cn5e.m4v "7-4 History of TCP Congestion Control")  
+[7-5 ACK Clocking](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-5_ACK_Clocking__/ph/streaming/esm/tanenbaum5e_videonotes/7_5_ack_clock_cn5e.m4v "7-5 ACK Clocking")  
+[7-6 TCP Slow-Start](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-6_TCP_Slow-Start__/ph/streaming/esm/tanenbaum5e_videonotes/7_6_slow_start_cn5e.m4v "7-6 TCP Slow-Start")  
+[7-7 TCP Fast Retransmit / Fast Recovery](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-7_TCP_Fast_Retransmit_-_Fast_Recovery__/ph/streaming/esm/tanenbaum5e_videonotes/7_7_fast_recovery_cn5e.m4v "7-7 TCP Fast Retransmit / Fast Recovery")  
+[7-8 Explicit Congestion Notification (ECN)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-8_Explicit_Congestion_Notification_(ECN)__/ph/streaming/esm/tanenbaum5e_videonotes/7_8_ecn_cn5e.m4v "7-8 Explicit Congestion Notification (ECN)")
 
-
-<a name="datalink_b"></a> 
-Link Layer, Part B [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=281)
-------------------
-
-[3b-1 Overview of the Link Layer](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-1_Overview_of_the_Link_Layer__/ph/streaming/esm/tanenbaum5e_videonotes/3b_1_link_overview_cn5e.m4v "3b-1 Overview of the Link Layer")  
-[3b-2 Retransmissions](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-2_Retransmissions__/ph/streaming/esm/tanenbaum5e_videonotes/3b_2_arq_cn5e.m4v "3b-2 Retransmissions")  
-[3b-3 Multiplexing](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-3_Multiplexing__/ph/streaming/esm/tanenbaum5e_videonotes/3b_3_multiplexing_cn5e.m4v "3b-3 Multiplexing")  
-[3b-4 Random Multiple Access](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-4_Random_Multiple_Access__/ph/streaming/esm/tanenbaum5e_videonotes/3b_4_random_access_cn5e.m4v "3b-4 Random Multiple Access")  
-[3b-5 Wireless Multiple Access](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-5_Wireless_Multiple_Access__/ph/streaming/esm/tanenbaum5e_videonotes/3b_5_wireless_access_cn5e.m4v "3b-5 Wireless Multiple Access")  
-[3b-6 Contention-Free Multiple Access](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-6_Contention-Free_Multiple_Access__/ph/streaming/esm/tanenbaum5e_videonotes/3b_6_contention_free_cn5e.m4v "3b-6 Contention-Free Multiple Access")  
-[3b-7 LAN Switches](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-7_LAN_Switches__/ph/streaming/esm/tanenbaum5e_videonotes/3b_7_switches_cn5e.m4v "3b-7 LAN Switches")  
-[3b-8 Switch Spanning Tree](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-8_Switch_Spanning_Tree__/ph/streaming/esm/tanenbaum5e_videonotes/3b_8_spanning_tree_cn5e.m4v "3b-8 Switch Spanning Tree")
 
 
 <a name="forwarding"></a> 
@@ -106,45 +117,43 @@ Routing [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205t
 [5-12 Border Gateway Protocol BGP](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.5-12_Border_Gateway_Protocol_(BGP)__/ph/streaming/esm/tanenbaum5e_videonotes/5_12_bgp_cn5e.m4v "5-12 Border Gateway Protocol (BGP)")
 
 
-<a name="trans"></a> 
-Transport Layer, Reliable Transport [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=519)
------------------------------------
 
-[6-1 Transport Layer Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-1_Transport_Layer_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/6_1_transport_overview_cn5e.m4v "6-1 Transport Layer Overview")  
-[6-2 User Datagram Protocol UDP](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-2_User_Datagram_Protocol%20(UDP)__/ph/streaming/esm/tanenbaum5e_videonotes/6_2_udp_cn5e.m4v)  
-[6-3 Connection Establishment](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-3_Connection_Establishment__/ph/streaming/esm/tanenbaum5e_videonotes/6_3_connection_establish_cn5e.m4v "6-3 Connection Establishment")  
-[6-4 Connection Release](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-4_Connection_Release__/ph/streaming/esm/tanenbaum5e_videonotes/6_4_connection_release_cn5e.m4v "6-4 Connection Release")  
-[6-5 Sliding Window](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-5_Sliding_Window__/ph/streaming/esm/tanenbaum5e_videonotes/6_5_sliding_window_cn5e.m4v "6-5 Sliding Window")  
-[6-6 Flow Control](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-6_Flow_Control__/ph/streaming/esm/tanenbaum5e_videonotes/6_6_flow_control_cn5e.m4v "6-6 Flow Control")  
-[6-7 Retransmission Timeouts](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-7_Retransmission_Timeouts__/ph/streaming/esm/tanenbaum5e_videonotes/6_7_timeouts_cn5e.m4v "6-7 Retransmission Timeouts")  
-[6-8 Transmission Control Protocol (TCP)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.6-8_Transmission_Control_Protocol_(TCP)__/ph/streaming/esm/tanenbaum5e_videonotes/6_8_tcp_cn5e.m4v "6-8 Transmission Control Protocol (TCP)")
 
-<a name="congestion"></a> 
-Congestion Control [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=554)
+<a name="datalink_a"></a> 
+Link Layer, Part A [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=218)
 ------------------
 
-[7-1 Congestion Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-1_Congestion_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/7_1_congestion_overview_cn5e.m4v "7-1 Congestion Overview")  
-[7-2 Fairness of Allocations](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-2_Fairness_of_Allocations__/ph/streaming/esm/tanenbaum5e_videonotes/7_2_fairness_cn5e.m4v "7-2 Fairness of Allocations")  
-[7-3 Additive Increase Multiplicative Decrease (AIMD)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-3_Additive_Increase_Multiplicative_Decrease_(AIMD)__/ph/streaming/esm/tanenbaum5e_videonotes/7_3_aimd_cn5e.m4v "7-3 Additive Increase Multiplicative Decrease (AIMD)")  
-[7-4 History of TCP Congestion Control](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-4_History_of_TCP_Congestion_Control__/ph/streaming/esm/tanenbaum5e_videonotes/7_4_tcp_history_cn5e.m4v "7-4 History of TCP Congestion Control")  
-[7-5 ACK Clocking](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-5_ACK_Clocking__/ph/streaming/esm/tanenbaum5e_videonotes/7_5_ack_clock_cn5e.m4v "7-5 ACK Clocking")  
-[7-6 TCP Slow-Start](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-6_TCP_Slow-Start__/ph/streaming/esm/tanenbaum5e_videonotes/7_6_slow_start_cn5e.m4v "7-6 TCP Slow-Start")  
-[7-7 TCP Fast Retransmit / Fast Recovery](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-7_TCP_Fast_Retransmit_-_Fast_Recovery__/ph/streaming/esm/tanenbaum5e_videonotes/7_7_fast_recovery_cn5e.m4v "7-7 TCP Fast Retransmit / Fast Recovery")  
-[7-8 Explicit Congestion Notification (ECN)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.7-8_Explicit_Congestion_Notification_(ECN)__/ph/streaming/esm/tanenbaum5e_videonotes/7_8_ecn_cn5e.m4v "7-8 Explicit Congestion Notification (ECN)")
+[3a-1 Overview of the Link Layer](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-1_Overview_of_the_Link_Layer__/ph/streaming/esm/tanenbaum5e_videonotes/3a_1_link_overview_cn5e.m4v "3a-1 Overview of the Link Layer")  
+[3a-2 Framing](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-2_Framing__/ph/streaming/esm/tanenbaum5e_videonotes/3a_2_framing_cn5e.m4v "3a-2 Framing")  
+[3a-3 Error Coding Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-3_Error_Coding_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/3a_3_error_overview_cn5e.m4v "3a-3 Error Coding Overview")  
+[3a-4 Error Detection](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-4_Error_Detection__/ph/streaming/esm/tanenbaum5e_videonotes/3a_4_error_detection_cn5e.m4v "3a-4 Error Detection")  
+[3a-5 Error Correction](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3a-5_Error_Correction__/ph/streaming/esm/tanenbaum5e_videonotes/3a_5_error_correction_cn5e.m4v "3a-5 Error Correction")
 
-<a name="web"></a>
-Web and Content Distribution [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=670)
-----------------------------
 
-[8-1 Application Layer Overview](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-1_Application_Layer_Overview__/ph/streaming/esm/tanenbaum5e_videonotes/8_1_application_overview_cn5e.m4v "8-1 Application Layer Overview")  
-[8-2 Domain Name System DNS, Part 1](https://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-2_Domain_Name_System_(DNS),_Part_1__/ph/streaming/esm/tanenbaum5e_videonotes/8_2_dns_cn5e.m4v)  
-[8-3 Domain Name System DNS, Part 2](https://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-3_Domain_Name_System_(DNS),_Part%202__/ph/streaming/esm/tanenbaum5e_videonotes/8_3_dns_cn5e.m4v)  
-[8-4 Introduction to HTTP](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-4_Introduction_to_HTTP__/ph/streaming/esm/tanenbaum5e_videonotes/8_4_http_cn5e.m4v "8-4 Introduction to HTTP")  
-[8-5 HTTP Performance](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-5_HTTP_Performance__/ph/streaming/esm/tanenbaum5e_videonotes/8_5_http_performance_cn5e.m4v "8-5 HTTP Performance")  
-[8-6 HTTP Caching and Proxies](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-6_HTTP_Caching_and_Proxies__/ph/streaming/esm/tanenbaum5e_videonotes/8_6_http_caching_cn5e.m4v "8-6 HTTP Caching and Proxies")  
-[8-7 Content Delivery Networks (CDNs)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-7_Content_Delivery_Networks_(CDNs)__/ph/streaming/esm/tanenbaum5e_videonotes/8_7_cdns_cn5e.m4v "8-7 Content Delivery Networks (CDNs)")  
-[8-8 Future of HTTP](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-8_Future_of_HTTP__/ph/streaming/esm/tanenbaum5e_videonotes/8_8_http_future_cn5e.m4v "8-8 Future of HTTP")  
-[8-9 Peer-to-Peer Content Delivery (BitTorrent)](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.8-9_Peer-to-Peer_Content_Delivery_(BitTorrent)__/ph/streaming/esm/tanenbaum5e_videonotes/8_9_p2p_cn5e.m4v "8-9 Peer-to-Peer Content Delivery (BitTorrent)")
+<a name="datalink_b"></a> 
+Link Layer, Part B [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=281)
+------------------
+
+[3b-1 Overview of the Link Layer](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-1_Overview_of_the_Link_Layer__/ph/streaming/esm/tanenbaum5e_videonotes/3b_1_link_overview_cn5e.m4v "3b-1 Overview of the Link Layer")  
+[3b-2 Retransmissions](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-2_Retransmissions__/ph/streaming/esm/tanenbaum5e_videonotes/3b_2_arq_cn5e.m4v "3b-2 Retransmissions")  
+[3b-3 Multiplexing](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-3_Multiplexing__/ph/streaming/esm/tanenbaum5e_videonotes/3b_3_multiplexing_cn5e.m4v "3b-3 Multiplexing")  
+[3b-4 Random Multiple Access](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-4_Random_Multiple_Access__/ph/streaming/esm/tanenbaum5e_videonotes/3b_4_random_access_cn5e.m4v "3b-4 Random Multiple Access")  
+[3b-5 Wireless Multiple Access](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-5_Wireless_Multiple_Access__/ph/streaming/esm/tanenbaum5e_videonotes/3b_5_wireless_access_cn5e.m4v "3b-5 Wireless Multiple Access")  
+[3b-6 Contention-Free Multiple Access](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-6_Contention-Free_Multiple_Access__/ph/streaming/esm/tanenbaum5e_videonotes/3b_6_contention_free_cn5e.m4v "3b-6 Contention-Free Multiple Access")  
+[3b-7 LAN Switches](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-7_LAN_Switches__/ph/streaming/esm/tanenbaum5e_videonotes/3b_7_switches_cn5e.m4v "3b-7 LAN Switches")  
+[3b-8 Switch Spanning Tree](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.3b-8_Switch_Spanning_Tree__/ph/streaming/esm/tanenbaum5e_videonotes/3b_8_spanning_tree_cn5e.m4v "3b-8 Switch Spanning Tree")
+
+
+<a name="nivel_fizic"></a> 
+Physical Layer (optional) [capitolul în pdf](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=113)
+--------------
+
+[2-1 Overview of the Physical Layer](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-1_Overview_of_the_Physical_Layer__/ph/streaming/esm/tanenbaum5e_videonotes/2_1_physical_overview_cn5e.m4v "2-1 Overview of the Physical Layer")  
+[2-2 Media](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-2_Media__/ph/streaming/esm/tanenbaum5e_videonotes/2_2_media_cn5e.m4v "2-2 Media")  
+[2-3 Signals](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-3_Signals__/ph/streaming/esm/tanenbaum5e_videonotes/2_3_signals_cn5e.m4v "2-3 Signals")  
+[2-4 Modulation](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-4_Modulation__/ph/streaming/esm/tanenbaum5e_videonotes/2_4_modulation_cn5e.m4v "2-4 Modulation")  
+[2-5 Fundamental Limits](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.2-5_Fundamental_Limits__/ph/streaming/esm/tanenbaum5e_videonotes/2_5_limits_cn5e.m4v "2-5 Fundamental Limits")
+
 
 
 <a name="qos"></a>
