@@ -16,43 +16,14 @@
 
 <a name="intro"></a> 
 ## Introducere
-În cadrul acestui capitol vom lucra cu [python](http://www.bestprogramminglanguagefor.me/why-learn-python), un limbaj de programare simplu pe care îl vom folosi pentru a crea și trimite pachete pe rețea. De asemenea, in cadrul acestui capitol folosim orchestratia de containere definită [aici](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/docker-compose.yml). Pentru a rula această orchestrație, este suficient să:
+În cadrul acestui capitol vom lucra cu [python](http://www.bestprogramminglanguagefor.me/why-learn-python), un limbaj de programare simplu pe care îl vom folosi pentru a crea și trimite pachete pe rețea. De asemenea, in cadrul acestui capitol folosim orchestratia de containere definită [aici](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/docker-compose.yml). Pentru a rula această orchestrație, este suficient să executăm:
 ```bash
-cd computer-networks/
-docker-compose down
+cd computer-networks/capitolul2
 yes | docker network prune
-
-# pentru a suprascrie modificările locale
-git fetch --all
-git reset --hard origin/2020
-
-cd capitolul2
-
 docker-compose up -d
 ```
 
-Pentru debug și autocomplete, este bine să avem un editor și [IDE pentru acest limbaj](https://wiki.python.org/moin/IntegratedDevelopmentEnvironments). În cadrul orelor vom lucra cu [wingide](http://wingware.com/downloads/wing-personal), dar pe calculatoarele voastre personale puteți lucra cu orice alt editor. 
-Pentru a instala wingide făra permisiuni de administrator, putem rula:
-```bash
-wget https://gist.githubusercontent.com/senisioi/7d3d8a223f23d8bc9a21464dbe5f7e47/raw/e6657e66c441e2554fb8d3777783ca0eb6a2c985/install-wing.sh
-bash install-wing.sh
-```
-[Scriptul](https://gist.github.com/senisioi/772b4b87b4fb52b96e6b83a22a4299b5) va instala editorul în directorul $HOME. 
-Pentru a lansa wingide, putem să rulam în terminal:
-```bash
-wing-personal
-```
-Dacă aplicația nu există, puteți să o adăugați în path sau puteți încerca să o instalați din nou.
-
-Pentru a face editorul să arate mai bine, rulați din linia de comandă:
-```bash
-cat <<EOF >> ~/.wingpersonal6/preferences
-[user-preferences]
-edit.show-line-numbers = 1
-gui.qt-color-palette = u'one-dark'
-gui.use-palette-throughout-ui = True
-EOF
-```
+Pentru debug și autocomplete, este bine să avem un editor și [IDE pentru acest limbaj](https://wiki.python.org/moin/IntegratedDevelopmentEnvironments). În cadrul orelor vom lucra cu [Visual Studio Code](https://code.visualstudio.com/), dar puteți lucra cu orice alt editor. 
 
 <a name="basics"></a> 
 ## [python 3 basics](https://www.tutorialspoint.com/python/python_variable_types.htm)

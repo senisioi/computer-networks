@@ -19,6 +19,8 @@ RUN tar -xvf GeoLite2-City.tar.gz && mv GeoLite2-City_20191224/GeoLite2-City.mmd
 
 RUN apt-get update && apt-get install -y libgeos-* proj-* libproj-dev libgeos++-dev python3-cartopy python3-tk
 
-RUN git clone https://github.com/senisioi/scapy.git && cd scapy && python3 setup.py install
+RUN pip3 install --pre scapy[complete]
+
+#RUN git clone https://github.com/senisioi/scapy.git && cd scapy && python3 setup.py install
 
 RUN apt-get update && apt-get install -y iputils-ping dnsutils

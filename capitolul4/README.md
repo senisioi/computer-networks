@@ -1,120 +1,299 @@
 # Capitolul 4
 
-## Configurarea unui router virtual
+## Cuprins
+- [Requiremets](#intro)
+- [IPv4 Datagram](#ipv4)
+  - [IPv4 Raw Socket](#ip_raw_socket)
+  - [IPv4 Scapy](#ip_scapy)
+- [IPv6 Datagram](#ipv6)
+  - [IPv6 Socket](#ipv6_socket)
+  - [IPv6 Scapy](#ipv6_scapy)
+- [Exerciții](#exercitii)
 
-În acest capitol vom utiliza [vrnetlab](https://github.com/plajjan/vrnetlab), un framework pentru crearea de containere docker cu imagini de routere virtuale. Acest lucru ne permite să depășim configurațiile de rețele LAN cu care am lucrat până acum, să pornim un container care să funcționeze ca router, să putem configura device-ul și să înțelegem ce presupun acești pași.
+<a name="intro"></a> 
+## Introducere
+**Important:** continuăm cu aceeași configurație ca în capitolul3 și urmărim secțiunea introductivă de acolo.
+```
+cd computer-networks
 
-Puteți urmări mai multe detalii despre vrnetlab și în acest film pe youtube: https://youtu.be/R_vCdGkGeSk?t=9m25s sau în acest [tutorial](https://www.brianlinkletter.com/vrnetlab-emulate-networks-using-kvm-and-docker/).
+# ștergem toate containerele create default
+docker-compose down
 
-### Instalarea vrnetlab
-Această unealtă se găsește ca submodul în reporitoy-ul de git (vezi fișierul gitmodules). Pentru a avea acces la cod, trebuie să rulați:
-```bash
-git submodule update --init --recursive
+# ștergem rețelele create anterior ca să nu se suprapună cu noile subnets
+docker network prune
+
+# lucrăm cu docker-compose.yml din capitolul3
+cd capitolul3
+docker-compose up -d
+
+# sau din directorul computer-networks: 
+# docker-compose -f capitolul3/docker-compose.yml up -d
 ```
 
-Posibil ca scripturile din repo să nu funcționeze fără BeautifulSoup și lxml, cel mai bine instalați-l pe host:
-```bash
-pip3 install beautifulsoup4 lxml
+
+
+<a name="ipv4"></a> 
+## [Internet Protocol Datagram v4 - IPv4](https://tools.ietf.org/html/rfc791#page-11)
+```
+  0               1               2               3              4 Offs.
+  0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |Version|  IHL  |     DSCP  |ECN|          Total Length         |  1
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |         Identification        |Flags|      Fragment Offset    |  2
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |  Time to Live |    Protocol   |         Header Checksum       |  3
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                       Source Address                          |  4
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                    Destination Address                        |  5
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                    Options    (if IHL  > 5)                   |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                   Application + TCP data                      | 
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+
+```
+Prima specificație a protocolului IP a fost în [RFC791](https://tools.ietf.org/html/rfc791) iar câmpurile sunt explicate foarte bine în aceste [note de curs](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=14).
+
+#### Câmpurile antetului
+
+- Version - 4 pentru ipv4
+- IHL - similar cu Data offset de la TCP, ne spune care este dimnesiunea header-ului în multiplii de 32 de biți. Dacă nu sunt specificate opțiuni, IHL este 5.
+- [DSCP](https://en.wikipedia.org/wiki/Differentiated_services) - în tcpdump mai apare ca ToS (type of service), acest camp a fost definit în [RFC2474](https://tools.ietf.org/html/rfc2474) și setează politici de retransmitere a pachetelor, ca [aici](https://en.wikipedia.org/wiki/Differentiated_services#Commonly_used_DSCP_values). Aici puteți găsi un [ghid de setare pentru DSCP](https://tools.ietf.org/html/rfc4594#page-19). Câmpul acesta are un rol important în prioritizarea pachetelor de tip video, voce sau streaming.
+- ECN - definit în [RFC3186](https://tools.ietf.org/html/rfc3168) este folosit de către routere, pentru a notifica transmițătorii cu privire la existența unor congestionări pe rețea. Setarea flag-ului pe 11 (Congestion Encountered - CE), va determina layer-ul TCP să își seteze ECE, CWR și NS.
+- Total length - lumgimea totală in octeti, cu header și date pentru întreg-ul datagram
+- Identification - un id care este folosit pentru idenficarea pachetelor fragmentate
+- [Flags](https://en.wikipedia.org/wiki/IPv4#Flags) - flag-uri de fragmentare, bitul 0 e rezervat, bitul 1 indică DF - don't fragment, iar bitul 2 setat, ne spune că mai urmează fragmente.
+- Fragment Offset - offset-ul unui fragment curent în raport cu fragmentul inițial, măsurat în multiplu de 8 octeți (64 biți).
+- Time to Live (TTL) -  numărul maxim de routere prin care poate trece IP datagram pâna în punctul în care e discarded
+- Protocol - indică codul [protocolului](https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers) din interiorul secvenței de date
+- Header checksum - aceeași metodă de checksum ca la [TCP si UDP](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation), adică suma în complement 1, a fragmentelor de câte 16 biți, dar în cazul acesta se aplică **doar pentru header**. Această sumă este puțin redundantă având în vedere că se mai calculează o dată peste pseudoheader-ul de la TCP sau UDP.
+- Source/Destination Address - adrese ip pe 32 de biți
+- [Options](https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml) - sunt opțiuni la nivelul IP. Mai multe informații despre rolul acestora puteți găsi [aici](http://www.tcpipguide.com/free/t_IPDatagramOptionsandOptionFormat.htm), [aici](http://www.cc.ntut.edu.tw/~kwke/DC2006/ipo.pdf) și specificația completă [aici](http://www.networksorcery.com/enp/protocol/ip.htm#Options). Din [lista de 30 de optiuni](https://www.iana.org/assignments/ip-parameters/ip-parameters.xhtml), cel putin 11 sunt deprecated in mod oficial, 8 sunt experimentale/ putin documentate, din cele ramase, o buna parte sunt neimplementate de catre routere sau prezinta riscuri de securitate. Spre exemplu, optiunea [traceroute](https://networkengineering.stackexchange.com/questions/10453/ip-traceroute-rfc-1393), si optiunea [record route](https://networkengineering.stackexchange.com/questions/41886/how-does-the-ipv4-option-record-route-work) care nu au fost implementate, sau optiunile [source based routing](https://howdoesinternetwork.com/2014/source-based-routing) cu risc sporit de securitate, mai multe în [acest raport](https://www2.eecs.berkeley.edu/Pubs/TechRpts/2005/EECS-2005-24.pdf). 
+
+###### Wireshark IPv4 Options
+Ca să captați cu [Wireshark](https://osqa-ask.wireshark.org/questions/25504/how-to-capture-based-on-ip-header-length-using-a-capture-filter) IP datagrams care conțin opțiuni, puteți folosi filtrul care verifică ultimii 4 biți ai primului octet: `ip[0] & 0xf != 5`. Veți putea observa pachete cu [protocolul IGMP](https://www.youtube.com/watch?v=2fduBqQQbps) care are setată [opțiunea Router Alert](http://www.rfc-editor.org/rfc/rfc6398.html) 
+
+
+<a name="ip_raw_socket"></a> 
+### IPv4 Object from Raw Socket
+Folosim datele ca octeti din exemplul cu UDP Raw Socket de mai sus:
+```python
+import socket
+import struct
+
+data = b'E\x00\x00!\xc2\xd2@\x00@\x11\xeb\xe1\xc6\n\x00\x01\xc6\n\x00\x02\x08\xae\t\x1a\x00\r\x8c6salut'
+
+# extragem headerul de baza de IP:
+ip_header = struct.unpack('!BBHHHBBH4s4s', data[:20])
+ip_ihl_ver, ip_dscp_ecn, ip_tot_len, ip_id, ip_frag, ip_ttl, ip_proto, ip_check, ip_saddr, ip_daddr = ip_header
+
+print("Versiune IP: ", ip_ihl_ver >> 4)
+print("Internet Header Length: ", ip_ihl_ver & 0b1111) # & cu 1111 pentru a extrage ultimii 4 biti
+print("DSCP: ", ip_dscp_ecn >> 6)
+print("ECN: ", ip_dscp_ecn & 0b11) # & cu 11 pt ultimii 2 biti
+print("Total Length: ", ip_tot_len)
+print("ID: ", ip_id)
+print("Flags: ",  bin(ip_frag >> 13))
+print("Fragment Offset: ",  ip_frag & 0b111) # & cu 111
+print("Time to Live: ",  ip_ttl)
+print("Protocol nivel superior: ",  ip_proto)
+print("Checksum: ",  ip_check)
+print("Adresa sursa: ", socket.inet_ntoa(ip_saddr))
+print("Adresa destinatie: ", socket.inet_ntoa(ip_daddr))
+
+if ip_ihl_ver & (16 - 1) == 5:
+  print ("header-ul de IP nu are optiuni")
+
+Versiune IP:  4
+Internet Header Length:  5
+DSCP:  0
+ECN:  0
+Total Length:  33
+ID:  49874
+Flags:  0b10
+Fragment Offset:  0
+Time to Live:  64
+Protocol nivel superior:  17
+Checksum:  60385
+Adresa sursa:  198.10.0.1
+Adresa destinatie:  198.10.0.2
 ``` 
 
-Vom folosi [openwrt](https://openwrt.org/) un firmare open source pentru embedded devices, în cazul nostru un router. Intrați în directorul corespunzător, downloadați imaginea openwrt și rulați comanda `make build`:
-
-```bash
-cd vrnetlab/openwrt
-wget https://downloads.openwrt.org/releases/18.06.2/targets/x86/64/openwrt-18.06.2-x86-64-combined-ext4.img.gz
-make build
-cd ../..
-```
-Comanda execută un script în python care downloadează imaginile necesare și construiește imaginea pentru docker. În cazul în care comanda returnează erori, este posibil ca framework-ul BeautifulSoup să nu fie instalat, puteți să îl instalați cu `pip3 install bs4
-`. 
-
-În cele ce urmează trebuie să instalăm [vr-xcon](https://github.com/plajjan/vrnetlab/tree/master/vr-xcon) un program containerizat care permite crearea de legături bine definite între noduri și topologii de rețele.
-
-```bash
-# pull din docker registry https://hub.docker.com/
-docker pull vrnetlab/vr-xcon
-
-# retag images cu varianta simplificata
-docker tag vrnetlab/vr-xcon:latest vr-xcon
-docker tag vrnetlab/vr-openwrt:18.06.2 openwrt
-```
-
-### Pornirea și configurarea routerelor
-
-În directorul vrnetlab se găsește un script care definește nișe funcții de shell ce pot fi utilizate pentru configurare ușoară. Pentru a acea acces în terminalul vostru la aceste comenzi, treubie să rulați:
-
-```bash
-cd vrnetlab
-source vrnetlab.sh
-```
-Putem crea două routere OpenWRT cu următoarea topologie și să testăm conexiunea dintre ele folosind ping
-![alt text](https://i1.wp.com/www.brianlinkletter.com/wp-content/uploads/2019/03/vrnetlab-002.png)
-
-Putem porni routerele individual folosind `docker run` sau prin intermediul orchestratiei docker-compose.yml din capitolul4:
-```bash
-docker run -d --privileged --name openwrt1 openwrt
-docker run -d --privileged --name openwrt2 openwrt
-# sau
-cd capitolul4
-docker-compose up -d
-```
-Pentru a ne conecta la un router trebuie să folosim aplicația **telnet** pe portul 5000. Fie știm adresele IP ale containerelor din fisierul .yml sau le aflăm cu comanda: `docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' ID_CONTAINER` 
 
 
-Conectarea la routerul openwrt1 se face prin telnet:
-```bash
-telnet 198.166.0.1 5000
-# sau
-vrcons capitolul4_openwrt1_1
+<a name="ip_scapy"></a> 
+### IPv4 object in scapy
+```python
+ip = IP() 
+ip.show()
+###[ IP ]### 
+  version= 4
+  ihl= None
+  tos= 0x0
+  len= None
+  id= 1
+  flags= 
+  frag= 0
+  ttl= 64
+  proto= hopopt
+  chksum= None
+  src= 127.0.0.1
+  dst= 127.0.0.1
+  \options\
 
-Trying 198.166.0.1...
-Connected to 198.166.0.1.
-Escape character is '^]'.
-
-Apasam Ctrl + ] si enter pentru a tasta comenzile urmatoare:
+# observăm că DSCP și ECN nu sunt înca implementate în scapy.
+# daca vrem să le folosim, va trebui să setăm tos cu o valoare
+# pe 8 biți care să reprezinte DSCP și ECN folosind: int('DSCP_BINARY_STR' + 'ECN_BINARY_STR', 2)
+# pentru a seta DSCP cu cod AF32 pentru video streaming și ECN cu notificare de congestie: ip.tos = int('011100' + '11', 2)
 ```
 
-Conform documentației [openwrt](https://openwrt.org/docs/guide-user/base-system/basic-networking), configurația LAN se definește pe o interfață numită br-lan: `ifconfig br-lan`. Adresa IP a interfeței LAN este 10.0.0.15, dar configurația permanentă se definește prin:
+#### Atacuri simple folosind IP
+- [IP Spoofing](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=71)
+- [IP Spoofing Mitigation](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=84)
+- [Network Ingress Filtering: Defeating Denial of Service Attacks which employ IP Source Address Spoofing](https://tools.ietf.org/html/bcp38)
 
-```bash
-uci show network.lan
 
-# setam adresa IP pentru lan
-uci set network.lan.ipaddr='10.0.0.15'
-
-# configuram adresele IP pentru wan
-uci show network.wan
-uci set network.wan.proto='static'
-uci set network.wan.ipaddr='10.10.10.1'
-uci set network.wan.netmask='255.255.255.0'
-
-# salvam modificarile retelei si dam restart
-uci commit network
-service network restart
+<a name="ipv6"></a> 
+## [Internet Protocol Datagram v6 - IPv6](https://tools.ietf.org/html/rfc2460#page-4)
 ```
-Pentru a ieși din router tastăm `Ctrl+]` apoi `quit`.
+  0               1               2               3              4 Offs.
+  0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |Version| Traffic Class |           Flow Label                  |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |         Payload Length        |  Next Header  |   Hop Limit   |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                                                               |
+ -                                                               -
+ |                                                               |
+ -                         Source Address                        -
+ |                                                               |
+ -                                                               -
+ |                                                               |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+ |                                                               |
+ -                                                               -
+ |                                                               |
+ -                      Destination Address                      -
+ |                                                               |
+ -                                                               -
+ |                                                               |
+ -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+```
+Prima specificație a protocolului IPv6 a fost în 1998 [rfc2460](https://tools.ietf.org/html/rfc2460) iar detaliile despre semnificația câmpurilor se găsesc în aceste [note de curs](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=23).
 
-Facem setări similare și pe routerul openwrt2:
+#### Câmpurile antetului IPv6
 
-```bash
-telnet 198.166.0.2 5000
+- Version - 6 pentru ipv6
+- Traffic Class        8-bit [traffic class field](https://tools.ietf.org/html/rfc2460#section-7), similar cu [DSCP](https://en.wikipedia.org/wiki/Differentiated_services) 
+- Flow Label           [20-bit flow label](https://tools.ietf.org/html/rfc2460#section-6), semantica definită [aici](https://tools.ietf.org/html/rfc2460#page-30), este folosit și în instanțierea socketului prin IPv6.
+- Payload Length       16-bit unsigned integer care include si extra headerele adaugate
+- Next Header          8-bit selector similar cu câmpul Protocol din IPv4
+- Hop Limit            8-bit unsigned integer similar cu câmpul TTL din IPv4
+- Source Address       128-bit addresă sursă
+- Destination Address  128-bit addresă destinație
+- Headerul poate fi extins prin adăugarea mai multor headere in payload, vezi [aici](https://tools.ietf.org/html/rfc2460#page-6)
+- Pseudoheaderul pentru checksum-ul calculat de layerele de transport se formează diferit, vezi [aici](https://tools.ietf.org/html/rfc2460#page-27)
+- Adresele sunt stocate in 8 grupuri de câte 16 biti: `fe80:cd00:0000:0000:1257:0000:0000:729c`
+- Numărul total de adrese IPv6 este 340282366920938463463374607431768211456, suficient pentru toate device-urile existente
+- Adresa IPv6 pentru loopback localhost este `::1/128` 
+- Dublu `::` este o variantă prin care se prescurtează secventele continue cele mai din stânga de `0`, adresa de mai sus este prescurtată: `fe80:cd00::1257:0:0:729c`
 
-uci set network.lan.ipaddr='10.0.0.15'
-uci set network.wan.proto='static'
-uci set network.wan.ipaddr='10.10.10.2'
-uci set network.wan.netmask='255.255.255.0'
-uci commit network
-service network restart
-#  Ctrl+] apoi quit
+<a name="ipv6_socket" ></a>
+### IPv6 Socket
+#### Server
+```python
+import socket
+import sys
+# try to detect whether IPv6 is supported at the present system and
+# fetch the IPv6 address of localhost.
+if not socket.has_ipv6:
+    print("Nu putem folosi IPv6")
+    sys.exit(1)
+
+# "::0" este echivalent cu 0.0.0.0
+infos = socket.getaddrinfo("::0", 8080, socket.AF_INET6, 0, socket.IPPROTO_TCP, socket.AI_CANONNAME)
+# [(<AddressFamily.AF_INET6: 10>, <SocketKind.SOCK_STREAM: 1>, 6, '', ('::', 8080, 0, 0))]
+# info contine o lista de parametri, pentru fiecare interfata, cu care se poate instantia un socket
+print (len(infos))
+1
+
+info = infos[0]
+adress_family = info[0].value # AF_INET
+socket_type = info[1].value # SOCK_STREAM
+protocol = info[2].value # IPPTROTO_TCP == 6
+cannonical_name = info[3] # tot ::0 adresa de echivalenta cu 0.0.0.0
+adresa_pt_bind = info[4] # tuplu ('::', 8080, 0, 0):
+'''
+Metodele de setare a adreselor (bind, connect, sendto) 
+pentru socketul IPv6 sunt un tuplu cu urmatoarele valori:
+- adresa_IPv6               ::0
+- port                      8080
+- flow_label ca in header   0
+- scope-id - id pt NIC      0
+mai multe detalii: https://stackoverflow.com/a/11930859
+'''
+
+# instantiem socket TCP cu AF_INET6
+s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, proto=socket.IPPROTO_TCP)
+
+# executam bind pe tuplu ('::', 8080, 0, 0)
+s.bind(adresa_pt_bind)
+
+# restul e la fel ca la IPv4
+s.listen(1)
+conn, addr = s.accept()
+print(conn.recv(1400))
+conn.send(b'am primit mesajul')
+conn.close()
+s.close()
 ```
 
-### Conectarea routerelor
-Comanda vrbridge este definită în scriptul vrnetlab/vrnetlab.sh și are ca rol pornirea unui container care prin vr-xcon care creează legăturile dintre cele două routere. Comanda are ca parametrii containerul1, interfața1, containerul2 și interfața 2:
-```bash
-vrbridge capitolul4_openwrt1_1 1 capitolul4_openwrt2_1 1
-# echivalent cu:
-docker run -d --privileged --name bridge-capitolul4_openwrt1_1-1-capitolul4_openwrt2_1-1 --net capitolul4_net --link capitolul4_openwrt1_1 --link capitolul4_openwrt2_1 vr-xcon --p2p capitolul4_openwrt1_1/1--capitolul4_openwrt2_1/1 --debug 
+#### Client
+```python
+import socket
+import sys
+# try to detect whether IPv6 is supported at the present system and
+# fetch the IPv6 address of localhost.
+if not socket.has_ipv6:
+    print("Nu putem folosi IPv6")
+    sys.exit(1)
+
+s = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, proto=socket.IPPROTO_TCP)
+adresa = ('::', 8080, 0, 0)
+s.connect(adresa)
+
+# restul e la fel ca la IPv4
+s.send(b'Salut prin IPv6')
+print (s.recv(1400))
+s.close()
 ```
 
-### Exercițiu - Testarea conexiunii 
-Conectați-vă prin telnet la unul din routere și încercați să dați ping către celălalt router.
+<a name="ipv6_scapy" ></a>
+### IPv6 Scapy
+```python
+ip = IPv6()
+ip.show()
+###[ IPv6 ]### 
+  version= 6
+  tc= 0
+  fl= 0
+  plen= None
+  nh= No Next Header
+  hlim= 64
+  src= ::1
+  dst= ::1
+
+ip.dst = '::1' # localhost
+# trimitem la un server UDP care asteapta pe (::0, 8081, 0, 0)
+udp = UDP(sport=1234, dport=8081)  
+send(ip / udp / b'salut prin ipv6')
+
+```
+
+<a name="exercitii"></a> 
+## Exerciții
+1. Urmăriți mai multe exemple din scapy [aici](https://scapy.readthedocs.io/en/latest/usage.html#simple-one-liners)
+2. Implementați un traceroute folosind ICMP.
