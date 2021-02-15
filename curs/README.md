@@ -33,7 +33,7 @@ Introduction, Protocols and Layering [capitolul în pdf](http://index-of.es/Vari
 [1-5 Traceroute](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.1-5_Traceroute__/ph/streaming/esm/tanenbaum5e_videonotes/1_5_traceroute_cn5e.m4v "1-5 Traceroute")  
 [1-6 Protocols and Layers](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.1-6_Protocols_and_Layers__/ph/streaming/esm/tanenbaum5e_videonotes/1_6_protocol_layers_cn5e.m4v "1-6 Protocols and Layers")  
 [1-7 Reference Models](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.1-7_Reference_Models__/ph/streaming/esm/tanenbaum5e_videonotes/1_7_reference_layers_cn5e.m4v "1-7 Reference Models")  
-[1-8 History of the Internet](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.1-8_History_of_the_Internet__/ph/streaming/esm/tanenbaum5e_videonotes/1_8_internet_history_cn5e.m4v "1-8 History of the Internet")  
+[1-8 History of the Internet](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.1-8_History_of_the_Internet__/ph/streaming/esm/tanenbaum5e_videonotes/1_8_internet_history_cn5e.m4v "1-8 History of the Internet"), [extra history](http://31.42.184.140/main/2656000/9229a40a166d6006a88f912d3859d673/Claire%20L.%20Evans%20-%20Broad%20band_%20the%20untold%20story%20of%20the%20women%20who%20made%20the%20Internet-Penguin%20Publishing%20Group%20%282018%29.epub)
 [1-9 Lecture Outline](http://mediaplayer.pearsoncmg.com/_ph_cc_ecs_set.title.1-9_Lecture_Outline__/ph/streaming/esm/tanenbaum5e_videonotes/1_9_lecture_outline_cn5e.m4v "1-9 Lecture Outline")
 
 

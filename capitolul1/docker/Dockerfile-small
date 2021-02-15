@@ -1,4 +1,4 @@
-FROM kalilinux/kali-rolling
+FROM ubuntu:20.04
 
 MAINTAINER Sergiu Nisioi <sergiu.nisioi@fmi.unibuc.ro>
 

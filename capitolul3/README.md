@@ -57,7 +57,7 @@ docker-compose up -d
 # docker-compose -f capitolul3/docker-compose.yml up -d
 ```
 
-Fișierul `docker-compose.yml` definește 4 containere `server, router, client, middle` având ip-uri fixe în subneturi diferite, iar `router` este un container care funcționează ca router între cele două subrețele. Observați în [command pentru server](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/server.sh): `ip route add 172.10.0.0/16 via 198.10.0.1` adăugarea unei rute către subnetul în care se află clientul via ip-ul containerului router. De asemenea, în containerul client există o rută către server prin containerul router: `ip route add 198.10.0.0/16 via 172.10.0.1`.
+Fișierul `docker-compose.yml` definește 4 containere `server, router, client, middle` având ip-uri fixe în subneturi diferite, iar `router` este un container care funcționează ca router între cele două subrețele. Observați în [command pentru server](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/src/server.sh): `ip route add 172.10.0.0/16 via 198.10.0.1` adăugarea unei rute către subnetul în care se află clientul via ip-ul containerului router. De asemenea, în containerul client există o rută către server prin containerul router: `ip route add 198.10.0.0/16 via 172.10.0.1`.
 
 Serviciile router și middle sunt setate să facă forwarding `net.ipv4.ip_forward=1`, lucru care se poate observa prin valoarea=1 setată: `bash /proc/sys/net/ipv4/ip_forward`. 
 
@@ -294,7 +294,7 @@ Ce se întamplă dacă suma calculată este exact numărul maxim pe N biți?
 
 <a name="#udp_socket"></a> 
 ### Socket UDP
-În capitolul2 există exemple de [server](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/src/udp_server.py) și [client](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/src/udp_client.py) pentru protocolul UDP. Cele mai importante metode de socket udp sunt:
+În capitolul2 există exemple de [server](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/src/udp_server.py) și [client](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/src/udp_client.py) pentru protocolul UDP. Cele mai importante metode de socket udp sunt:
 ```python
 # instantierea obiectului cu SOCK_DGRAM si IPPROTO_UDP
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, proto=socket.IPPROTO_UDP)
@@ -531,14 +531,14 @@ definit [aici](https://tools.ietf.org/html/rfc2018#page-3) permite trimiterea un
 ### Exercițiu TCP Retransmission
 TCP este un protocol care oferă siguranța transmiterii pachetelor, în cazul în care un stream de octeți este trimis, se așteaptă o confirmare pentru acea secvență de bytes. Dacă confirmarea nu este primită se încearcă retransmiterea. Pentru a observa retransmisiile, putem introduce un delay artificial sau putem ignora anumite pachete pe rețea. Folosim un tool linux numit [netem](https://wiki.linuxfoundation.org/networking/netem) sau mai pe scurt [aici](https://stackoverflow.com/questions/614795/simulate-delayed-and-dropped-packets-on-linux).
 
-În containerul router, în [docker-compose.yml](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/docker-compose.yml) este commented comanda pentru [/drop_packages.sh](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/drop_packages.sh). Fisierul respectiv este copiat în directorul root `/` in container prin comanda `COPY src/*.sh /` din Dockerfile-lab3. 
+În containerul router, în [docker-compose.yml](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/docker-compose.yml) este commented comanda pentru [/drop_packages.sh](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/src/drop_packages.sh). Fisierul respectiv este copiat în directorul root `/` in container prin comanda `COPY src/*.sh /` din Dockerfile-lab3. 
 Prin scriptul comentat, routerul poate fi programat să renunțe la pachete cu o probabilitate de 50%: `tc qdisc add dev eth0 root netem loss 50% && tc qdisc add dev eth1 root netem loss 50%`. Puteți folosi această setare dacă doriți să verificați retransmiterea mesajelor în cazul TCP.
 
 Porniți TCP Server și TCP Client în containerul server, respectiv client și executați schimburi de mesaje. Cu `tcpdump -Sntv -i any tcp` în containerul router puteți observa retransmiterile segmentelor.
 
 <a name="#tcp_socket"></a> 
 ### Socket TCP
-În capitolul2 există exemple de [server](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/src/tcp_server.py) și [client](https://github.com/senisioi/computer-networks/blob/2020/capitolul2/src/tcp_client.py) pentru protocolul TCP. Cele mai importante metode sunt:
+În capitolul2 există exemple de [server](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/src/tcp_server.py) și [client](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/src/tcp_client.py) pentru protocolul TCP. Cele mai importante metode sunt:
 ```python
 # instantierea obiectului cu SOCK_STREAN si IPPROTO_TCP
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAN, proto=socket.IPPROTO_TCP)
@@ -557,7 +557,7 @@ s.send(b'octeti')
 
 <a name="#tcp_raw_socket"></a> 
 ### Raw Socket TCP
-Un exemplu de 3-way handshake facut cu Raw Socket este în directorul [capitolul3/src/examples/raw_socket_handshake.py](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/examples/raw_socket_handshake.py)
+Un exemplu de 3-way handshake facut cu Raw Socket este în directorul [capitolul3/src/examples/raw_socket_handshake.py](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/src/examples/raw_socket_handshake.py)
 Putem instantia un socket brut pentru a capta mesaje TCP de pe orice port:
 ```python
 
@@ -1204,7 +1204,7 @@ ping router
 - [bootstrap protocol](https://en.wikipedia.org/wiki/Bootstrap_Protocol) a fost înlocuit de [Dynamic Host Configuration Protocol](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol#Operation) pentru asignarea de adrese IPv4 automat device-urilor care se conectează pe rețea
 - pentru cerere de IP flow-ul include pașii pentru discover, offer, request și ack
 - container de docker [aici](https://github.com/networkboot/docker-dhcpd)
-- [exemplu de cod scapy aici](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/examples/dhcp.py)
+- [exemplu de cod scapy aici](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/src/examples/dhcp.py)
 
 <a name="scapy_icmp"></a> 
 ### [Internet Control Message Protocol (ICMP)](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
@@ -1433,7 +1433,7 @@ Testați din containerul `server`: `docker-compose exec server bash -c "ping fmi
 <a name="exercitii"></a> 
 ## Exerciții
 1. Instanțiați un server UDP și faceți schimb de mesaje cu un client scapy.
-2. Rulați 3-way handshake între server și client folosind containerele definite în capitolul3, astfel: containerul `server` va rula `capitolul2/tcp_server.py` pe adresa '0.0.0.0', iar în containerul `client` configurați și rulați fișierul din [capitolul3/src/examples/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/2020/capitolul3/src/examples/tcp_handshake.py) pentru a face 3-way handshake.
+2. Rulați 3-way handshake între server și client folosind containerele definite în capitolul3, astfel: containerul `server` va rula `capitolul2/tcp_server.py` pe adresa '0.0.0.0', iar în containerul `client` configurați și rulați fișierul din [capitolul3/src/examples/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/src/examples/tcp_handshake.py) pentru a face 3-way handshake.
 3. Configurați opțiunea pentru Maximum Segment Size (MSS) astfel încat să îl notificați pe server că segmentul maxim este de 1 byte. Puteți să-l configurați cu 0?
 4. Trimiteți mesaje TCP folosind flag-ul PSH și scapy.
 5. Setați flag-urile ECN în IP și flag-ul ECE in TCP pentru a notifica serverul de congestionarea rețelei.
