@@ -1,9 +1,7 @@
-# Capitolul 2
+# Capitolul 2 - Application Layer
 
 ## Cuprins
-- [Introducere și IDE](#intro)
-- [python 3 basics](#basics)
-  - [Exerciții python](#exercitii_python)
+- [Introducere](#intro)
 - [HTTP/S requests](#https)
   - [DNS over HTTPS](#doh)
   - [Exerciții HTTP](#exercitii_http)
@@ -16,164 +14,13 @@
 
 <a name="intro"></a> 
 ## Introducere
-În cadrul acestui capitol vom lucra cu [python](http://www.bestprogramminglanguagefor.me/why-learn-python), un limbaj de programare simplu pe care îl vom folosi pentru a crea și trimite pachete pe rețea. De asemenea, in cadrul acestui capitol folosim orchestratia de containere definită [aici](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/docker-compose.yml). Pentru a rula această orchestrație, este suficient să executăm:
+
+În cadrul acestui capitol folosim orchestratia de containere definită [aici](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/docker-compose.yml). Pentru a rula această orchestrație, este suficient să executăm:
 ```bash
 cd computer-networks/capitolul2
 yes | docker network prune
 docker-compose up -d
 ```
-
-Pentru debug și autocomplete, este bine să avem un editor și [IDE pentru acest limbaj](https://wiki.python.org/moin/IntegratedDevelopmentEnvironments). În cadrul orelor vom lucra cu [Visual Studio Code](https://code.visualstudio.com/), dar puteți lucra cu orice alt editor. 
-
-<a name="basics"></a> 
-## [python 3 basics](https://www.tutorialspoint.com/python/python_variable_types.htm)
-```python
-# comment pentru hello world
-variabila = 'hello "world"'
-print (variabila)
-
-# int:
-x = 1 + 1
-
-# str:
-xs = str(x) + ' ' + variabila
-
-# tuplu
-tup = (x, xs)
-
-# lista
-l = [1, 2, 2, 3, 3, 4, x, xs, tup]
-print (l[2:])
-
-# set
-s = set(l)
-print (s)
-print (s.intersection(set([4, 4, 4, 1])))
-
-# dict:
-d = {'grupa': 123, "nr_studenti": 10}
-print (d['grupa'], d['nr_studenti'])
-```
-
-#### [for](https://www.tutorialspoint.com/python/python_for_loop.htm) și [while](https://www.tutorialspoint.com/python/python_while_loop.htm)
-```python
-lista = [1,5,7,8,2,5,2]
-for element in lista:
-    print (element)
-
-for idx, element in enumerate(lista):
-    print (idx, element)
-
-for idx in range(0, len(lista)):
-    print (lista[idx])
-
-idx = 0
-while idx < len(lista):
-    print (lista[idx])
-    idx += 1 
-```
-
-#### [if else](https://www.tutorialspoint.com/python/python_if_else.htm)
-```python
-'''
-   comment pe
-   mai multe
-   linii
-'''
-x = 1
-y = 2
-print (x + y)
-if (x == 1 and y == 2) or (x==2 and y == 1):
-    print (" x e egal cu:", x, ' si y e egal cu: ', y)
-elif x == y:
-    print ('sunt la fel')
-else:
-    print ("nimic nu e adevarat")
-```
-
-#### [funcții](https://www.tutorialspoint.com/python/python_functions.htm)
-```python
-def functie(param = 'oooo'):
-    '''dockblock sunt comments in care explicam
-    la ce e buna functia
-    '''
-    return "whooh " + param + "!"
-
-def verifica(a, b):
-    ''' aceasta functie verifica
-    o ipoteza interesanta
-    '''
-    if (x == 1 and y == 2) or (x==2 and y == 1):
-        return 1
-    elif x == y:
-        return 0
-    return -1
-```
-
-#### [module](https://www.tutorialspoint.com/python/python_modules.htm)
-```python
-import os
-import sys
-import logging
-from os.path import exists
-import time
-
-logging.basicConfig(format = u'[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s', level = logging.NOTSET)
-logging.info("Mesaj de informare")
-logging.warn("Mesaj de warning")
-logging.error("Mesaj de eroare")
-try:
-    1/0
-except:
-    logging.exception("Un mesaj de exceptie!")
-
-program_name = sys.argv[0]
-print (program_name)
-print ("Exista '/elocal'?", exists('/elocal'))
-print (os.path.join('usr', 'local', 'bin'))
-
-for element in "hello world":
-    sys.stdout.write(element)
-    sys.stdout.flush()
-    time.sleep(1)
-```
-
-#### [main](https://stackoverflow.com/questions/4041238/why-use-def-main)
-```python
-def main():
-    print ("functia main")
-
-# un if care verifică dacă scriptul este importat sau apelat ca main
-if __name__ == '__main__':
-    main()
- ```
-
-#### [clase](https://www.tutorialspoint.com/python/python_classes_objects.htm)
-```python
-class Grupa:
-    nume = 'grp'
-    def __init__(self, nume, numar_studenti):
-        self.nume = nume
-        self.numar_student = numar_studenti
-    def _metoda_protected(self):
-        print ("da")
-    def __metoda_privata(self):
-        print ('nu')
-    def metoda_publica(self):
-        print ("yes")
-
-
-g = Grupa('222', '21')
-print (g.nume)
-print (g.numar_studenti)
-print (G.nume)
-```
-
-<a name="exercitii_python"></a>
-### Exerciții python
-1. Creați un script de python care printează toate literele unui text, câte o literă pe secunda, folosind `time.sleep(1)`.
-2. Rulați scriptul anterior într-un container.
-3. Folosind [command](https://docs.docker.com/compose/compose-file/compose-file-v2/#command), modificați docker-compose.yml pentru a lansa acel script ca proces al containerului.
 
 <a name="https"></a>
 ## HTTP/S requests
@@ -209,11 +56,13 @@ paragraph = div.find('p')
 
 print (paragraph.text)
 ```
+
 <a name="doh"></a>
 ### [DNS over HTTPS](https://datatracker.ietf.org/doc/rfc8484/?include_text=1)
 Pentru securitare și privacy, sunt dezvoltate metode noi care encriptează cererile către DNS.
 DNS over HTTPS sau DoH este explicat in detaliu [aici](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/). 
 Privacy-ul oferit de DoH poate fi exploatat și de [malware](https://www.zdnet.com/article/first-ever-malware-strain-spotted-abusing-new-doh-dns-over-https-protocol/) iar mai multe detalii despre securitatea acestuia pot fi citite [aici](https://secure64.com/wp-content/uploads/2019/06/doh-dot-investigation-6.pdf).
+
 
 <a name="exercitii_http"></a>
 ### Exerciții HTTP/S

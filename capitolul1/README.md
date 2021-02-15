@@ -1,293 +1,403 @@
-## Capitolul 1
+# Capitolul 1 - Programming Basics
+
+## Cuprins
+- [Network Stacks](#stacks)
+- [Introducere și IDE](#intro)
+  - [python3 basics](#basics)
+  - [Exerciții python](#exercitii_python)
+- [Big Endian (Network Order) vs. Little Endian](#endianness)
+- [Python Bytes as C Types](#ctypes)
+- [Funcțiile sniff și send(p), sr(p), sr(p)1 în scapy](#scapy_sniff)
 
 
-## Concepte de bază în docker
-Un container (sau serviciu) docker poate fi pornit (în mod asemănător cu o mașină virtuală) cu o imagine cu un sistem de operare. Pentru a construi imaginea explicit, putem folosi [docker build](https://docs.docker.com/engine/reference/commandline/build/). Comanda build utilizează fișierul [./docker/Dockerfile]() care definește ce sistem de operare va fi utilizat de container, ce aplicații vor fi pre-instalate și ce useri vor exista pe containerele care rulează acea imagine. Un container seamănă mai mult cu un **proces** decât cu o mașină virtuală. Acesta nu emulează componente hardware, ci execută apeluri sistem cu dependințele necesare rulării unei aplicații. 
+<a name="stacks"></a> 
+### Network Stacks
+Stiva OSI:
+![OSI7](https://www.cloudflare.com/img/learning/ddos/what-is-a-ddos-attack/osi-model-7-layers.svg)
 
-Comanda [docker-compose up -d](https://docs.docker.com/compose/reference/up/), va citi fișierul **docker-compose.yml** din path-ul de unde rulăm comanda și va lansa containere după cum sunt definite în fișier în secțiunea *services*: rt1, rt2, etc..
-Containere care sunt configurate să ruleze o imagine dată (în cazul nostru *baseimage*, imaginea construită la pasul anterior) sunt conectate la o rețea (în cazul nostru rețeaua *dmz*) sau și au definite [un mount point](https://unix.stackexchange.com/questions/3192/what-is-meant-by-mounting-a-device-in-linux) local.
-Comanda docker-compose pe linux nu se instalează default cu docker, ci trebuie [să o instalăm separat](https://docs.docker.com/compose/install/). În cazul nostru, comanda se găsește chiar în directorul computer-networks, în acest repository. 
+Stiva TCP IP:
+![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/2020/capitolul3/layers.jpg)
 
-## Starting up
+
+
+<a name="intro"></a> 
+## Introducere și IDE
+În cadrul acestui capitol vom lucra cu [python](http://www.bestprogramminglanguagefor.me/why-learn-python), un limbaj de programare simplu pe care îl vom folosi pentru a crea și trimite pachete pe rețea. Pentru debug și autocomplete, este bine să avem un editor și [IDE pentru acest limbaj](https://wiki.python.org/moin/IntegratedDevelopmentEnvironments). În cadrul orelor vom lucra cu [Visual Studio Code](https://code.visualstudio.com/), dar puteți lucra cu orice alt editor. 
+
+<a name="basics"></a> 
+## [python 3 basics](https://www.tutorialspoint.com/python/python_variable_types.htm)
+```python
+# comment pentru hello world
+variabila = 'hello "world"'
+print (variabila)
+
+# int:
+x = 1 + 1
+
+# str:
+xs = str(x) + ' ' + variabila
+
+# tuplu
+tup = (x, xs)
+
+# lista
+l = [1, 2, 2, 3, 3, 4, x, xs, tup]
+print (l[2:])
+
+# set
+s = set(l)
+print (s)
+print (s.intersection(set([4, 4, 4, 1])))
+
+# dict:
+d = {'grupa': 123, "nr_studenti": 10}
+print (d['grupa'], d['nr_studenti'])
+```
+
+#### [for](https://www.tutorialspoint.com/python/python_for_loop.htm) și [while](https://www.tutorialspoint.com/python/python_while_loop.htm)
+```python
+lista = [1,5,7,8,2,5,2]
+for element in lista:
+    print (element)
+
+for idx, element in enumerate(lista):
+    print (idx, element)
+
+for idx in range(0, len(lista)):
+    print (lista[idx])
+
+idx = 0
+while idx < len(lista):
+    print (lista[idx])
+    idx += 1 
+```
+
+#### [if else](https://www.tutorialspoint.com/python/python_if_else.htm)
+```python
+'''
+   comment pe
+   mai multe
+   linii
+'''
+x = 1
+y = 2
+print (x + y)
+if (x == 1 and y == 2) or (x==2 and y == 1):
+    print (" x e egal cu:", x, ' si y e egal cu: ', y)
+elif x == y:
+    print ('sunt la fel')
+else:
+    print ("nimic nu e adevarat")
+```
+
+#### [funcții](https://www.tutorialspoint.com/python/python_functions.htm)
+```python
+def functie(param = 'oooo'):
+    '''dockblock sunt comments in care explicam
+    la ce e buna functia
+    '''
+    return "whooh " + param + "!"
+
+def verifica(a, b):
+    ''' aceasta functie verifica
+    o ipoteza interesanta
+    '''
+    if (x == 1 and y == 2) or (x==2 and y == 1):
+        return 1
+    elif x == y:
+        return 0
+    return -1
+```
+
+#### [module](https://www.tutorialspoint.com/python/python_modules.htm)
+```python
+import os
+import sys
+import logging
+from os.path import exists
+import time
+
+logging.basicConfig(format = u'[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s', level = logging.NOTSET)
+logging.info("Mesaj de informare")
+logging.warn("Mesaj de warning")
+logging.error("Mesaj de eroare")
+try:
+    1/0
+except:
+    logging.exception("Un mesaj de exceptie!")
+
+program_name = sys.argv[0]
+print (program_name)
+print ("Exista '/elocal'?", exists('/elocal'))
+print (os.path.join('usr', 'local', 'bin'))
+
+for element in "hello world":
+    sys.stdout.write(element)
+    sys.stdout.flush()
+    time.sleep(1)
+```
+
+#### [main](https://stackoverflow.com/questions/4041238/why-use-def-main)
+```python
+def main():
+    print ("functia main")
+
+# un if care verifică dacă scriptul este importat sau apelat ca main
+if __name__ == '__main__':
+    main()
+ ```
+
+#### [clase](https://www.tutorialspoint.com/python/python_classes_objects.htm)
+```python
+class Grupa:
+    nume = 'grp'
+    def __init__(self, nume, numar_studenti):
+        self.nume = nume
+        self.numar_student = numar_studenti
+    def _metoda_protected(self):
+        print ("da")
+    def __metoda_privata(self):
+        print ('nu')
+    def metoda_publica(self):
+        print ("yes")
+
+
+g = Grupa('222', '21')
+print (g.nume)
+print (g.numar_studenti)
+print (G.nume)
+```
+
+<a name="exercitii_python"></a>
+### Exerciții python
+1. Creați un script de python care printează toate literele unui text, câte o literă pe secunda, folosind `time.sleep(1)`.
+2. Rulați scriptul anterior într-un container.
+3. Folosind [command](https://docs.docker.com/compose/compose-file/compose-file-v2/#command), modificați docker-compose.yml pentru a lansa acel script ca proces al containerului.
+
+
+
+<a name="endianness"></a>
+### [Big Endian (Network Order) vs. Little Endian](https://en.m.wikipedia.org/wiki/Endianness#Etymology)
+
+Numarul 16 se scrie in binar: `10000 (2^4)`, deci numărăm biții de la dreapta la stânga. 
+Dacă numărul ar fi stocat într-un tip de date pe 8 biți, s-ar scrie: `00010000`
+Dacă ar fi reprezentat pe 16 biți, s-ar scrie: `00000000 00010000`, completând cu 0 pe pozițiile mai mari până obținem 16 biți.
+
+În calculatoare există două tipuri de reprezentare a ordinii octeților: 
+- **Big Endian** este: 00000000 00010000
+  - cel mai semnificativ bit are adresa cea mai mică, octet 0: 00010000, octet 1: 00000000
+- **Little Endian** este: 00010000 00000000
+  - cel mai semnificativ bit are adresa cea mai mare, octet 0: 00000000, octet 1: 00010000
+
+Pe rețea mesajele transmise trebuie să fie reprezentate într-un mod standardizat, independent de reprezentarea octeților pe mașinile de pe care sunt trimise, și acest standard este dat de Big Endian sau **Network Order**.
+
+Pentru a verifica ce endianness are calculatorul vostru puteti rula din python:
+```python
+import sys
+print(sys.byteorder)
+```
+
+
+<a name="ctypes"></a> 
+### Python Bytes as C Types
+În python există [modulul struct](https://docs.python.org/3.0/library/struct.html) care face conversia din tipul de date standard al limbajului în bytes reprezentând tipuri de date din C. Acest lucru este util fiindcă în cadrul rețelelor vom avea de configurat elemente low-level ale protocoalelor care sunt restricționate pe lungimi fixe de biți. Ca exemplu, headerul UDP este structurat din 4 cuvinte de 16 biți (port sursă, port destinație, lungime și checksum):
+```python
+import struct
+
+# functia pack ia valorile date ca parametru si le "impacheteaza" dupa un tip de date din C dat
+struct.pack(formatare, val1, val2, val3)
+
+# functia unpack face exact opusul, despacheteaza un sir de bytes in variabile dupa un format 
+struct.unpack(formatare, sir_de_bytes)
+```
+
+#### Tipuri de formatare:
+
+|Format Octeti|Tip de date C|Tip de date python|Nr. biți|Note|
+|--- |--- |--- |--- |--- |
+|`x`|pad byte|no value|8||
+|`c`|char|bytes of length 1|8||
+|`b`|signed char|integer|8|(1)|
+|`B`|unsigned char|integer|8||
+|`?`|_Bool|bool||(2)|
+|`h`|short|integer|16||
+|`H`|unsigned short|integer|16||
+|`i`|int|integer|32||
+|`I`|unsigned int|integer|32||
+|`l`|long|integer|32||
+|`L`|unsigned long|integer|32||
+|`q`|long long|integer|64|(3)|
+|`Q`|unsigned long long|integer|64|(3)|
+|`f`|float|float|32||
+|`d`|double|float|64||
+|`s`|char[]|bytes||(1)|
+|`p`|char[]|bytes||(1)|
+|`P`|void *|integer|||
+
+Note:
+<ol class="arabic simple">
+<li>The <tt class="docutils literal"><span class="pre">c</span></tt>, <tt class="docutils literal"><span class="pre">s</span></tt> and <tt class="docutils literal"><span class="pre">p</span></tt> conversion codes operate on <a title="bytes" class="reference external" href="functions.html#bytes"><tt class="xref docutils literal"><span class="pre">bytes</span></tt></a>
+objects, but packing with such codes also supports <a title="str" class="reference external" href="functions.html#str"><tt class="xref docutils literal"><span class="pre">str</span></tt></a> objects,
+which are encoded using UTF-8.</li>
+<li>The <tt class="docutils literal"><span class="pre">'?'</span></tt> conversion code corresponds to the <tt class="xref docutils literal"><span class="pre">_Bool</span></tt> type defined by
+C99. If this type is not available, it is simulated using a <tt class="xref docutils literal"><span class="pre">char</span></tt>. In
+standard mode, it is always represented by one byte.</li>
+<li>The <tt class="docutils literal"><span class="pre">'q'</span></tt> and <tt class="docutils literal"><span class="pre">'Q'</span></tt> conversion codes are available in native mode only if
+the platform C compiler supports C <tt class="xref docutils literal"><span class="pre">long</span> <span class="pre">long</span></tt>, or, on Windows,
+<tt class="xref docutils literal"><span class="pre">__int64</span></tt>.  They are always available in standard modes.</li>
+</ol>
+
+Metodele de pack/unpack sunt dependente de ordinea octeților din calculator. Pentru a seta un anumit tip de endianness cand folosim funcțiile din struct, putem pune înaintea formatării caracterele următoare:
+
+|Caracter|Byte order|
+|--- |--- |
+|@|native|
+|<|little-endian|
+|>|big-endian|
+|!|network (= big-endian)|
+
+
+#### Exemple
+
+```python
+numar = 16
+# impachetam numarul 16 intr-un 'unsigned short' pe 16 biti cu network order
+octeti = struct.pack('!H', numar)
+print("Network Order: ")
+for byte in octeti:
+    print (bin(byte))
+
+
+# impachetam numarul 16 intr-un 'unsigned short' pe 16 biti cu Little Endian
+octeti = struct.pack('<H', numar)
+print("Little Endian: ")
+for byte in octeti:
+    print (bin(byte))
+
+# B pentru 8 biti, numere unsigned intre 0-256
+struct.pack('B', 300)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+struct.error: ubyte format requires 0 <= number <= 255
+
+# string de 10 bytes, sunt codificati primii 10 si 
+# restul sunt padded cu 0
+struct.pack('10s', 'abcdef'.encode('utf-8'))
+b'abcdef\x00\x00\x00\x00'
+
+
+# numarul 256 packed in NetworkOrder pe 64 de biti
+struct.pack('!L', 256)
+b'\x00\x00\x01\x00'
+
+# numarul 256 packed in LittleEndian pe 64 de biti
+struct.pack('<L', 256)
+b'\x00\x01\x00\x00'
+```
+
+
+<a name="scapy_sniff"></a> 
+## Funcțiile sniff și send(p), sr(p), sr(p)1 în scapy
+[scapy](https://github.com/secdev/scapy) este o librărie care acoperă o serie mare de funcționalități ce pot fi implementate programatic. Principalele features sunt cele de creare și manipulare a pachetelor, dar și aceea de a capta pachetele care circulă pe rețea. Pentru a scana pachetele care circulă, similar cu tcpdump, există funcția `sniff`:
+
+```python
+pachete = sniff()
+# Trimiteti de pe router un mesaj UDP catre server: sendto(b'salut', ('server', 2222)) 
+# Apasati Ctrl+C pentru a opri functia care monitorizeaza pachete
+
+<Sniffed: TCP:0 UDP:1 ICMP:0 Other:0>
+
+pachete[UDP][0].show()
+
+###[ Ethernet ]### 
+  dst= 02:42:c6:0a:00:02
+  src= 02:42:c6:0a:00:01
+  type= IPv4
+###[ IP ]### 
+     version= 4
+     ihl= 5
+     tos= 0x0
+     len= 33
+     id= 7207
+     flags= DF
+     frag= 0
+     ttl= 64
+     proto= udp
+     chksum= 0x928d
+     src= 198.10.0.1
+     dst= 198.10.0.2
+     \options\
+###[ UDP ]### 
+        sport= 2222
+        dport= 2330
+        len= 13
+        chksum= 0x8c36
+###[ Raw ]### 
+           load= 'salut'
+```
+
+
+Funcția `sniff()` ne permite să captăm pachete în cod cum am face cu wireshark sau tcpdump. De asemenea putem salva captura de pachete în format .pcap cu tcpdump: 
 ```bash
-# build the docker image
-docker build -t baseimage -f ./docker/Dockerfile-small .
-# start services defined in docker-compose.yml
-docker-compose up -d
+tcpdump -i any -s 65535 -w example.pcap
+```
+și putem încărca pachetele în scapy pentru a le procesa:
+```python
+packets = rdpcap('example.pcap')
+for pachet in packets:
+    if pachet.haslayer(ARP):
+        pachet.show()
+```
+
+Mai mult, funcția sniff are un parametrul prin care putem trimite o metodă care să proceseze pachetul primit în funcție de conținut:
+```python
+def handler(pachet):
+    if pachet.haslayer(TCP):
+        if pachet[TCP].dport == 80: #or pachet[TCP].dport == 443:
+            if pachet.haslayer(Raw):
+                raw = pachet.getlayer(Raw)
+                print(raw.load)
+sniff(prn=handler)
+```
+
+Putem converti și octeții obținuți printr-un socket raw dacă știm care este primul layer (cel mai de jos):
+```python
+# vezi exemplul de mai sus cu UDP Raw Socket
+raw_socket_date = b'E\x00\x00!\xc2\xd2@\x00@\x11\xeb\xe1\xc6\n\x00\x01\xc6\n\x00\x02\x08\xae\t\x1a\x00\r\x8c6salut'
+# dacă am fi avut un raw_socket care citește și header ehternet, ar fi trebuit să folosim și 
+pachet = IP(raw_socket_date)
+pachet.show()
+###[ IP ]### 
+  version= 4
+  ihl= 5
+  tos= 0x0
+  len= 33
+  id= 49874
+  flags= DF
+  frag= 0
+  ttl= 64
+  proto= udp
+  chksum= 0xebe1
+  src= 198.10.0.1
+  dst= 198.10.0.2
+  \options\
+###[ UDP ]### 
+     sport= 2222
+     dport= 2330
+     len= 13
+     chksum= 0x8c36
+###[ Raw ]### 
+        load= 'salut'
 ```
 
 
-## Comenzi de bază de docker
-```bash
-# list your images
-docker image ls
+În scapy avem mai multe funcții de trimitere a pachetelor:
+- `send()` - trimite un pachet pe rețea la nivelul network (layer 3), iar secțiunea de ethernet este completată de către sistem
+- `answered, unanswered = sr()` - send_receive - trimite pachete pe rețea în loop și înregistrează și răspunsurile primite într-un tuplu (answered, unanswered), unde answered și unanswered reprezintă o listă de tupluri [(pachet_trimis1, răspuns_primit1), ...,(pachet_trimis100, răspuns_primit100)] 
+- `answer = sr1()` - send_receive_1 - trimite pe rețea un pachet și înregistrează primul răspunsul
+
+Pentru a trimite pachete la nivelul legatură de date (layer 2), completând manual câmpuri din secțiunea Ethernet, avem echivalentul funcțiilor de mai sus:
+- `sendp()` - send_ethernet trimite un pachet la nivelul data-link, cu layer Ether custom
+- `answered, unanswered = srp()` - send_receive_ethernet trimite pachete la layer 2 și înregistrează răspunsurile
+- `answer = srp1()` - send_receive_1_ethernet la fel ca srp, dar înregistreazî doar primul răspuns
 
-# stop services
-docker-compose down
-
-# see the containers running
-docker ps
-docker-compose ps
-
-# kill a container
-docker kill $CONTAINER_ID
-
-# see the containers not running
-docker ps --filter "status=exited"
-
-# remove the container
-docker rm $CONTAINER_ID
-
-# list available networks
-docker network ls
-
-# inspect network
-docker network inspect $NETWORK_ID
-
-# inspect container
-docker inspect $CONTAINER_ID
-
-# see container ip
-docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CONTAINER_ID
-
-# attach to a container
-docker exec -it $CONTAINER_ID bash
-
-# attach using docker-compose
-docker-compose exec rt1 bash
-
-# attach as root to a container
-docker-compose exec --user root rt1 bash
-```
-
-## Docker References
-- [docker concepts](https://docs.docker.com/engine/docker-overview/#docker-engine)
-- [docker-compose](http://docker-k8s-lab.readthedocs.io/en/latest/docker/docker-compose.html)
-- [Compose Networking](https://runnable.com/docker/docker-compose-networking)
-- [Designing Scalable, Portable Docker Container Networks](https://success.docker.com/article/Docker_Reference_Architecture-_Designing_Scalable,_Portable_Docker_Container_Networks)
-- [Docker Networking Cookbook](https://github.com/TechBookHunter/Free-Docker-Books/blob/2020/book/Docker%20Networking%20Cookbook.pdf)
-- [Packet Crafting with Scapy](http://www.scs.ryerson.ca/~zereneh/cn8001/CN8001-PacketCraftingUsingScapy-WilliamZereneh.pdf)
-
-
-<a name="clean_all"></a> 
-### În prealabil
-Rulați comenzi de docker din https://github.com/senisioi/computer-networks.
-
-Ștergeți toate containerele create și resetați modificările efectuate în branch-ul local de git.
-```bash
-# pentru a opri toate containerele
-docker stop $(docker ps -a -q)
-# pentru a șterge toate containerele
-docker rm $(docker ps -a -q)
-# pentru a șterge toate rețelele care nu au containere alocate
-yes | docker network prune
-
-# pentru a șterge toate imaginile de docker (!!!rulați doar dacă știți ce face)
-docker rmi $(docker images -a -q)
-
-# pentru a suprascrie modificările locale
-git fetch --all
-git reset --hard origin/master
-```
-
-### NIC - Network Interface Controller (Placa de rețea)
-```bash
-# executați un shell în containerul rt1
-docker-compose exec rt1 bash
-
-# listați configurațiile de rețea
-ifconfig
-
-### eth0 - Ethernet device to communicate with the outside  ###
-# eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-#        inet 172.27.0.3  netmask 255.255.0.0  broadcast 0.0.0.0
-#        ether 02:42:ac:1b:00:03  txqueuelen 0  (Ethernet)
-# lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
-#        inet 127.0.0.1  netmask 255.0.0.0
-#        loop  txqueuelen 1000  (Local Loopback)
-```
-
-Comanda *ifconfig* ne indică două device-uri care rulează pe containerul *rt1*:
-
-- [*eht0*](http://www.tldp.org/LDP/nag/node67.html#SECTION007720000) - placa de rețea Ethernet virtuală care indică configurația pentru stabilirea unei conexiuni de rețea a containerului.
-- [*lo*](https://askubuntu.com/questions/247625/what-is-the-loopback-device-and-how-do-i-use-it) - local Loopback device definește categoria de adrese care se mapează pe localhost.
-- Ce reprezintă [ether](https://en.wikipedia.org/wiki/MAC_address) si [inet](https://en.wikipedia.org/wiki/IPv4)?
-- Ce este [netmask](https://www.computerhope.com/jargon/n/netmask.htm)?
-- Netmask și Subnet cu [prefix notation](https://www.ripe.net/about-us/press-centre/IPv4CIDRChart_2015.pdf)?
-- Maximum Transmission Unit [MTU](https://en.wikipedia.org/wiki/Maximum_transmission_unit) dimensiunea în bytes a pachetului maxim
-
-<a name="exercițiu1"></a>
-##### Exercițiu
-Modificați docker-compose.yml pentru a adaugă încă o rețea și încă 3 containere atașate la rețeaua respectivă. Modificați definiția container-ului rt1 pentru a face parte din ambele rețele. 
-Exemplu de rețele:
-```bash
-networks:
-    dmz:
-        ipam:
-            driver: default
-            config:
-                - subnet: 172.111.111.0/16 
-                  gateway: 172.111.111.1
-    net:
-        ipam:
-            driver: default
-            config:
-                - subnet: 198.13.13.0/16
-                  gateway: 198.13.13.1
-```
-Ce se intamplă dacă constrângeți subnet-ul definit pentru a nu putea permite mai mult de 4 ip-uri într-o rețea.
-
-<a name="ping"></a>
-### Ping
-Este un tool de networking care se foloseste de [ICMP](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol) pentru a verifica dacă un host este conectat la o rețea prin IP.
-
-```bash
-# ping localhost and loopback
-ping localhost
-
-ping 127.0.0.1
-
-ping 127.0.2.12
-
-# ping neighbour from network dmz
-ping 172.111.0.3
-
-# ping neighbour from network net
-ping 198.13.13.1
-```
-
-1. Când rulați ping, utilizați opțiunea -R pentru a vedea și calea pe care o efectuează pachetul.
-
-2. Ce reprezintă adresa 127.0.2.12? De ce funcționează ping către aceasta?
-
-3. Într-un terminal nou, rulați comanda `docker network inspect computernetworks_dmz` pentru a vedea ce adrese au celelalte containere. Încercați să trimiteți un ping către adresele IP ale celorlalte containere.
-
-4. Folosiți `docker stop` pentru a opri un container, cum arată rezultatul comenzii `ping` către adresa IP a containerului care tocmai a fost oprit?
-
-4. Rețelele dmz și net au în comun containerul rt1. Un container din rețeaua dmz primește răspunsuri la ping de la containere din rețeaua net?
-
-5. Folosiți opțiunea `-c 10` pentru a trimite un număr fix de pachete.
-
-6. Folosiți opțiunea `-s 1000` pentru a schimba dimensiunea pachetului ICMP
-
-7. Reporniți toate containerele. Cum arată rezultatele pentru `ping -M do -s 30000 172.111.0.4` și pentru `ping -M do -s 30000 172.111.0.4`. Care este diferenta dintre cele două? Care este rezultatul dacă selectați dimensiunea 1500?
-
-8. Opțiunea `-f` este folosită pentru a face un flood de ping-uri.  Rulați un shell cu user root, apoi `ping -f 172.111.0.4`. Separat, într-un alt terminal rulați `docker stats`. Ce observați?
-
-<a name="ping_block"></a>
-De multe ori răspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva răspunsul la ping rulați userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`. Într-un container de docker nu aveți dreptul să modificați acel fișier și veți primi o eroare. Putem, în schimb, modifica structura containerului din *docker-compose.yml* și-i putem adăuga pe lângă image, networks, volumes, tty, o opțiune de [sysctls](https://docs.docker.com/compose/compose-file/compose-file-v2/#sysctls):
-```
-    rt1:
-        ..........
-        sysctls:
-          - net.ipv4.icmp_echo_ignore_all=1
-```
-
-
-<a name="tcpdump_install"></a>
-###  tcpdump
-Este un tool care vă permite monitorizarea traficului de pe containerul/mașina pe care vă aflați. Vom folosi *tcpdump* pentru a monitoriza traficul generat de comanda ping. Pentru a rula tcpdump, trebuie să ne atașam unui container cu user **root** apoi putem rula:
-
-```bash
-tcpdump
-```
-Dacă tcpdump nu există ca aplicație, va trebui să modificați fișierul *Dockerfile* pentru a adaugă comanda de instalare a acestei aplicații. Reconstruiți imaginea folosind comanda docker build, distrugeți și reconstruiți containerele folosind `docker-compose down` și `docker-compose up -d`. Din cauza unui [bug de docker](https://github.com/moby/moby/issues/14140) e posibil ca această comandă să nu funcționeze imediat după instalare, afisând eroarea:
-```bash
-tcpdump: error while loading shared libraries: libcrypto.so.1.0.0: cannot open shared object file: Permission denied
-```
-Pentru a remedia această eroare, trebuie să adăugați în Dockerfile:
-```bash
-# move tcpdump from the default location to /usr/local
-RUN mv /usr/sbin/tcpdump /usr/local/bin
-# add the new location to the PATH in case it's not there
-ENV PATH="/usr/local/bin:${PATH}"
-```
-De asemenea, e posibil ca datorită unor schimbări recente în repository de kali linux, să fie necesară reconstruirea imaginii, altfel nu vor putea fi instalate pachetele necesare. Pentru această operație, trebuie să opriți toate containere, să ștergeți containerele create împreună cu rețelele create (vezi [primele 4 comenzi de la începutul fișierului](https://github.com/senisioi/computer-networks/tree/master/capitolul1#clean_all)). În urma ștergerii imaginilor, trebuie să reconstruim imaginea *baseimage* folosind `docker build -t baseimage ./docker/`.
-
-Dacă în urma rulării acestei comenzi nu apare nimic, înseamnă că în momentul acesta interfața dată pe containerul respectiv nu execută operații pe rețea. Pentru a vedea ce interfețe (device-uri) putem folosi pentru a capta pachete, putem rula:
-```bash
-tcpdump -D
-```
-
-<a name="tcpdump_exer"></a>
-##### Exerciții
-1. În containerul rt1 rulați `tcpdump -n`. În containerul rt2 rulați `ping -c 1 rt1`. Ce trasături observați la pachetul ICMP? Ce observați dacă rulați `ping -c 1 -s 2000 rt1`?
-
-2. Rulați aceleasi ping-uri dar acum monitorizați pachetele cu `tcpdump -nvtS`. Ce detalii observați în plus? Dar dacă adăugați opțiunea `tcpdump -nvtSXX`?
-
-3. Pentru a vedea și header-ul de ethernet, adăugați opțiunea `-e` la tcpdump.
-
-4. În rt1 monitorizați traficul cu `tcpdump -nevtSXX` Într-un alt terminal, rulați un shell tot pe containerul rt1 apoi dați `ping -c 1 yahoo.com`. Ce adrese MAC și IP sunt folosite pentru a trimite requestul ICMP? Câte pachete sunt captate în total?
-
-5. În loc de ultimul ping, generați trafic la nivelul aplicație folosind `wget https://github.com/senisioi/computer-networks/`. Comparați continutul pachetului cu un request HTTP: `wget http://moodle.fmi.unibuc.ro`. Observați diferența dintre HTTP si HTTPS la nivel de pachete.
-
-6. Puteți deduce din output-ul lui tcpdump care este adresa IP a site-ului github.com sau moodle.fmi.unibuc.ro? Ce reprezintă adresa MAC din cadrul acelor request-uri?
-
-7. Captând pachete, ați putut observa requesturi la o adresă de tipul 239.255.255.255? Mai multe detalii [aici](https://en.wikipedia.org/wiki/IP_multicast).
-
-
-###### TCP/IP stack
-```
-                     ----------------------------
-                     |    Application (HTTP+S)  |
-                     |                          |
-                     |...  \ | /  ..  \ | /  ...|
-                     |     -----      -----     |
-                     |     |TCP|      |UDP|     |
-                     |     -----      -----     |
-                     |         \      /         |
-                     |         --------         |
-                     |         |  IP  |         |
-                     |  -----  -*------         |
-                     |  |ARP|   |               |
-                     |  -----   |               |
-                     |      \   |               |
-                     |      ------              |
-                     |      |ENET|              |
-                     |      ---@--              |
-                     ----------|-----------------
-                               |
-         ----------------------o---------
-             Ethernet Cable
-
-                  Basic TCP/IP Network Node
-```
-
-Diferite opțiuni pentru tcpdump:
-```bash
-# -c pentru a capta un numar fix de pachete
-tcpdump -c 20
-
-# -w pentru a salva pachetele într-un fișier și -r pentru a citi fișierul
-tcpdump -w pachete.pcap
-tcpdump -r pachete.pcap
-
-# pentru a afișa doar pachetele care vin sau pleacă cu adresa google.com
-tcpdump host google.com
-
-# folosiți -XX pentru a afișa și conținutul în HEX și ASCII
-tcpdump -XX
-
-# pentru un timestamp normal
-tcpdump -t
-
-# pentru a capta pachete circula verbose
-tcpdump -vvv
-
-# indică interfața pe care o folosim pentru a capta pachete, în cazul acesta eth0 
-tcpdump -i
-
-# afișarea headerului de ethernet
-tcpdump -e
-
-# afișarea valorilor numerice ale ip-urilo în loc de valorile date de nameserver
-tcpdump -n
-
-# numărul de secvență al pachetului 
-tcpdump -S
-```
-
- - Întrebare: este posibil să captați pachetele care circulă între google.com și rt2 folosind mașina rt1?
- - Pentru mai multe detalii puteteți urmări acest [tutorial](https://danielmiessler.com/study/tcpdump/) sau [alte exemple](https://www.rationallyparanoid.com/articles/tcpdump.html)
- - Pentru exemple de filtrare mai detaliate, puteți urmări si [acest tutorial](https://forum.ivorde.com/tcpdump-how-to-to-capture-only-icmp-ping-echo-requests-t15191.html)
- - Trucuri de [filtare avansată](https://www.wains.be/pub/networking/tcpdump_advanced_filters.txt)
