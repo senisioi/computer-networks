@@ -1,4 +1,4 @@
-# Capitolul 4
+# Capitolul 4 - Network Layer
 
 ## Cuprins
 - [Requiremets](#intro)
@@ -8,6 +8,7 @@
 - [IPv6 Datagram](#ipv6)
   - [IPv6 Socket](#ipv6_socket)
   - [IPv6 Scapy](#ipv6_scapy)
+- [Internet Control Message Protocol (ICMP)](#scapy_icmp)
 - [Exerciții](#exercitii)
 
 <a name="intro"></a> 
@@ -292,6 +293,52 @@ udp = UDP(sport=1234, dport=8081)
 send(ip / udp / b'salut prin ipv6')
 
 ```
+
+<a name="scapy_icmp"></a> 
+### [Internet Control Message Protocol (ICMP)](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages)
+
+Am discutat despre ICMP și ping pentru a verifica dacă două device-uri pot comunica unul cu altul. Principala funcție a protocolului ICMP este de [a raprota erori](https://www.cloudflare.com/learning/ddos/glossary/internet-control-message-protocol-icmp/) iar [mesajele de control](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol#Control_messages) pot varia de la faptul că un host, port sau protocol este inaccesibil până la notificarea că TTL a expirat în tranzit.
+
+```python
+ICMP().show()
+###[ ICMP ]### 
+  type= echo-request
+  code= 0
+  chksum= None
+  id= 0x0
+  seq= 0x0
+
+# facem un pachet echo-request, ping
+icmp = ICMP(type = 'echo-request')
+ip = IP(dst = "137.254.16.101")
+pachet = ip / icmp
+
+# folosim sr1 pentru send și un reply
+rec = sr1(pachet)
+rec.show()
+
+###[ IP ]### 
+  version= 4
+  ihl= 5
+  tos= 0x0
+  len= 28
+  id= 48253
+  flags= DF
+  frag= 0
+  ttl= 242
+  proto= icmp
+  chksum= 0x23e7
+  src= 137.254.16.101
+  dst= 1.15.3.1
+  \options\
+###[ ICMP ]### 
+     type= echo-reply
+     code= 0
+     chksum= 0x0
+     id= 0x0
+     seq= 0x0
+```
+
 
 <a name="exercitii"></a> 
 ## Exerciții
