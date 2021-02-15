@@ -1,4 +1,4 @@
-## Capitolul 1
+## Capitolul 0 - Getting familiarized
 
 
 ## Concepte de bază în docker

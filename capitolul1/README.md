@@ -11,7 +11,7 @@
 
 
 <a name="stacks"></a> 
-### Network Stacks
+## Network Stacks
 Stiva OSI:
 ![OSI7](https://www.cloudflare.com/img/learning/ddos/what-is-a-ddos-attack/osi-model-7-layers.svg)
 
@@ -25,7 +25,7 @@ Stiva TCP IP:
 În cadrul acestui capitol vom lucra cu [python](http://www.bestprogramminglanguagefor.me/why-learn-python), un limbaj de programare simplu pe care îl vom folosi pentru a crea și trimite pachete pe rețea. Pentru debug și autocomplete, este bine să avem un editor și [IDE pentru acest limbaj](https://wiki.python.org/moin/IntegratedDevelopmentEnvironments). În cadrul orelor vom lucra cu [Visual Studio Code](https://code.visualstudio.com/), dar puteți lucra cu orice alt editor. 
 
 <a name="basics"></a> 
-## [python 3 basics](https://www.tutorialspoint.com/python/python_variable_types.htm)
+### [python 3 basics](https://www.tutorialspoint.com/python/python_variable_types.htm)
 ```python
 # comment pentru hello world
 variabila = 'hello "world"'
@@ -177,7 +177,7 @@ print (G.nume)
 
 
 <a name="endianness"></a>
-### [Big Endian (Network Order) vs. Little Endian](https://en.m.wikipedia.org/wiki/Endianness#Etymology)
+## [Big Endian (Network Order) vs. Little Endian](https://en.m.wikipedia.org/wiki/Endianness#Etymology)
 
 Numarul 16 se scrie in binar: `10000 (2^4)`, deci numărăm biții de la dreapta la stânga. 
 Dacă numărul ar fi stocat într-un tip de date pe 8 biți, s-ar scrie: `00010000`
@@ -199,7 +199,7 @@ print(sys.byteorder)
 
 
 <a name="ctypes"></a> 
-### Python Bytes as C Types
+## Python Bytes as C Types
 În python există [modulul struct](https://docs.python.org/3.0/library/struct.html) care face conversia din tipul de date standard al limbajului în bytes reprezentând tipuri de date din C. Acest lucru este util fiindcă în cadrul rețelelor vom avea de configurat elemente low-level ale protocoalelor care sunt restricționate pe lungimi fixe de biți. Ca exemplu, headerul UDP este structurat din 4 cuvinte de 16 biți (port sursă, port destinație, lungime și checksum):
 ```python
 import struct
@@ -257,7 +257,7 @@ Metodele de pack/unpack sunt dependente de ordinea octeților din calculator. Pe
 |!|network (= big-endian)|
 
 
-#### Exemple
+### Exemple
 
 ```python
 numar = 16
