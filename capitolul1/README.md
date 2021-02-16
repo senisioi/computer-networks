@@ -172,7 +172,7 @@ print (G.nume)
 ### Exerciții python
 1. Creați un script de python care printează toate literele unui text, câte o literă pe secunda, folosind `time.sleep(1)`.
 2. Rulați scriptul anterior într-un container.
-3. Folosind [command](https://docs.docker.com/compose/compose-file/compose-file-v2/#command), modificați docker-compose.yml pentru a lansa acel script ca proces al containerului.
+3. Folosind [command](https://docs.docker.com/compose/compose-file/compose-file-v2/#command), modificați docker-compose.yml din capitolul0 pentru a lansa acel script ca proces al containerului.
 
 
 

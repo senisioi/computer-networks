@@ -1,4 +1,4 @@
-FROM snisioi/cap2
+FROM snisioi/retele:2021
 
 MAINTAINER Sergiu Nisioi <sergiu.nisioi@fmi.unibuc.ro>
 
@@ -7,11 +7,5 @@ USER root
 RUN apt-get update && apt-get install -y iptables iproute2
 RUN apt-get update && apt-get install -y libnetfilter-queue-dev
 
-RUN pip3 install --upgrade python-iptables
-run pip3 install cython
-
-
 COPY src/*.sh /
 
-RUN git clone https://github.com/kti/python-netfilterqueue
-RUN cd python-netfilterqueue && python3 setup.py install

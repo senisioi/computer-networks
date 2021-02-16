@@ -7,6 +7,8 @@ Materiale online de curs:
 - [sursa video lectures](https://media.pearsoncmg.com/ph/streaming/esm/tanenbaum5e_videonotes/tanenbaum_videoNotes.html)
 - [Cursul lui Avinash Kak pe securitate](https://engineering.purdue.edu/kak/compsec/NewLectures/)
 - [Computer Networks: A Systems Approach](https://book.systemsapproach.org/foundation.html)
+- [Packet Crafting with Scapy](http://www.scs.ryerson.ca/~zereneh/cn8001/CN8001-PacketCraftingUsingScapy-WilliamZereneh.pdf)
+
 
 ## Cuprins
 - [I. Introduction, Protocols and Layering](#intro)

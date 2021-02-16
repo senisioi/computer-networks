@@ -16,3 +16,4 @@ Pentru laborator, vom avea nevoie de:
 - [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/) sau urmați pașii de [aici](https://gist.github.com/senisioi/0d4326775cade99ce2dec41b8d716b04)
 - [docker-compose](https://docs.docker.com/compose/install/) - este deja adăugat în acest repository
 - după instalarea docker, trebuie să adăugați userul cu care lucrăm în grupul de docker `sudo usermod -aG docker $USER`
+

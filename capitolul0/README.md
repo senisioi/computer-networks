@@ -1,26 +1,44 @@
 # Capitolul 0 - Getting familiarized
 
 
-## Concepte de bază în docker
-Un container (sau serviciu) docker poate fi pornit (în mod asemănător cu o mașină virtuală) cu o imagine cu un sistem de operare. Pentru a construi imaginea explicit, putem folosi [docker build](https://docs.docker.com/engine/reference/commandline/build/). Comanda build utilizează fișierul [./docker/Dockerfile]() care definește ce sistem de operare va fi utilizat de container, ce aplicații vor fi pre-instalate și ce useri vor exista pe containerele care rulează acea imagine. Un container seamănă mai mult cu un **proces** decât cu o mașină virtuală. Acesta nu emulează componente hardware, ci execută apeluri sistem cu dependințele necesare rulării unei aplicații. 
+## Introducere Docker
+Un container (sau serviciu) docker poate fi pornit (în mod asemănător cu o mașină virtuală) cu o imagine cu un sistem de operare. Un container seamănă mai mult cu un **proces** decât cu o mașină virtuală. Acesta nu emulează componente hardware, ci execută apeluri sistem cu dependințele necesare rulării unei aplicații. 
 
+### Building a docker image
+Pentru a construi imaginea explicit, putem folosi [docker build](https://docs.docker.com/engine/reference/commandline/build/). Comanda build utilizează fișierul [./docker/Dockerfile]() care definește ce sistem de operare va fi utilizat de container, ce aplicații vor fi pre-instalate și ce useri vor exista pe containerele care rulează acea imagine.
+```bash
+docker build -t retele:latest -f ./docker/Dockerfile .
+
+# tag-ul imaginii (nume:versiune)
+-t retele:latest
+
+# calea catre fisierul dockerfile
+-f ./docker/Dockerfile 
+
+# contextul in care se executa docker build
+.
+```
+Contextul este directorul în care se execută construcția imaginii. În fișierul Dockerfile se poate specifica [copierea explicită](https://docs.docker.com/engine/reference/builder/) a unor fișiere / date din directorul local, iar contextul reprezintă directorul în funcție de care se pot specifica căi relative în dockerfile.
+
+
+### Orchestrate containers with docker-compose
 Comanda [docker-compose up -d](https://docs.docker.com/compose/reference/up/), va citi fișierul **docker-compose.yml** din path-ul de unde rulăm comanda și va lansa containere după cum sunt definite în fișier în secțiunea *services*: rt1, rt2, etc..
 Containere care sunt configurate să ruleze o imagine dată (în cazul nostru *baseimage*, imaginea construită la pasul anterior) sunt conectate la o rețea (în cazul nostru rețeaua *dmz*) sau și au definite [un mount point](https://unix.stackexchange.com/questions/3192/what-is-meant-by-mounting-a-device-in-linux) local.
 Comanda docker-compose pe linux nu se instalează default cu docker, ci trebuie [să o instalăm separat](https://docs.docker.com/compose/install/). În cazul nostru, comanda se găsește chiar în directorul computer-networks, în acest repository. 
 
-## Starting up
+Aplicația docker-compose [va descărca din registry](https://hub.docker.com/repository/docker/snisioi/retele) imaginea corespunzătoare pentru acest laborator. Imaginea se numește retele și are tag-ul 2021, cu versiunea pentru acest an.
 ```bash
-# build the docker image
-docker build -t baseimage -f ./docker/Dockerfile-small .
+cd capitolul0
 # start services defined in docker-compose.yml
 docker-compose up -d
 ```
 
-
-## Comenzi de bază de docker
+## Basic commands
 ```bash
 # list your images
 docker image ls
+# sau
+docker images
 
 # stop services
 docker-compose down
@@ -60,18 +78,8 @@ docker-compose exec rt1 bash
 docker-compose exec --user root rt1 bash
 ```
 
-## Docker References
-- [docker concepts](https://docs.docker.com/engine/docker-overview/#docker-engine)
-- [docker-compose](http://docker-k8s-lab.readthedocs.io/en/latest/docker/docker-compose.html)
-- [Compose Networking](https://runnable.com/docker/docker-compose-networking)
-- [Designing Scalable, Portable Docker Container Networks](https://success.docker.com/article/Docker_Reference_Architecture-_Designing_Scalable,_Portable_Docker_Container_Networks)
-- [Docker Networking Cookbook](https://github.com/TechBookHunter/Free-Docker-Books/blob/2020/book/Docker%20Networking%20Cookbook.pdf)
-- [Packet Crafting with Scapy](http://www.scs.ryerson.ca/~zereneh/cn8001/CN8001-PacketCraftingUsingScapy-WilliamZereneh.pdf)
-
-
 <a name="clean_all"></a> 
-### În prealabil
-Rulați comenzi de docker din https://github.com/senisioi/computer-networks.
+### Remove images and containers
 
 Ștergeți toate containerele create și resetați modificările efectuate în branch-ul local de git.
 ```bash
@@ -80,17 +88,26 @@ docker stop $(docker ps -a -q)
 # pentru a șterge toate containerele
 docker rm $(docker ps -a -q)
 # pentru a șterge toate rețelele care nu au containere alocate
-yes | docker network prune
+docker network prune
+# pentru a șterge containere si imagini
+docker system prune
 
 # pentru a șterge toate imaginile de docker (!!!rulați doar dacă știți ce face)
 docker rmi $(docker images -a -q)
-
-# pentru a suprascrie modificările locale
-git fetch --all
-git reset --hard origin/master
 ```
 
-### NIC - Network Interface Controller (Placa de rețea)
+
+### Docker References
+- [docker concepts](https://docs.docker.com/engine/docker-overview/#docker-engine)
+- [docker-compose](http://docker-k8s-lab.readthedocs.io/en/latest/docker/docker-compose.html)
+- [Compose Networking](https://runnable.com/docker/docker-compose-networking)
+- [Designing Scalable, Portable Docker Container Networks](https://success.docker.com/article/Docker_Reference_Architecture-_Designing_Scalable,_Portable_Docker_Container_Networks)
+- [Docker Networking Cookbook](https://github.com/TechBookHunter/Free-Docker-Books/blob/2020/book/Docker%20Networking%20Cookbook.pdf)
+
+
+
+
+## NIC - Network Interface Controller (Placa de rețea)
 ```bash
 # executați un shell în containerul rt1
 docker-compose exec rt1 bash
@@ -117,7 +134,7 @@ Comanda *ifconfig* ne indică două device-uri care rulează pe containerul *rt1
 - Maximum Transmission Unit [MTU](https://en.wikipedia.org/wiki/Maximum_transmission_unit) dimensiunea în bytes a pachetului maxim
 
 <a name="exercițiu1"></a>
-##### Exercițiu
+### Exercițiu
 Modificați docker-compose.yml pentru a adaugă încă o rețea și încă 3 containere atașate la rețeaua respectivă. Modificați definiția container-ului rt1 pentru a face parte din ambele rețele. 
 Exemplu de rețele:
 ```bash
@@ -202,7 +219,7 @@ RUN mv /usr/sbin/tcpdump /usr/local/bin
 # add the new location to the PATH in case it's not there
 ENV PATH="/usr/local/bin:${PATH}"
 ```
-De asemenea, e posibil ca datorită unor schimbări recente în repository de kali linux, să fie necesară reconstruirea imaginii, altfel nu vor putea fi instalate pachetele necesare. Pentru această operație, trebuie să opriți toate containere, să ștergeți containerele create împreună cu rețelele create (vezi [primele 4 comenzi de la începutul fișierului](https://github.com/senisioi/computer-networks/tree/master/capitolul1#clean_all)). În urma ștergerii imaginilor, trebuie să reconstruim imaginea *baseimage* folosind `docker build -t baseimage ./docker/`.
+De asemenea, e posibil ca datorită unor schimbări recente în repository de kali linux, să fie necesară reconstruirea imaginii, altfel nu vor putea fi instalate pachetele necesare. Pentru această operație, trebuie să opriți toate containere, să ștergeți containerele create împreună cu rețelele create (vezi [primele 4 comenzi de la începutul fișierului](#clean_all)). În urma ștergerii imaginilor, trebuie să reconstruim imaginea *baseimage* folosind `docker build -t baseimage ./docker/`.
 
 Dacă în urma rulării acestei comenzi nu apare nimic, înseamnă că în momentul acesta interfața dată pe containerul respectiv nu execută operații pe rețea. Pentru a vedea ce interfețe (device-uri) putem folosi pentru a capta pachete, putem rula:
 ```bash
@@ -210,7 +227,7 @@ tcpdump -D
 ```
 
 <a name="tcpdump_exer"></a>
-##### Exerciții
+### Exerciții
 1. În containerul rt1 rulați `tcpdump -n`. În containerul rt2 rulați `ping -c 1 rt1`. Ce trasături observați la pachetul ICMP? Ce observați dacă rulați `ping -c 1 -s 2000 rt1`?
 
 2. Rulați aceleasi ping-uri dar acum monitorizați pachetele cu `tcpdump -nvtS`. Ce detalii observați în plus? Dar dacă adăugați opțiunea `tcpdump -nvtSXX`?

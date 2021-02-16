@@ -1,8 +1,8 @@
-version: '2.1'
+version: '3.8'
 
 services:
     rt1:
-        image: snisioi/cap2:latest
+        image: snisioi/retele:2021
         volumes:
             - .:/elocal
         tty: true
@@ -11,7 +11,7 @@ services:
         ports:
          - "8001:8001"
     rt2:
-        image: snisioi/cap2:latest
+        image: snisioi/retele:2021
         volumes:
             - .:/elocal
         tty: true
