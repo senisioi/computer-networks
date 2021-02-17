@@ -7,7 +7,7 @@
   - [Exerciții python](#exercitii_python)
 - [Big Endian (Network Order) vs. Little Endian](#endianness)
 - [Python Bytes as C Types](#ctypes)
-- [Funcțiile sniff și send(p), sr(p), sr(p)1 în scapy](#scapy_sniff)
+- [Funcția sniff și în scapy](#scapy_sniff)
 
 
 <a name="stacks"></a> 
@@ -25,7 +25,7 @@ Stiva TCP IP:
 În cadrul acestui capitol vom lucra cu [python](http://www.bestprogramminglanguagefor.me/why-learn-python), un limbaj de programare simplu pe care îl vom folosi pentru a crea și trimite pachete pe rețea. Pentru debug și autocomplete, este bine să avem un editor și [IDE pentru acest limbaj](https://wiki.python.org/moin/IntegratedDevelopmentEnvironments). În cadrul orelor vom lucra cu [Visual Studio Code](https://code.visualstudio.com/), dar puteți lucra cu orice alt editor. 
 
 <a name="basics"></a> 
-### [python 3 basics](https://www.tutorialspoint.com/python/python_variable_types.htm)
+### [python3 basics](https://www.tutorialspoint.com/python/python_variable_types.htm)
 ```python
 # comment pentru hello world
 variabila = 'hello "world"'
