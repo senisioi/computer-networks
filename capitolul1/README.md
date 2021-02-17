@@ -297,9 +297,13 @@ b'\x00\x01\x00\x00'
 
 
 <a name="scapy_sniff"></a> 
-## Funcțiile sniff și send(p), sr(p), sr(p)1 în scapy
-[scapy](https://github.com/secdev/scapy) este o librărie care acoperă o serie mare de funcționalități ce pot fi implementate programatic. Principalele features sunt cele de creare și manipulare a pachetelor, dar și aceea de a capta pachetele care circulă pe rețea. Pentru a scana pachetele care circulă, similar cu tcpdump, există funcția `sniff`:
+## Funcția sniff în scapy
+[scapy](https://github.com/secdev/scapy) este o librărie care acoperă o serie mare de funcționalități ce pot fi implementate programatic. Principalele features sunt cele de creare și manipulare a pachetelor, dar și aceea de a capta pachetele care circulă pe rețea. Pentru a scana pachetele care circulă, similar cu tcpdump, există funcția `sniff`. Pentru a instala librăria, folosim pipy:
+```bash
+pip install --pre scapy[complete]
+```
 
+Captarea pachetelor se face folosind **sniff**:
 ```python
 pachete = sniff()
 # Trimiteti de pe router un mesaj UDP catre server: sendto(b'salut', ('server', 2222)) 
@@ -337,7 +341,7 @@ pachete[UDP][0].show()
 ```
 
 
-Funcția `sniff()` ne permite să captăm pachete în cod cum am face cu wireshark sau tcpdump. De asemenea putem salva captura de pachete în format .pcap cu tcpdump: 
+Funcția `sniff()` ne permite să captăm pachete în cod, la fel cum am face cu [wireshark](https://www.wireshark.org/) sau tcpdump. De asemenea putem salva captura de pachete în format .pcap cu tcpdump: 
 ```bash
 tcpdump -i any -s 65535 -w example.pcap
 ```
@@ -362,9 +366,9 @@ sniff(prn=handler)
 
 Putem converti și octeții obținuți printr-un socket raw dacă știm care este primul layer (cel mai de jos):
 ```python
-# vezi exemplul de mai sus cu UDP Raw Socket
+# presupunem ca avem octetii corespunzatorui unui pachet UDP in python:
 raw_socket_date = b'E\x00\x00!\xc2\xd2@\x00@\x11\xeb\xe1\xc6\n\x00\x01\xc6\n\x00\x02\x08\xae\t\x1a\x00\r\x8c6salut'
-# dacă am fi avut un raw_socket care citește și header ehternet, ar fi trebuit să folosim și 
+
 pachet = IP(raw_socket_date)
 pachet.show()
 ###[ IP ]### 
@@ -389,15 +393,4 @@ pachet.show()
 ###[ Raw ]### 
         load= 'salut'
 ```
-
-
-În scapy avem mai multe funcții de trimitere a pachetelor:
-- `send()` - trimite un pachet pe rețea la nivelul network (layer 3), iar secțiunea de ethernet este completată de către sistem
-- `answered, unanswered = sr()` - send_receive - trimite pachete pe rețea în loop și înregistrează și răspunsurile primite într-un tuplu (answered, unanswered), unde answered și unanswered reprezintă o listă de tupluri [(pachet_trimis1, răspuns_primit1), ...,(pachet_trimis100, răspuns_primit100)] 
-- `answer = sr1()` - send_receive_1 - trimite pe rețea un pachet și înregistrează primul răspunsul
-
-Pentru a trimite pachete la nivelul legatură de date (layer 2), completând manual câmpuri din secțiunea Ethernet, avem echivalentul funcțiilor de mai sus:
-- `sendp()` - send_ethernet trimite un pachet la nivelul data-link, cu layer Ether custom
-- `answered, unanswered = srp()` - send_receive_ethernet trimite pachete la layer 2 și înregistrează răspunsurile
-- `answer = srp1()` - send_receive_1_ethernet la fel ca srp, dar înregistreazî doar primul răspuns
 

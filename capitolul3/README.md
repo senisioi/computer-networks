@@ -2,6 +2,7 @@
 
 ## Cuprins
 - [Introducere](#intro)
+- [Funcțiile send(p), sr(p), sr(p)1 în scapy](#scapy_send)
 - [UDP Datagram](#udp)
   - [Exemplu de calcul pentru checksum](#checksum)
   - [UDP Socket](#udp_socket)
@@ -55,6 +56,22 @@ subnet2: 198.10.0.2      subnet1: 172.10.0.1      subnet1: 172.10.0.2
                          subnet1 <-> subnet2
                              forwarding
 ```
+
+
+
+
+<a name="scapy_send"></a> 
+## Funcțiile send(p), sr(p), sr(p)1 în scapy
+
+În scapy avem mai multe funcții de trimitere a pachetelor:
+- `send()` - trimite un pachet pe rețea la nivelul network (layer 3), iar secțiunea de ethernet este completată de către sistem
+- `answered, unanswered = sr()` - send_receive - trimite pachete pe rețea în loop și înregistrează și răspunsurile primite într-un tuplu (answered, unanswered), unde answered și unanswered reprezintă o listă de tupluri [(pachet_trimis1, răspuns_primit1), ...,(pachet_trimis100, răspuns_primit100)] 
+- `answer = sr1()` - send_receive_1 - trimite pe rețea un pachet și înregistrează primul răspunsul
+
+Pentru a trimite pachete la nivelul legatură de date (layer 2), completând manual câmpuri din secțiunea Ethernet, avem echivalentul funcțiilor de mai sus:
+- `sendp()` - send_ethernet trimite un pachet la nivelul data-link, cu layer Ether custom
+- `answered, unanswered = srp()` - send_receive_ethernet trimite pachete la layer 2 și înregistrează răspunsurile
+- `answer = srp1()` - send_receive_1_ethernet la fel ca srp, dar înregistreazî doar primul răspuns
 
 
 
@@ -217,6 +234,10 @@ udp_obj.show()
   len= None
   chksum= None
 
+network_layer = IP(dst='adresa_server')
+pachet = network_layer / udp_obj
+
+send(pachet)
 ```
 
 
@@ -441,6 +462,7 @@ IndexError: index out of range
 
 <a name="tcp_scapy"></a> 
 ### TCP object in scapy:
+Un exemplu de handshake se afla în `src/examples/tcp_handshake.py` din cadrul acestui capitol.
 ```python
 tcp_obj = TCP()
 tcp_obj.show()
