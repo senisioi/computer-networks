@@ -3,6 +3,7 @@
 ## Cuprins
 - [Network Stacks](#stacks)
 - [Introducere și IDE](#intro)
+  - [utils](#utils)
   - [python3 basics](#basics)
   - [Exerciții python](#exercitii_python)
 - [Big Endian (Network Order) vs. Little Endian](#endianness)
@@ -19,6 +20,60 @@ Stiva TCP IP:
 ![alt text](https://raw.githubusercontent.com/senisioi/computer-networks/2020/capitolul3/layers.jpg)
 
 
+<a name="utils"></a>
+## netcat
+netcat este un utilitar de retea folosit pentru a trimite/citi mesaje pe conexiuni. Exemplul urmator este pentru a simula o comunicare de baza server / client.
+Se instaleaza folosind `[sudo] apt-get install netcat`.
+
+### Server
+`nc -l 8081`
+
+Aceasta comanda va deschide un socket pe portul 8081 si asculta pentru noi conexiuni.
+Noul proces se poate vedea folosind comanda `lsof -i -P | grep LISTEN` avand un output asemanator cu acesta: 
+```
+nc      2527 ubuntu    3u  IPv4  69208      0t0  TCP *:8081 (LISTEN)
+```
+Ni se specifica numele executabilului, process ID-ul iar in final protocolul de la nivelul transport si port-ul pe care asculta.
+
+### Client
+`echo "salut" | nc 127.0.0.1 8080`
+Clientul va trimite folosind un pipe "|" (o metoda de a redirectiona output-ul unui proces catre input-ul altui proces in linux) mesajul "salut" catre ip-ul de loopback pe portul pe care ruleaza si serverul. In terminalul in care ruleaza serverul vom observa ca acesta a primit mesajul.
+
+
+## traceroute
+Este un utilitar pentru a vizualiza drumul pe care un pachet il parcurge pentru a ajunge la destinatie si a descoperi eventualele intarzieri. 
+Se foloseste dand ca input un domeniu
+```
+ubuntu@ubun2004:~$ traceroute www.google.ro
+traceroute to www.google.ro (142.250.185.163), 30 hops max, 60 byte packets
+ 1  _gateway (192.168.13.2)  0.399 ms  0.366 ms  0.328 ms
+ 2  192.168.100.2 (192.168.100.2)  0.667 ms  0.644 ms  0.820 ms
+ 3  StamAcasa.rdsnet.ro (10.0.0.1)  2.802 ms  2.782 ms  2.749 ms
+ 4  TotulVaFiBine.rdsnet.ro (172.19.211.1)  4.249 ms  4.229 ms  4.217 ms
+ 5  10.220.153.20 (10.220.153.20)  19.676 ms * *
+ 6  72.14.216.212 (72.14.216.212)  19.615 ms  19.753 ms  17.989 ms
+ 7  * 74.125.242.227 (74.125.242.227)  17.081 ms 10.23.192.126 (10.23.192.126)  19.847 ms
+ 8  216.239.41.57 (216.239.41.57)  32.737 ms  32.715 ms 72.14.233.180 (72.14.233.180)  17.316 ms
+ 9  108.170.226.2 (108.170.226.2)  33.542 ms  33.990 ms  33.970 ms
+10  108.170.251.193 (108.170.251.193)  36.129 ms * 108.170.236.247 (108.170.236.247)  31.870 ms
+11  209.85.252.215 (209.85.252.215)  32.228 ms 142.250.210.197 (142.250.210.197)  33.306 ms 142.250.210.209 (142.250.210.209)  32.633 ms
+12  108.170.252.65 (108.170.252.65)  34.098 ms fra16s51-in-f3.1e100.net (142.250.185.163)  31.214 ms 108.170.252.65 (108.170.252.65)  32.272 ms
+``` 
+Mesajele trec prin mai multe routere sau servere chiar daca totul se intampla foarte repede. Internetul este format dintr-o multime de retele interconectate intre ele prin routere care stiu sa ghideze pachetele dupa IP destinatie.
+
+## Adresele IP
+
+O adresa IP este compusa din 4 campuri a cate un byte de exemplu `192.168.5.1` avand reprezentarea binara `11000000.10100100.00000101.00000001`. Fiecare retea, fie ea publica sau privata, are o adresa de retea si o masca care desparte un IP intr-un prefix de retea si un sufix de host. Se noteaza `192.168.5.0/24` si inseamana ca primii 24 de biti din IP sunt fixi iar ceilalti poti fi folositi pentru a atribui IP-uri dispozitivelor din retea. Retaua aceasta are urmatorul range `192.168.5.1 - 192.168.5.255` 
+Masca poate fi reprezentata si de forma unei adrese IP dupa urmatoarea regula: toti bitii fixi au valoarea 1, restul au valoarea 0. Masca de 24 ar avea reprezentarea binara `11111111.11111111.11111111.00000000` si in format human readable `255.255.255.0`.
+
+### Exercitii
+- Care este intervalul de IP-uri al adresei de retea `64.183.234.9/15`
+- Cate IP-uri pot fi atribuite in reteaua `192.168.0.0/16`
+- Care este ultimul IP din reteaua `164.88.24.37/29`
+
+### Observatii
+- Utlimul IP din orice retea este cel de broadcast
+- IP-ul retelei nu poate fi atribuit
 
 <a name="intro"></a> 
 ## Introducere și IDE
