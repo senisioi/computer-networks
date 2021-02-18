@@ -157,9 +157,9 @@ def verifica(a, b):
     ''' aceasta functie verifica
     o ipoteza interesanta
     '''
-    if (x == 1 and y == 2) or (x==2 and y == 1):
+    if (a == 1 and b == 2) or (a==2 and b == 1):
         return 1
-    elif x == y:
+    elif a == b:
         return 0
     return -1
 ```
