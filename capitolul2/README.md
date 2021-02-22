@@ -19,7 +19,7 @@
 În cadrul acestui capitol folosim orchestratia de containere definită [aici](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/docker-compose.yml). Pentru a rula această orchestrație, este suficient să executăm:
 ```bash
 cd computer-networks/capitolul2
-yes | docker network prune
+docker network prune
 docker-compose up -d
 ```
 
@@ -28,23 +28,59 @@ docker-compose up -d
 
 Folosim DNS pentru a afla IP-urile corespunzătoare numelor. În general numele sunt ([Fully Qualified Domain Names](https://kb.iu.edu/d/aiuv)) salvate cu [un punct în plus la sfârșit](https://stackexchange.github.io/dnscontrol/why-the-dot).
 
-- [DNS și DNS over HTTPS](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/). 
+- [DNS și DNS over HTTPS cartoon](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/). 
 - [DNS server types](https://www.cloudflare.com/learning/dns/dns-server-types/)
 - [DNSSEC](https://www.cloudflare.com/dns/dnssec/how-dnssec-works/)
 
 
-În linux există aplicația `dig` cu care putem interoga entries de DNS:
+În linux și macOS există aplicația `dig` cu care putem interoga entries de DNS:
 ```bash
-# request-uri iterative pentru a afla fmi.unibuc.ro
+#1. cele 12 root servers de DNS:
+dig 
+;; ANSWER SECTION:
+.     18942 IN  NS  m.root-servers.net.
+.     18942 IN  NS  a.root-servers.net.
+.     18942 IN  NS  b.root-servers.net.
+.     18942 IN  NS  c.root-servers.net.
+.     18942 IN  NS  d.root-servers.net.
+.     18942 IN  NS  e.root-servers.net.
+.     18942 IN  NS  f.root-servers.net.
+.     18942 IN  NS  g.root-servers.net.
+.     18942 IN  NS  h.root-servers.net.
+.     18942 IN  NS  i.root-servers.net.
+.     18942 IN  NS  j.root-servers.net.
+.     18942 IN  NS  k.root-servers.net.
+.     18942 IN  NS  l.root-servers.net.
+
+#2. facem request-uri iterative pentru a afla adresa IP corespunzatoare lui fmi.unibuc.ro
 dig @a.root-servers.net fmi.unibuc.ro
+
+;; AUTHORITY SECTION:
+ro.     172800  IN  NS  sec-dns-b.rotld.ro.
+ro.     172800  IN  NS  dns-c.rotld.ro.
+ro.     172800  IN  NS  dns-at.rotld.ro.
+ro.     172800  IN  NS  dns-ro.denic.de.
+ro.     172800  IN  NS  primary.rotld.ro.
+ro.     172800  IN  NS  sec-dns-a.rotld.ro.
+
+#3. interogam un nameserver responsabil de top-level domain .ro
 dig @sec-dns-b.rotld.ro fmi.unibuc.ro
 
+;; QUESTION SECTION:
+fmi.unibuc.ro.     IN  A
+
+;; AUTHORITY SECTION:
+unibuc.ro.    86400 IN  NS  ns.unibuc.ro.
+
+;; ADDITIONAL SECTION:
+ns.unibuc.ro.   86400 IN  A 80.96.21.3
+
+
 #am aflat de la @sec-dns-b.rotld.ro ca ns.unibuc.ro se gaseste la adresa: 80.96.21.3
-mesaj = "hey ns.unibuc.ro, care este numele pentru fmi.unibuc.ro?"
-#mesaj catre:
+#4. trimitem un ultim mesaj:
+mesaj = "hey, ns.unibuc.ro, care este adresa IP pentru numele fmi.unibuc.ro?"
 IP dst:  80.96.21.3 (ns.unibuc.ro)
 PORT dst: aplicația de pe portul: 53 - constanta magică (vezi IANA și ICANN)
-
 
 #cand fac cererea, deschid un port temporar (47632)
 #pentru a primi inapoi raspunsul DNS destinat aplicatiei care a făcut cererea
@@ -93,7 +129,7 @@ Protocolul pentru DNS lucrează la nivelul aplicației și este standardizat pen
 
 <a name="https"></a>
 ## HTTP/S requests
-Intrati in  browser si apasati tasta F12. Accesati pagina http://fmi.unibuc.ro/ro si urmariti in tabul Network
+Intrati in  browser si apasati tasta F12. Accesati pagina https://fmi.unibuc.ro si urmariti in tabul Network
 request-urile HTTP.
 - Protocolul [HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
 - [Metode HTTP](http://httpbin.org/#/HTTP_Methods)
@@ -113,7 +149,7 @@ headers = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.79 Safari/537.36"
 }
 
-response = requests.get('http://fmi.unibuc.ro/ro', headers=headers)
+response = requests.get('https://fmi.unibuc.ro', headers=headers)
 print (response.text[:200])
 
 # proceseaza continutul html
