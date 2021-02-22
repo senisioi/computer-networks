@@ -107,46 +107,9 @@ ping router
 <a name="scapy_dns"></a> 
 ### [Domain Name System](https://dnsmonitor.com/dns-tutorial-1-the-basics/)
 
-Aici puteți găsi ilustrate informații despre [DNS și DNS over HTTPS](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/). 
-În general, numele care corespund unui server ([Fully Qualified Domain Names](https://kb.iu.edu/d/aiuv)) sunt salvate cu [un punct în plus la sfârșit](https://stackexchange.github.io/dnscontrol/why-the-dot).
-În linux există aplicația `dig` cu care putem interoga entries de DNS:
-```bash
-# interogam serverul 8.8.8.8 pentur a afla la ce IP este fmi.unibuc.ro
-dig @8.8.8.8 fmi.unibuc.ro
+DNS este un protocol la nivelul aplicației care este standardizat pentru UDP, port 53. Acesta se bazează pe request-response iar în cazul în care nu se primesc răspunsuri după un număr de reîncercări (de multe ori 2), programul anunță că nu poate găsi IP-ul pentru hostname-ul cerut ("can't resolve"). Headerul protocolului [este definit aici](http://www.networksorcery.com/enp/protocol/dns.htm).
 
-; <<>> DiG 9.10.3-P4-Ubuntu <<>> @8.8.8.8 fmi.unibuc.ro
-; (1 server found)
-;; global options: +cmd
-;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 16808
-;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
 
-;; OPT PSEUDOSECTION:
-; EDNS: version: 0, flags:; udp: 512
-;; QUESTION SECTION:
-;fmi.unibuc.ro.         IN  A
-
-;; ANSWER SECTION:
-fmi.unibuc.ro.      12925   IN  A   193.226.51.15
-
-;; Query time: 39 msec
-;; SERVER: 8.8.8.8#53(8.8.8.8)
-;; WHEN: Wed May 13 13:29:13 EEST 2020
-;; MSG SIZE  rcvd: 58
-
-```
-DNS stochează nu doar informații despre IP-ul corespunzător unui hostname, ci există mai multe tipuri de intrări ([record types](https://ns1.com/resources/dns-types-records-servers-and-queries)) în baza de date:
-
-- A record / Address Mapping - stochează perechi de NUME - IPv4
-- AAAA Record - similar cu A, pentru adrese IPv6
-- CNAME / Canonical Name - are rolul de a face un alias între un hostname existent și un alt hostname, ex: nlp.unibuc.ro -> nlp-unibuc.github.io
-- MX / Mail Exchanger - spcifică server de email SMTP pentru domeniu, încercați `dig @8.8.8.8 fmi.unibuc.ro MX`
-- NS / Name Server - specifică ce Authoritative Name Server este responabil pentru o anumită zonă de DNS (ex., pentru fmi.unibuc.ro este ns1.fmi.unibuc.ro), încercați `dig @8.8.8.8 fmi.unibuc.ro NS`
-- PTR / Reverse-lookup Pointer - permite interogarea in functie de IP pentru a afla numele
-- TXT / Text data - conține informații care pot fi procesate de alte servicii, `dig @8.8.8.8 fmi.unibuc.ro TXT`
-- SOA / Start of Authority - conține informații despre autoritatea care se ocupă de acest nume
-
-Protocolul pentru DNS lucrează la nivelul aplicației și este standardizat pentru UDP, port 53. Acesta se bazează pe request-response iar în cazul în care nu se primesc răspunsuri după un număr de reîncercări (de multe ori 2), programul anunță că nu poate găsi IP-ul pentru hostname-ul cerut ("can'r resolve"). Headerul protocolului [este definit aici](http://www.networksorcery.com/enp/protocol/dns.htm).
 
 <a name="scapy_dns_request"></a> 
 #### Exemplu DNS request
