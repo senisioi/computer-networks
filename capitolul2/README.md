@@ -45,8 +45,9 @@ mesaj = "hey ns.unibuc.ro, care este numele pentru fmi.unibuc.ro?"
 IP dst:  80.96.21.3 (ns.unibuc.ro)
 PORT dst: aplicația de pe portul: 53 - constanta magică (vezi IANA și ICANN)
 
+
 #cand fac cererea, deschid un port temporar (47632)
-#pentru a primi inapoi raspunsul catre aplicatia care a deschis portul
+#pentru a primi inapoi raspunsul DNS destinat aplicatiei care a făcut cererea
 ```
 
 Interogări către serverul DNS 8.8.8.8 de la google.
