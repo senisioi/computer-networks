@@ -33,7 +33,7 @@ Folosim DNS pentru a afla IP-urile corespunzătoare numelor. În general numele 
 - [DNSSEC](https://www.cloudflare.com/dns/dnssec/how-dnssec-works/)
 
 
-În linux și macOS există aplicația `dig` cu care putem interoga entries de DNS:
+În linux și macOS există aplicația `dig` cu care putem interoga entries de DNS. Puteți rula aceleași exemple dintr-un container docker `docker-compose exec rt1 bash`. 
 ```bash
 #1. cele 12 root servers de DNS:
 dig 
