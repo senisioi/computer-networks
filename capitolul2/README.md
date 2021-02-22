@@ -26,9 +26,30 @@ docker-compose up -d
 <a name="dns"></a> 
 ## [Domain Name System](https://dnsmonitor.com/dns-tutorial-1-the-basics/)
 
-Aici puteți găsi ilustrate informații despre [DNS și DNS over HTTPS](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/). 
-În general, numele care corespund unui server ([Fully Qualified Domain Names](https://kb.iu.edu/d/aiuv)) sunt salvate cu [un punct în plus la sfârșit](https://stackexchange.github.io/dnscontrol/why-the-dot).
+Folosim DNS pentru a afla IP-urile corespunzătoare numelor. În general numele sunt ([Fully Qualified Domain Names](https://kb.iu.edu/d/aiuv)) salvate cu [un punct în plus la sfârșit](https://stackexchange.github.io/dnscontrol/why-the-dot).
+
+- [DNS și DNS over HTTPS](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/). 
+- [DNS server types](https://www.cloudflare.com/learning/dns/dns-server-types/)
+- [DNSSEC](https://www.icann.org/resources/pages/dnssec-what-is-it-why-important-2019-03-05-en)
+
+
 În linux există aplicația `dig` cu care putem interoga entries de DNS:
+```bash
+# request-uri iterative pentru a afla fmi.unibuc.ro
+dig @a.root-servers.net fmi.unibuc.ro
+dig @sec-dns-b.rotld.ro fmi.unibuc.ro
+
+#am aflat de la @sec-dns-b.rotld.ro ca ns.unibuc.ro se gaseste la adresa: 80.96.21.3
+mesaj = "hey ns.unibuc.ro, care este numele pentru fmi.unibuc.ro?"
+#mesaj catre:
+IP dst:  80.96.21.3 (ns.unibuc.ro)
+PORT dst: aplicația de pe portul: 53 - constanta magică (vezi IANA și ICANN)
+
+#cand fac cererea, deschid un port temporar (47632)
+#pentru a primi inapoi raspunsul catre aplicatia care a deschis portul
+```
+
+Interogări către serverul DNS 8.8.8.8 de la google.
 ```bash
 # interogam serverul 8.8.8.8 pentur a afla la ce IP este fmi.unibuc.ro
 dig @8.8.8.8 fmi.unibuc.ro
