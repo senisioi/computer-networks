@@ -30,7 +30,7 @@ Folosim DNS pentru a afla IP-urile corespunzătoare numelor. În general numele 
 
 - [DNS și DNS over HTTPS](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/). 
 - [DNS server types](https://www.cloudflare.com/learning/dns/dns-server-types/)
-- [DNSSEC](https://www.icann.org/resources/pages/dnssec-what-is-it-why-important-2019-03-05-en)
+- [DNSSEC](https://www.cloudflare.com/dns/dnssec/how-dnssec-works/)
 
 
 În linux există aplicația `dig` cu care putem interoga entries de DNS:
