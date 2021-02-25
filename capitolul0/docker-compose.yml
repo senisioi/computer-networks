@@ -2,21 +2,21 @@ version: '2.1'
 
 services:
     rt1:
-        image: baseimage:latest
+        image: snisioi/retele:2021
         volumes:
             - .:/elocal
         tty: true
         networks:
             - dmz
     rt2:
-        image: baseimage:latest
+        image: snisioi/retele:2021
         volumes:
             - .:/elocal
         tty: true
         networks:
             - dmz
     rt3:
-        image: baseimage:latest
+        image: snisioi/retele:2021
         volumes:
             - .:/elocal
         tty: true
