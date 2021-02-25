@@ -4,6 +4,13 @@
 ## Introducere Docker
 Un container (sau serviciu) docker poate fi pornit (în mod asemănător cu o mașină virtuală) cu o imagine cu un sistem de operare. Un container seamănă mai mult cu un **proces** decât cu o mașină virtuală. Acesta nu emulează componente hardware, ci execută apeluri sistem cu dependințele necesare rulării unei aplicații. 
 
+Microservices vs monolithic architecture:
+![alt text](https://avinetworks.com/wp-content/uploads/2018/06/Microservices-vs-monolithic-architecture-diagram.png)
+([img credits](https://avinetworks.com/glossary/microservice/))
+
+Containerization:
+![alt text](https://dev-to-uploads.s3.amazonaws.com/i/0id6ytmfmyyem6j4t62j.png)([img credits](https://www.youtube.com/watch?v=TvnZTi_gaNc))
+
 ### Building a docker image
 Pentru a construi imaginea explicit, putem folosi [docker build](https://docs.docker.com/engine/reference/commandline/build/). Comanda build utilizează fișierul [./docker/Dockerfile]() care definește ce sistem de operare va fi utilizat de container, ce aplicații vor fi pre-instalate și ce useri vor exista pe containerele care rulează acea imagine.
 ```bash
