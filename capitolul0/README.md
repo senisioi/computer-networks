@@ -204,22 +204,9 @@ De multe ori răspunsurile la ping [sunt dezactivate](https://superuser.com/ques
 <a name="tcpdump_install"></a>
 ###  tcpdump
 Este un tool care vă permite monitorizarea traficului de pe containerul/mașina pe care vă aflați. Vom folosi *tcpdump* pentru a monitoriza traficul generat de comanda ping. Pentru a rula tcpdump, trebuie să ne atașam unui container cu user **root** apoi putem rula:
-
 ```bash
-tcpdump
+tcpdump -Sntv
 ```
-Dacă tcpdump nu există ca aplicație, va trebui să modificați fișierul *Dockerfile* pentru a adaugă comanda de instalare a acestei aplicații. Reconstruiți imaginea folosind comanda docker build, distrugeți și reconstruiți containerele folosind `docker-compose down` și `docker-compose up -d`. Din cauza unui [bug de docker](https://github.com/moby/moby/issues/14140) e posibil ca această comandă să nu funcționeze imediat după instalare, afisând eroarea:
-```bash
-tcpdump: error while loading shared libraries: libcrypto.so.1.0.0: cannot open shared object file: Permission denied
-```
-Pentru a remedia această eroare, trebuie să adăugați în Dockerfile:
-```bash
-# move tcpdump from the default location to /usr/local
-RUN mv /usr/sbin/tcpdump /usr/local/bin
-# add the new location to the PATH in case it's not there
-ENV PATH="/usr/local/bin:${PATH}"
-```
-De asemenea, e posibil ca datorită unor schimbări recente în repository de kali linux, să fie necesară reconstruirea imaginii, altfel nu vor putea fi instalate pachetele necesare. Pentru această operație, trebuie să opriți toate containere, să ștergeți containerele create împreună cu rețelele create (vezi [primele 4 comenzi de la începutul fișierului](#clean_all)). În urma ștergerii imaginilor, trebuie să reconstruim imaginea *baseimage* folosind `docker build -t baseimage ./docker/`.
 
 Dacă în urma rulării acestei comenzi nu apare nimic, înseamnă că în momentul acesta interfața dată pe containerul respectiv nu execută operații pe rețea. Pentru a vedea ce interfețe (device-uri) putem folosi pentru a capta pachete, putem rula:
 ```bash
