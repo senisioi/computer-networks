@@ -176,6 +176,9 @@ ping 127.0.2.12
 # ping neighbour from network dmz
 ping 172.111.0.3
 
+# ping broadcast from network dmz
+ping -b 172.111.255.255
+
 # ping neighbour from network net
 ping 198.13.13.1
 ```
@@ -194,7 +197,7 @@ ping 198.13.13.1
 
 6. Folosiți opțiunea `-s 1000` pentru a schimba dimensiunea pachetului ICMP
 
-7. Reporniți toate containerele. Cum arată rezultatele pentru `ping -M do -s 30000 172.111.0.4` și pentru `ping -M do -s 30000 172.111.0.4`. Care este diferenta dintre cele două? Care este rezultatul dacă selectați dimensiunea 1500?
+7. Reporniți toate containerele. Cum arată rezultatele pentru `ping -M do -s 30000 172.111.0.4`? Care este rezultatul dacă selectați dimensiunea 1500?
 
 8. Opțiunea `-f` este folosită pentru a face un flood de ping-uri.  Rulați un shell cu user root, apoi `ping -f 172.111.0.4`. Separat, într-un alt terminal rulați `docker stats`. Ce observați?
 
