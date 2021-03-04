@@ -58,7 +58,7 @@ traceroute to www.google.ro (142.250.185.163), 30 hops max, 60 byte packets
 10  108.170.251.193 (108.170.251.193)  36.129 ms * 108.170.236.247 (108.170.236.247)  31.870 ms
 11  209.85.252.215 (209.85.252.215)  32.228 ms 142.250.210.197 (142.250.210.197)  33.306 ms 142.250.210.209 (142.250.210.209)  32.633 ms
 12  108.170.252.65 (108.170.252.65)  34.098 ms fra16s51-in-f3.1e100.net (142.250.185.163)  31.214 ms 108.170.252.65 (108.170.252.65)  32.272 ms
-``` 
+```
 Mesajele trec prin mai multe routere sau servere chiar daca totul se intampla foarte repede. Internetul este format dintr-o multime de retele interconectate intre ele prin routere care stiu sa ghideze pachetele dupa IP destinatie.
 
 ## Adresele IP
@@ -200,7 +200,7 @@ def main():
 # un if care verifică dacă scriptul este importat sau apelat ca main
 if __name__ == '__main__':
     main()
- ```
+```
 
 #### [clase](https://www.tutorialspoint.com/python/python_classes_objects.htm)
 ```python
@@ -208,7 +208,7 @@ class Grupa:
     nume = 'grp'
     def __init__(self, nume, numar_studenti):
         self.nume = nume
-        self.numar_student = numar_studenti
+        self.numar_studenti = numar_studenti
     def _metoda_protected(self):
         print ("da")
     def __metoda_privata(self):
@@ -220,7 +220,7 @@ class Grupa:
 g = Grupa('222', '21')
 print (g.nume)
 print (g.numar_studenti)
-print (G.nume)
+print (Grupa.nume)
 ```
 
 <a name="exercitii_python"></a>
