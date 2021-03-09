@@ -296,12 +296,32 @@ definit [aici](https://tools.ietf.org/html/rfc2018#page-3) permite trimiterea un
 
 <a name="tcp_retransmission"></a>
 ### Exercițiu TCP Retransmission
-TCP este un protocol care oferă siguranța transmiterii pachetelor, în cazul în care un stream de octeți este trimis, se așteaptă o confirmare pentru acea secvență de bytes. Dacă confirmarea nu este primită se încearcă retransmiterea. Pentru a observa retransmisiile, putem introduce un delay artificial sau putem ignora anumite pachete pe rețea. Folosim un tool linux numit [netem](https://wiki.linuxfoundation.org/networking/netem) sau mai pe scurt [aici](https://stackoverflow.com/questions/614795/simulate-delayed-and-dropped-packets-on-linux).
+TCP este un protocol care oferă siguranța transmiterii pachetelor, în cazul în care un stream de octeți este trimis, se așteaptă o confirmare pentru acea secvență de bytes. Dacă confirmarea nu este primită se încearcă retransmiterea. Pentru a observa retransmisiile, putem introduce un delay artificial sau putem ignora anumite pachete pe rețea. Folosim un tool linux numit [netem](https://www.cs.unm.edu/~crandall/netsfall13/TCtutorial.pdf), un tutorial este disponibil si [aici](https://www.excentis.com/blog/use-linux-traffic-control-impairment-node-test-environment-part-2).
 
-În containerul router, în [docker-compose.yml](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/docker-compose.yml) este commented comanda pentru [/drop_packages.sh](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/src/drop_packages.sh). Fisierul respectiv este copiat în directorul root `/` in container prin comanda `COPY src/*.sh /` din Dockerfile-lab3. 
-Prin scriptul comentat, routerul poate fi programat să renunțe la pachete cu o probabilitate de 50%: `tc qdisc add dev eth0 root netem loss 50% && tc qdisc add dev eth1 root netem loss 50%`. Puteți folosi această setare dacă doriți să verificați retransmiterea mesajelor în cazul TCP.
+Exemple netem:
+```bash
+# tc qdisc add/change/show/del
+# introduce between 5% and 25% loss on eht0 interface
+tc qdisc add dev eth0 root netem loss 5% 25%
+# package corruption 5% probability on eth1 interface
+tc qdisc add dev eth1 root netem corrupt 5%
+# reorder packages on eth0 interface
+tc qdisc add dev eth0 root netem reorder 25% 50%
+# at a 10ms delay on eth1 interface
+tc qdisc add dev eth1 root netem delay 10ms
+# clean everything
+tc qdisc del dev eth0 root
 
-Porniți TCP Server și TCP Client în containerul server, respectiv client și executați schimburi de mesaje. Cu `tcpdump -Sntv -i any tcp` în containerul router puteți observa retransmiterile segmentelor.
+# to add multiple constraits, make a single command
+tc qdisc add dev eth0 root netem loss 5% 25% corrupt 5% reorder 25% 50% delay 10ms
+```
+
+În containerul router, în [docker-compose.yml](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/docker-compose.yml) exista o `command` care inițializează containerul router și care rulează `sleep infinity`. 
+`router.sh` este copiat în directorul root `/` in container prin comanda `COPY src/*.sh /` din Dockerfile-lab3, deci modificarea lui locală nu afectează fișierul din container.
+
+Introduceți în elocal un shell script `alter_packages.sh` care să execute comenzi de netem pe interfețele eth0 și eth1. Rulați-l în cadrul command după inițializarea routerului, dar înainte de sleep infinity.
+
+Porniți TCP Server și TCP Client în containerul server, respectiv client și executați schimburi de mesaje. Cu `tcpdump -Sntv -i any tcp` sau cu Wireshark observați comportamentul protocolului TCP. Încercați diferite valori în netem.
 
 <a name="#tcp_socket"></a> 
 ### Socket TCP

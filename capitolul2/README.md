@@ -155,11 +155,10 @@ print (response.text[:200])
 # proceseaza continutul html
 supa = BeautifulSoup(response.text)
 
-# cauta div cu class cst2
-div = supa.find('div', {'class': 'cst2'})
-paragraph = div.find('p')
+# cauta lista cu clasa ultimeleor postari
+div = supa.find('ul', {'class': 'wp-block-latest-posts__list'})
 
-print (paragraph.text)
+print(div.text)
 ```
 
 <a name="doh"></a>
@@ -281,18 +280,20 @@ server_address = (adresa, port)
 În python3, un string nu poate fi trimis prin socket decât dacă este convertit în șir de octeți.
 Conversia se poate face fie prin alegerea unei [codificări](http://kunststube.net/encoding/):
 ```python
-mesaj = "salut de la client cu țășîâ"
+mesaj = "salut de la client, 你好"
+print(type(mesaj))
 # encoding utf-16
 octeti = mesaj.encode('utf-16')
 print (octeti)
+print(type(octeti))
 ```
 În linux codificarea default este UTF-8, un format în care unitățile de reprezentare a caracterelor sunt formate din 8 biți. Pentru a printa literele în terminal ar fi bine să folosim UTF-8. Caracterele ASCII putem să le convertim în bytes punând litera `b` în față:
 ```python
-octeti = b"salut de la client cu" # nu merg caracterele 'țășîâ'
+octeti = b"salut de la client cu" # nu merg caractere non-ascii 'țășîâ'
 # apelam string encode
-octeti = octeti + "țăș".encode('utf-8')
+octeti = octeti + "你好".encode('utf-8')
 # sau apelam constructorul de bytes cu un encoding
-octeti = octeti + bytes("îâ", 'utf-8')
+octeti = octeti + bytes("你好", 'utf-8')
 print (octeti)
 ```
 

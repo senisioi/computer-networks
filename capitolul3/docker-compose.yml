@@ -1,10 +1,10 @@
-version: '2.1'
+version: '3.8'
 
 services:
     server:
         build:
             context: .
-            dockerfile: docker/Dockerfile-lab3
+            dockerfile: docker/Dockerfile-chap3
         privileged: true
         volumes:
             - ..:/elocal
@@ -22,7 +22,7 @@ services:
     middle:
         build:
             context: .
-            dockerfile: docker/Dockerfile-lab3
+            dockerfile: docker/Dockerfile-chap3
         volumes:
             - ..:/elocal
         tty: true
@@ -41,7 +41,7 @@ services:
     router:
         build:
             context: .
-            dockerfile: docker/Dockerfile-lab3
+            dockerfile: docker/Dockerfile-chap3
         volumes:
             - ..:/elocal
         tty: true
@@ -60,7 +60,7 @@ services:
     client:
         build:
             context: .
-            dockerfile: docker/Dockerfile-lab3
+            dockerfile: docker/Dockerfile-chap3
         volumes:
             - ..:/elocal
         tty: true
