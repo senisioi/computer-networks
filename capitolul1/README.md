@@ -359,6 +359,12 @@ print(octeti)
 valori = struct.unpack('!IcI', octeti)
 print(valori)
 # (12, b'+', 13)
+
+# Atentie!
+# accesarea unui singur octet returneaza valoarea lui ca numar
+print(octeti[4]) # 43 echivalent cu codul ascii pt '+'
+# slicing returneaza stringul de bytes
+print(octeti[4:5]) # b'+' echivalent cu codul ascii pt '+'
 ```
 
 
