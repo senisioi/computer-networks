@@ -348,6 +348,17 @@ b'\x00\x00\x01\x00'
 # numarul 256 packed in LittleEndian pe 64 de biti
 struct.pack('<L', 256)
 b'\x00\x01\x00\x00'
+
+
+operator = '+'.encode('utf-8')
+# encode 12+13 as byte string
+# 32-bit network order integers and 1 byte-char operator
+octeti = struct.pack('!IcI', 12, operator, 13)
+print(octeti)
+# b'\x00\x00\x00\x0c+\x00\x00\x00\r'
+valori = struct.unpack('!IcI', octeti)
+print(valori)
+# (12, b'+', 13)
 ```
 
 
