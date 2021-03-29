@@ -18,6 +18,8 @@ services:
               ipv4_address: 198.10.0.2
         depends_on:
             - "router"
+        sysctls:
+          - net.ipv4.tcp_congestion_control=reno
         command: bash -c "/elocal/capitolul3/src/server.sh && sleep infinity"
     middle:
         build:
@@ -37,6 +39,7 @@ services:
             - "router"
         sysctls:
           - net.ipv4.ip_forward=1
+          - net.ipv4.tcp_congestion_control=reno
         command: bash -c "/elocal/capitolul3/src/middle.sh && sleep infinity"
     router:
         build:
@@ -56,6 +59,7 @@ services:
               ipv4_address: 198.10.0.1
         sysctls:
           - net.ipv4.ip_forward=1
+          - net.ipv4.tcp_congestion_control=reno
         command: bash -c "/elocal/capitolul3/src/router.sh && sleep infinity" # "/elocal/capitolul3/src/alter_packages.sh"
     client:
         build:
@@ -74,6 +78,8 @@ services:
         depends_on:
             - "router"
             - "server"
+        sysctls:
+          - net.ipv4.tcp_congestion_control=reno
         command: bash -c "/elocal/capitolul3/src/client.sh && sleep infinity"
 networks:
     subnet1:

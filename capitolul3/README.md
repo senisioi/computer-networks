@@ -279,7 +279,31 @@ Prima specificație a protocolului TCP a fost în [RFC793](https://tools.ietf.or
 - Checksum - suma în complement fată de 1 a bucăților de câte 16 biți, complementatî cu 1, vezi mai multe detalii [aici](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation) și [RFC1071 aici](https://tools.ietf.org/html/rfc1071)
 Se calculează din concatenarea: unui pseudo-header de IP [adresa IP sursă, IP dest (32 biti fiecare), placeholder (8 biti setati pe 0), [protocol](https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers) (8 biti), și lungimea în bytes a întregii secțiuni TCP sau UDP (16 biti)], TCP sau UDP header cu checksum setat pe 0, și secțiunea de date.
 
-În plus, pe lângă proprietățile din antet, protocolul TCP are o serie de opțiuni (explicate mai jos) și o serie de euristici prin care se încearcă detectarea și evitarea congestionării rețeleleor. Explicațiile pe această temă pot fi urmărite în [capitolul din curs despre congesion control](https://github.com/senisioi/computer-networks/tree/2020/curs#congestion) sau în [notele de curs de aici](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=60). Toate se bazează pe specificațiile din [RFC 2581](https://tools.ietf.org/html/rfc2581) sau [RFC 6582](https://tools.ietf.org/html/rfc6582) din 2012.
+<a name="tcp_cong"></a> 
+### Controlul congestionării
+Pe lângă proprietățile din antet, protocolul TCP are o serie de opțiuni (explicate mai jos) și o serie de euristici prin care se încearcă detectarea și evitarea congestionării rețeleleor.
+
+Explicațiile pe această temă pot fi urmărite și în [capitolul din curs despre congesion control](https://github.com/senisioi/computer-networks/tree/2020/curs#congestion) sau în [notele de curs de aici](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=60). 
+
+Deși implementările mai noi de TCP pot să difere, principiile după care se ghidează euristicile de control al congestionării sunt aceleași, implementează principiul de creștere aditivă și descreștere multiplicativă și includ:
+
+- [slow start & congestion avoidance](https://tools.ietf.org/html/rfc5681#page-4)
+- [fast retransmit & fast recovery](https://tools.ietf.org/html/rfc5681#page-8)
+
+TCP nu trimite pe rețea mai multe pachete decât variabila internă de congestion window cwnd și variabila din header-ul de la receiver (window) `min(cwnd, rwnd)`. Slow start presupune că începem cu o fereastră inițială în funcție de segmentul maxim. Apoi fereastra crește exponențial până apar pierderi pe rețea: `cwnd += min (N, MSS)`, unde N este diferența dintre numărul de octeți confirmat în prezent și cei confirmați anterior. Acest lucru determină o creșterea exponențială a ferestrei de congestionare cwnd care mai este reprezentată ca o dublare.
+
+În momentul în care apar pierderi, se trece la congestion avoidance care crește fereastra cu o fracțiune de segment `cwnd += MSS*MSS/cwnd` pentru evitarea blocării rețelei. Tot la pasul acesta se setează un prag Slow Start Thresh `ssthresh = max(FlightSize / 2, 2*MSS)`, unde FlightSize e dat de numărul de octeți trimiși și neconfirmați. Acest prag va fi folosit pe viitor pentru a trece din mecanismul de slow start (când pragul este atins) în mecanismul de evitare a congestiei.
+
+Fast retransmit se bazează pe faptul că un receptor trimite un ack duplicat atunci când primește un segment cu sequence number mai mare decât cel așteptat. Astfel, îl notifică pe emițător că a primit un segment out-of-order. Dacă un emițător primește 3 ack duplicate, atunci acesta trimite pachetul cu sequence number pornind de la valoarea acelui acknowledgement fără a mai aștepta după timeout (fast retransmit).
+
+Algoritmul de fast recovery pornește ulterior pentru a crește artificial cwnd. Acesta se bazează pe presupunerea că receptorul totuși recepționează o serie de pachete din moment ce trimite confirmări duplicate iar pachetele pe care le recepționează pot fi cu număr de secvență mai mare. De asemenea după 3 confirmări duplicate, ssthreshold se recalculează iar congestion window se înjumătățește (descreștere multiplicativă).
+
+
+Toate se bazează pe specificațiile din [RFC 2581](https://tools.ietf.org/html/rfc2581), [RFC5681](https://tools.ietf.org/html/rfc5681) sau [RFC 6582](https://tools.ietf.org/html/rfc6582) din 2012.
+Pentru a observa fast retransmit, puteți executa în contanerul server `/eloca/src/examples/tcp_losses/receiver.py` și în containerul client `/eloca/src/examples/tcp_losses/sender.py`. Captați cu wireshark sau `tcpdump -Sntv` pachetele de pe containerul router, veți putea observa schimburile de mesaje. 
+Pentru a observa fast retransmit, setați pe interfața eth1 din containerul router o regulă de reorder și loss `tc qdisc add dev eth1 root netem reorder 80% delay 100ms`
+
+
 
 <a name="tcp_options"></a> 
 ### Optiuni TCP
