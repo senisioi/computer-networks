@@ -11,6 +11,7 @@
 - [TCP Segment](#tcp)
   - [TCP Options](#tcp_options)
   - [TCP Retransmissions](#tcp_retransmission)
+  - [TCP Congestion Control](#tcp_cong)
   - [TCP Socket](#tcp_socket)
   - [TCP Raw Socket](#tcp_raw_socket)
   - [TCP Scapy](#tcp_scapy)
@@ -220,7 +221,7 @@ b'salut'
 
 <a name="#udp_scapy"></a> 
 ### Scapy UDP
-Într-un terminal dintr-un container rulați scapy: `docker-compose exec server scapy`
+Într-un terminal dintr-un container rulați scapy: `docker-compose exec client scapy`
 
 ```python
 udp_obj = UDP()
@@ -239,6 +240,13 @@ pachet = network_layer / udp_obj
 
 send(pachet)
 ```
+
+#### Exercițiu
+Porniți un UDP socket server pe un container iar pe containerul client rulați scapy pentru a trimite un pachet. 
+Încercați același lucru și pe localhost. 
+Captați pachetele pe localhost cu wireshark, ce adrese MAC sunt folosite?
+Pe baza [explicațiilor de aici](https://stackoverflow.com/questions/41166420/sending-a-packet-over-physical-loopback-in-scapy), corectați problema trimiterii pachetelor de pe localhost.
+
 
 
 <a name="tcp"></a> 
@@ -272,7 +280,7 @@ Prima specificație a protocolului TCP a fost în [RFC793](https://tools.ietf.or
 - [Sequence și Acknowledgment](http://www.firewall.cx/networking-topics/protocols/tcp/134-tcp-seq-ack-numbers.html) sunt folosite pentru indicarea secvenței de bytes transmisă și notificarea că acea secvență a fost primită
 - Data offset - dimensiunea header-ului în multipli de 32 de biți
 - Res - 3 biți rezervați
-- NS, CWR, ECE - biți pentru notificarea explicită a existenței congestionării [ECN](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-ECN_OS_RFC-793_3540.htm), explicat mai bine și [aici](http://blog.catchpoint.com/2015/10/30/tcp-flags-cwr-ece/). NS e o sumă binară pentru sigurantă, CWR - indică necesitatea micsorării ferestrei de congestionare iar ECE este un bit de echo care indică prezența congestionarii.
+- NS, CWR, ECE - biți pentru notificarea explicită a existenței congestionării [ECN](https://www.juniper.net/documentation/us/en/software/junos/cos/topics/concept/cos-qfx-series-explicit-congestion-notification-understanding.html), explicat mai bine și [aici](http://blog.catchpoint.com/2015/10/30/tcp-flags-cwr-ece/). NS e o sumă binară pentru sigurantă, CWR - indică necesitatea micsorării ferestrei de congestionare iar ECE este un bit de echo care indică prezența congestionarii.
 - URG, ACK, PSH, RST, SYN, FIN - [flags](http://www.firewall.cx/networking-topics/protocols/tcp/136-tcp-flag-options.html)
 - Window Size - folosit pentru [flow control](http://www.ccs-labs.org/teaching/rn/animations/flow/), exemplu [aici](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-Window-Size_OS_RFC-793.htm)
 - Urgent Pointer - mai multe detalii in [RFC6093](https://tools.ietf.org/html/rfc6093), pe scurt explicat [aici](http://www.firewall.cx/networking-topics/protocols/tcp/137-tcp-window-size-checksum.html).
@@ -300,9 +308,6 @@ Algoritmul de fast recovery pornește ulterior pentru a crește artificial cwnd.
 
 
 Toate se bazează pe specificațiile din [RFC 2581](https://tools.ietf.org/html/rfc2581), [RFC5681](https://tools.ietf.org/html/rfc5681) sau [RFC 6582](https://tools.ietf.org/html/rfc6582) din 2012.
-Pentru a observa fast retransmit, puteți executa în contanerul server `/eloca/src/examples/tcp_losses/receiver.py` și în containerul client `/eloca/src/examples/tcp_losses/sender.py`. Captați cu wireshark sau `tcpdump -Sntv` pachetele de pe containerul router, veți putea observa schimburile de mesaje. 
-Pentru a observa fast retransmit, setați pe interfața eth1 din containerul router o regulă de reorder și loss `tc qdisc add dev eth1 root netem reorder 80% delay 100ms`
-
 
 
 <a name="tcp_options"></a> 
@@ -346,6 +351,25 @@ tc qdisc add dev eth0 root netem loss 5% 25% corrupt 5% reorder 25% 50% delay 10
 Introduceți în elocal un shell script `alter_packages.sh` care să execute comenzi de netem pe interfețele eth0 și eth1. Rulați-l în cadrul command după inițializarea routerului, dar înainte de sleep infinity.
 
 Porniți TCP Server și TCP Client în containerul server, respectiv client și executați schimburi de mesaje. Cu `tcpdump -Sntv -i any tcp` sau cu Wireshark observați comportamentul protocolului TCP. Încercați diferite valori în netem.
+
+
+<a name="tcp_cong"></a>
+### Exercițiu TCP Congestion Control
+Pentru a observa fast retransmit, puteți executa în contanerul server `/eloca/src/examples/tcp_losses/receiver.py` și în containerul client `/eloca/src/examples/tcp_losses/sender.py`. Captați cu wireshark sau `tcpdump -Sntv` pachetele de pe containerul router, veți putea observa schimburile de mesaje. 
+Pentru a observa fast retransmit, setați pe interfața eth1 din containerul router o regulă de reorder și loss `tc qdisc add dev eth1 root netem reorder 80% delay 100ms`
+
+În docker-compose.yml este setată opțiunea de a folosi TCP Reno din sysctls, care folosește exact acest [fișier de linux](https://github.com/torvalds/linux/blob/master/net/ipv4/tcp_cong.c)
+```
+        sysctls:
+          - net.ipv4.tcp_congestion_control=reno
+```
+Adăugați în sysctls următoarea linie care adaugă capabilitatea de Explicit Congestion Notification.
+```
+          - net.ipv4.tcp_ecn=1 
+```
+Ce observați diferit la 3-way handshake?
+Folosind netfilterque, pentru toate pachetele, introduceți în layer-ul de IP informația că rețeaua este congestionată și urmăriți pachetele dintre `receiver.py` și `sender.py`.
+
 
 <a name="#tcp_socket"></a> 
 ### Socket TCP
