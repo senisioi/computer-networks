@@ -3,7 +3,8 @@
 ## Cuprins
 - [Requrements](#intro)
 - [Intercept Packages](#scapy_nfqueue)
-    - [Block Intercepted Packages](#scapy_nfqueue_block)
+    - [Intercepting Packets](#scapy_nfqueue_basic)
+    - [Block Intercepted Packets](#scapy_nfqueue_block)
 - [Exemple de protocoale în Scapy](#scapy)
   - [Domain Name System (DNS)](#scapy_dns)
     - [DNS Request](#scapy_dns_request)
@@ -42,11 +43,60 @@ Pentru a folosi librăria, trebuie să adăugăm o regulă în firewall-ul iptab
 ```bash
 # toate pachetele de la input se redirectioneaza catre coada 5
 iptables -I INPUT -j NFQUEUE --queue-num 5
+# toate pachetele spre output
+iptables -I OUTPUT -j NFQUEUE --queue-num 5
+# toate pachetele care sunt forwardate
+iptables -I FORWARD -j NFQUEUE --queue-num 5
+
+
+# stergem regula prin
+iptables -D FORWARD 1
 ```
 sau din python:
 ```python
 import os
 os.system("iptables -I INPUT -j NFQUEUE --queue-num 5")
+```
+
+<a name="scapy_nfqueue_basic"></a>
+### Intercepting Packets
+Setăm regula de iptables în funcție de locația de unde interceptăm pachete, dacă suntem pe aceiași mașină, rulăm redirecționarea pachetelor de la INPUT sau OUTPUT iar dacă suntem pe container router sau middle care au ca scop forwardarea pachetelor, folosim regula de FORWARD.
+
+```python
+from scapy.all import *
+from netfilterqueue import NetfilterQueue as NFQ
+import os
+```
+
+Construim o funcție care modifică layer-ul de IP dintr-un pachet și setează tos = 3. Pentru end-points care au ECN enabled, acest număr setează biții de congestionare pe 11 care indică faptul că există o congestionare a rețelei.
+```python
+def alter_pachet(pachet):
+    '''Implementați asta ca exercițiu.
+    '''
+    return pachet
+```
+
+Construim o funcție care va fi apelată pentru fiecare pachet din coada NFQUEUE. În cadrul acestei funcții se apelează alter_packet care are ca scop modificarea conținutului pachetului în tranzit.
+```python
+def proceseaza(pachet):
+    octeti = pachet.get_payload()
+    scapy_packet = IP(octeti)
+    print("Pachet: ", scapy_packet.summary())
+    pachet = alter_packet(pachet)
+    pachet.set_payload(bytes(pachet))
+    pachet.accept()
+```
+
+Executăm comanda de iptables si bucla infită pe NFQUEUE.
+```python
+queue = NFQ()
+try:
+    os.system("iptables -I FORWARD -j NFQUEUE --queue-num 5")
+    queue.bind(5, proceseaza)
+    queue.run()
+except KeyboardInterrupt:
+    queue.unbind()
+
 ```
 
 <a name="scapy_nfqueue_block"></a>
