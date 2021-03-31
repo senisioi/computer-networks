@@ -12,7 +12,7 @@ def checksum(msg):
     suma = 0
     # every two bytes
     for i in range(0, len(msg), 2):
-        cuvant = ord(msg[i]) + (ord(msg[i + 1]) << 8)
+        cuvant = msg[i] + (msg[i + 1] << 8)
         suma = suma + cuvant
     # restul peste 16 se aduna cu numarul trimmed la 16 biti and-ul face un
     # 111 de 16 biti iar in rest pune 0
@@ -33,8 +33,8 @@ s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 
 packet = ''
 
-source_ip = '198.13.0.1'
-dest_ip = '198.13.0.2'
+source_ip = '172.10.0.2'
+dest_ip = '198.10.0.2'
 
 # IP HEADER
 ip_ihl = 5
@@ -111,7 +111,7 @@ tcp_header = struct.pack(
     tcp_check,
     tcp_urg_ptr)
 
-user_data = ''
+user_data = b''
 
 # pseudo header fields
 source_address = socket.inet_aton(source_ip)
@@ -271,7 +271,7 @@ tcp_header = struct.pack(
     tcp_check,
     tcp_urg_ptr)
 
-user_data = ''
+user_data = b''
 
 # pseudo header fields
 source_address = socket.inet_aton(source_ip)
