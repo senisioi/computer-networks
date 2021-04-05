@@ -9,9 +9,10 @@
   - [UDP Raw Socket](#udp_raw_socket)
   - [UDP Scapy](#udp_scapy)
 - [TCP Segment](#tcp)
-  - [TCP Options](#tcp_options)
-  - [TCP Retransmissions](#tcp_retransmission)
   - [TCP Congestion Control](#tcp_cong)
+  - [TCP Options](#tcp_options)
+    - [Retransmissions Exercise](#tcp_retransmission)
+    - [Congestion Control Exercise](#tcp_cong_ex)
   - [TCP Socket](#tcp_socket)
   - [TCP Raw Socket](#tcp_raw_socket)
   - [TCP Scapy](#tcp_scapy)
@@ -364,7 +365,7 @@ Introduceți în elocal un shell script `alter_packages.sh` care să execute com
 Porniți TCP Server și TCP Client în containerul server, respectiv client și executați schimburi de mesaje. Cu `tcpdump -Sntv -i any tcp` sau cu Wireshark observați comportamentul protocolului TCP. Încercați diferite valori în netem.
 
 
-<a name="tcp_cong"></a>
+<a name="tcp_cong_ex"></a>
 ### Exercițiu TCP Congestion Control
 Pentru a observa fast retransmit, puteți executa în contanerul server `/eloca/src/examples/tcp_losses/receiver.py` și în containerul client `/eloca/src/examples/tcp_losses/sender.py`. Captați cu wireshark sau cu `tcpdump -Sntv` pachetele de pe containerul router, veți putea observa schimburile de mesaje. 
 Pentru a observa fast retransmit, setați pe interfața eth1 din containerul router o regulă de reorder și loss `tc qdisc add dev eth1 root netem reorder 80% delay 100ms`
