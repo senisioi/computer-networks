@@ -298,16 +298,27 @@ Deși implementările mai noi de TCP pot să difere, principiile după care se g
 - [slow start & congestion avoidance](https://tools.ietf.org/html/rfc5681#page-4)
 - [fast retransmit & fast recovery](https://tools.ietf.org/html/rfc5681#page-8)
 
-TCP nu trimite pe rețea mai multe pachete decât variabila internă de congestion window cwnd și variabila din header-ul de la receiver (window) `min(cwnd, rwnd)`. Slow start presupune că începem cu o fereastră inițială în funcție de segmentul maxim. Apoi fereastra crește exponențial până apar pierderi pe rețea: `cwnd += min (N, MSS)`, unde N este diferența dintre numărul de octeți confirmat în prezent și cei confirmați anterior. Acest lucru determină o creșterea exponențială a ferestrei de congestionare cwnd care mai este reprezentată ca o dublare.
+TCP nu trimite pe rețea mai multe pachete decât variabila internă de congestion window cwnd și variabila din header-ul de la receiver (window) `min(cwnd, rwnd)`. 
 
-În momentul în care apar pierderi, se trece la congestion avoidance care crește fereastra cu o fracțiune de segment `cwnd += MSS*MSS/cwnd` pentru evitarea blocării rețelei. Tot la pasul acesta se setează un prag Slow Start Thresh `ssthresh = max(FlightSize / 2, 2*MSS)`, unde FlightSize e dat de numărul de octeți trimiși și neconfirmați. Acest prag va fi folosit pe viitor pentru a trece din mecanismul de slow start (când pragul este atins) în mecanismul de evitare a congestiei.
 
-Fast retransmit se bazează pe faptul că un receptor trimite un ack duplicat atunci când primește un segment cu sequence number mai mare decât cel așteptat. Astfel, îl notifică pe emițător că a primit un segment out-of-order. Dacă un emițător primește 3 ack duplicate, atunci acesta trimite pachetul cu sequence number pornind de la valoarea acelui acknowledgement fără a mai aștepta după timeout (fast retransmit).
+**Slow start** presupune că începem cu o fereastră inițială în funcție de segmentul maxim. Apoi fereastra crește exponențial până apar pierderi pe rețea: `cwnd += min (N, MSS)`, unde N este numărul de octeți noi confirmați prin ultimul ACK (nu numărul total!). Acest lucru determină o creșterea exponențială a ferestrei de congestionare cwnd care mai este reprezentată ca o dublare. Codul de slow start poate fi verificat în [TCP Reno implementat în linux](https://github.com/torvalds/linux/blob/master/net/ipv4/tcp_cong.c#L383)
+
+
+**Congestion avoidance** apare în momentul în care apar pierderi, se crește fereastra cu o fracțiune de segment `cwnd += MSS*MSS/cwnd` pentru evitarea blocării rețelei. Tot la pasul acesta se setează un prag Slow Start Thresh `ssthresh = max(FlightSize / 2, 2*MSS)`, unde FlightSize e dat de numărul de octeți trimiși și neconfirmați. Acest prag va fi folosit pe viitor pentru a trece din mecanismul de slow start (când pragul este atins) în mecanismul de evitare a congestiei. Implementarea din TCP Reno [este aici](https://github.com/torvalds/linux/blob/master/net/ipv4/tcp_cong.c#L403).
+
+**Fast retransmit** se bazează pe faptul că un receptor trimite un ack duplicat atunci când primește un segment cu sequence number mai mare decât cel așteptat. Astfel, îl notifică pe emițător că a primit un segment out-of-order. Dacă un emițător primește 3 ack duplicate, atunci acesta trimite pachetul cu sequence number pornind de la valoarea acelui acknowledgement fără a mai aștepta după timeout (fast retransmit).
 
 Algoritmul de fast recovery pornește ulterior pentru a crește artificial cwnd. Acesta se bazează pe presupunerea că receptorul totuși recepționează o serie de pachete din moment ce trimite confirmări duplicate iar pachetele pe care le recepționează pot fi cu număr de secvență mai mare. De asemenea după 3 confirmări duplicate, ssthreshold se recalculează ca fiind jumate din cwnd iar congestion window se înjumătățește de asemenea (descreștere multiplicativă) și se trece la congestion avoidance. 
 
 
 Toate se bazează pe specificațiile din [RFC 2581](https://tools.ietf.org/html/rfc2581), [RFC5681](https://tools.ietf.org/html/rfc5681) sau [RFC 6582](https://tools.ietf.org/html/rfc6582) din 2012.
+
+În toate cazurile de mai sus, TCP se bazează pe pierderi de pachete (confirmări duplicate sau timeout) pentru identificarea congestionării. Există și un mecanism de notificare explicită a congestionării care a fost adăugat [relativ recent](http://www.icir.org/floyd/ecn.html) și care nu a fost încă adoptat de toate implementările de TCP. Pentru asta avem flag-urile NS, CWR, ECE dar mai este necesară și implementarea la [nivelul IP](https://en.wikipedia.org/wiki/Explicit_Congestion_Notification#Operation_of_ECN_with_IP) a unui câmp pe care să-l folosească routerele atunci când devin congestionate, iar pentru asta sunt folosiți primii doi biți din ToS. Flag-urile din TCP sunt:
+
+- [ECE (ECN-Echo)](https://tools.ietf.org/html/rfc3168) este folosit de către receptor pentru a-l notifica pe emițător să reducă fluxul de date.
+- CWR (Congestion window reduced) e folosit de către emițător pentru a confirma notificarea ECE primită către receptor și că `cwnd` a scăzut.
+- [NS](https://tools.ietf.org/html/draft-ietf-tsvwg-tcp-nonce-04) o sumă de control pe un bit care se calculează în funcție de sumele anterioare și care încearcă să prevină modificarea accidentală sau intenționată a pachetelor în tranzit.
+
 
 
 <a name="tcp_options"></a> 
