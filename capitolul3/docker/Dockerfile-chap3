@@ -6,6 +6,7 @@ USER root
 
 RUN apt-get update && apt-get install -y iptables iproute2
 RUN apt-get update && apt-get install -y libnetfilter-queue-dev
+RUN apt-get update && apt-get install -y iperf3 moreutils 
 
 COPY src/*.sh /
 

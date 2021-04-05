@@ -291,7 +291,7 @@ Se calculează din concatenarea: unui pseudo-header de IP [adresa IP sursă, IP 
 ### Controlul congestionării
 Pe lângă proprietățile din antet, protocolul TCP are o serie de opțiuni (explicate mai jos) și o serie de euristici prin care se încearcă detectarea și evitarea congestionării rețeleleor.
 
-Explicațiile pe această temă pot fi urmărite și în [capitolul din curs despre congesion control](https://github.com/senisioi/computer-networks/tree/2020/curs#congestion) sau în [notele de curs de aici](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=60). 
+Explicațiile pe această temă pot fi urmărite și în [capitolul din curs despre congesion control](https://github.com/senisioi/computer-networks/tree/2020/curs#congestion) sau în [notele de curs de aici](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=60). Un exemplu foarte clar este prezentat și [în acest tutorial](https://witestlab.poly.edu/blog/tcp-congestion-control-basics/)
 
 Deși implementările mai noi de TCP pot să difere, principiile după care se ghidează euristicile de control al congestionării sunt aceleași, implementează principiul de creștere aditivă și descreștere multiplicativă și includ:
 
@@ -366,7 +366,7 @@ Porniți TCP Server și TCP Client în containerul server, respectiv client și 
 
 <a name="tcp_cong"></a>
 ### Exercițiu TCP Congestion Control
-Pentru a observa fast retransmit, puteți executa în contanerul server `/eloca/src/examples/tcp_losses/receiver.py` și în containerul client `/eloca/src/examples/tcp_losses/sender.py`. Captați cu wireshark sau `tcpdump -Sntv` pachetele de pe containerul router, veți putea observa schimburile de mesaje. 
+Pentru a observa fast retransmit, puteți executa în contanerul server `/eloca/src/examples/tcp_losses/receiver.py` și în containerul client `/eloca/src/examples/tcp_losses/sender.py`. Captați cu wireshark sau cu `tcpdump -Sntv` pachetele de pe containerul router, veți putea observa schimburile de mesaje. 
 Pentru a observa fast retransmit, setați pe interfața eth1 din containerul router o regulă de reorder și loss `tc qdisc add dev eth1 root netem reorder 80% delay 100ms`
 
 În docker-compose.yml este setată opțiunea de a folosi TCP Reno din sysctls, care folosește exact acest [fișier de linux](https://github.com/torvalds/linux/blob/master/net/ipv4/tcp_cong.c)
@@ -379,6 +379,44 @@ Adăugați în sysctls următoarea linie care adaugă capabilitatea de Explicit 
           - net.ipv4.tcp_ecn=1 
 ```
 Ce observați diferit la 3-way handshake?
+
+#### Plot Congestion Graphs
+Exercițiul se bazează pe [tutorialul prezentat de Fraida Fund](https://witestlab.poly.edu/blog/tcp-congestion-control-basics/) în care sunt extragese informațiile despre cwnd folosind aplicația din linia de comandă ss (socket statistics): `ss -ein dst IP`. Citiți cu atenție tutorialul înainte de a începe rezolvarea și asigurați-vă că aveți aplicațiile `ss` și `ts` în containerul de docker (rulați `docker-compose build`).
+
+Setați pe containerul router limitare de bandă cu netem, astfel încât să aveți un bottleneck de 1 Mbp/s și un buffer de 0.1 MB, în ambele direcții de comunicare:
+```bash
+docker-compose exec router bash -c "/elocal/capitolul3/src/bottleneck.sh"
+```
+
+Rulați pe containerul server o aplicație server iperf3
+```bash
+docker-compose exec server bash -c "iperf3 -s -1"
+```
+
+Rulați pe containerul client script-ul de shell care salvează valorile de timestamp și cwnd într-un csv.
+```bash
+docker-compose exec client bash -c "/elocal/capitolul3/src/capture_stats.sh"
+```
+
+Rulați pe containerul client o aplicație client care să comunice cu serverul timp de 60 de secunde și care să folosească TCP Reno:
+```bash
+docker-compose exec client bash -c "iperf3 -c 198.10.0.2 -t 60 -C reno"
+```
+După finalizarea transmisiunii, încetați execuția comenzii `capture_stats.sh` prin `Ctrl + C`.
+
+
+La final veți putea vedea în directorul `capitolul3/congestion` un fișier `socket_stats.csv` care conține timestamp-ul și cwnd la fiecare transmisie. 
+
+##### 1. Plot cwnd
+Scrieți un script care citește fișierul csv și plotează (vezi matplotlib, seaborn sau pandas) cwnd în raport cu timestamp. Identificați fazele Slow Start, Congestion Avoidance, Fast Retransmit și Fast Recovery. 
+
+##### 2. Plot cwnd pentru alte metode de control
+Încercați și alte metode de congestion control schimbând `-C reno` în [vegas](https://en.wikipedia.org/wiki/TCP_Vegas), [BBR](https://en.wikipedia.org/wiki/TCP_congestion_control#TCP_BBR), [CUBIC](https://www.cs.princeton.edu/courses/archive/fall16/cos561/papers/Cubic08.pdf).
+
+
+
+#### Explicit Congestion Notification
+
 Folosind netfilterque, pentru toate pachetele, introduceți în layer-ul de IP informația că rețeaua este congestionată și urmăriți pachetele dintre `receiver.py` și `sender.py`.
 În [Capitolul 6](https://github.com/senisioi/computer-networks/tree/2021/capitolul6#scapy_nfqueue_basic) aveți un exemplu cu NFQUEUE care interceptează pachete și le modifică în tranzit. Încercați să setați flag-urile de explicit congestion notification pe fiecare pachet de la nivelul IP.
 
