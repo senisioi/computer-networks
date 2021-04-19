@@ -5,6 +5,7 @@
 - [IPv4 Datagram](#ipv4)
   - [IPv4 Raw Socket](#ip_raw_socket)
   - [IPv4 Scapy](#ip_scapy)
+- [Subnetting, Routing, and other stuff](#ipv4routing)
 - [IPv6 Datagram](#ipv6)
   - [IPv6 Socket](#ipv6_socket)
   - [IPv6 Scapy](#ipv6_scapy)
@@ -154,6 +155,21 @@ ip.show()
 - [IP Spoofing](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=71)
 - [IP Spoofing Mitigation](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=84)
 - [Network Ingress Filtering: Defeating Denial of Service Attacks which employ IP Source Address Spoofing](https://tools.ietf.org/html/bcp38)
+
+
+
+<a name="ipv4routing"></a> 
+## Subnetting, Routing, and other stuff
+Pe scurt, aici sunt link-urile cu informații esențiale despre rutare:
+- mai întâi urmăriți în partea de curs informațiile de bază despre [curs forwarding](https://github.com/senisioi/computer-networks/tree/2021/curs#forwarding) și [curs rutare](https://github.com/senisioi/computer-networks/tree/2021/curs#routing)
+- Fraida Fund are un tutorial foarte bun despre cum pot fi alocate [IP-uri subrețelelor](https://witestlab.poly.edu/blog/designing-subnets/); cu toate că nu aveți cont pe GINI, puteți replica întregul set-up pe docker modificând docker-compose.yml din capitolul3
+- pentur [Distance Vector Routing](https://en.wikipedia.org/wiki/Distance-vector_routing_protocol#Example) există un exemplu foarte ușor de urmărit pe wikipedia, inclusiv cu [Split Horizon si Poison Reverse](https://en.wikipedia.org/wiki/Split_horizon_route_advertisement)
+- [Link State Routing](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=397) este foarte bine explicat în cartea pentru curs
+- OSPF
+- un alt tutorial al Fraidei Fund, despre BGP este [cel de aici](https://witestlab.poly.edu/blog/a-peek-into-internet-routing/)
+- [Autonomous Systems](https://www.cidr-report.org/as2.0/)
+- [BGP looking glasses](https://www.bgp4.as/looking-glasses)
+- [MPLS](https://www.youtube.com/watch?v=U1w-b9GIt0k) prezentat într-un scurt video
 
 
 <a name="ipv6"></a> 
@@ -344,3 +360,4 @@ rec.show()
 ## Exerciții
 1. Urmăriți mai multe exemple din scapy [aici](https://scapy.readthedocs.io/en/latest/usage.html#simple-one-liners)
 2. Implementați un traceroute folosind ICMP.
+3. Urmăriți opțiunile de sysctls din linux și încercați diferite valori pentru udp_mem, tcp_ecn, tcp_min_snd_mss, [ip_nonlocal_bind](https://www.cyberciti.biz/faq/linux-bind-ip-that-doesnt-exist-with-net-ipv4-ip_nonlocal_bind/), sau mtu în containere.
