@@ -162,14 +162,16 @@ ip.show()
 ## Subnetting, Routing, and other stuff
 Pe scurt, aici sunt link-urile cu informații esențiale despre rutare:
 - mai întâi urmăriți în partea de curs informațiile de bază despre [curs forwarding](https://github.com/senisioi/computer-networks/tree/2021/curs#forwarding) și [curs rutare](https://github.com/senisioi/computer-networks/tree/2021/curs#routing)
-- Fraida Fund are un tutorial foarte bun despre cum pot fi alocate [IP-uri subrețelelor](https://witestlab.poly.edu/blog/designing-subnets/); cu toate că nu aveți cont pe GINI, puteți replica întregul set-up pe docker modificând docker-compose.yml din capitolul3
+- despre subnets și VPC în AWS există mai [multe explicații aici](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html) 
+- Fraida Fund are un tutorial foarte bun despre cum pot fi alocate [IP-uri subrețelelor](https://witestlab.poly.edu/blog/designing-subnets/); cu toate că nu aveți cont pe GENI, puteți replica întregul set-up pe docker modificând docker-compose.yml din capitolul3
 - pentur [Distance Vector Routing](https://en.wikipedia.org/wiki/Distance-vector_routing_protocol#Example) există un exemplu foarte ușor de urmărit pe wikipedia, inclusiv cu [Split Horizon si Poison Reverse](https://en.wikipedia.org/wiki/Split_horizon_route_advertisement)
 - [Link State Routing](http://index-of.es/Varios-2/Computer%20Networks%205th%20Edition.pdf#page=397) este foarte bine explicat în cartea pentru curs
-- OSPF
+- [OSPF](https://www.youtube.com/watch?v=kfvJ8QVJscc)
 - un alt tutorial al Fraidei Fund, despre BGP este [cel de aici](https://witestlab.poly.edu/blog/a-peek-into-internet-routing/)
 - [Autonomous Systems](https://www.cidr-report.org/as2.0/)
 - [BGP looking glasses](https://www.bgp4.as/looking-glasses)
 - [MPLS](https://www.youtube.com/watch?v=U1w-b9GIt0k) prezentat într-un scurt video
+
 
 
 <a name="ipv6"></a> 
