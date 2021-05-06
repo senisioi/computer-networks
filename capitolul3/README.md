@@ -327,7 +327,7 @@ Toate se bazează pe specificațiile din [RFC 2581](https://tools.ietf.org/html/
 O [listă completă de opțiuni se găsește aici](http://www.networksorcery.com/enp/Protocol/tcp.htm#Options) si [aici](https://www.iana.org/assignments/tcp-parameters/tcp-parameters.xhtml). Optiunile au coduri, dimensiuni si specificatii particulare.
 Probabil cele mai importante sunt prezentate pe scurt în [acest tutorial](http://www.firewall.cx/networking-topics/protocols/tcp/138-tcp-options.html): 
   - [Maximum Segment Size (MSS)](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00005.html) definit [aici](https://tools.ietf.org/html/rfc793#page-18) seteaza dimensiunea maxima a segmentului pentru a se evita fragmetarea la nivelul Network.
-  - [Window Scaling](https://cloudshark.io/articles/tcp-window-scaling-examples/) definit [aici](https://tools.ietf.org/html/rfc7323#page-8) - campul Window poate fi scalat cu valoarea Window * 2^WindowScaleOption; opțiune permite redimensionarea ferestrei până la (2^16 - 1) * 2^14. În linux si docker puteți dezactiva window scaling prin sysctls `net.ipv4.tcp_window_scaling=0`. 
+  - [Window Scaling](https://cloudshark.io/articles/tcp-window-scaling-examples/) definit [aici](https://tools.ietf.org/html/rfc7323#page-8) - campul Window poate fi scalat cu valoarea Window * 2^WindowScaleOption; opțiune permite redimensionarea ferestrei până la (2^16 - 1) * 2^14. În linux si docker puteți dezactiva window scaling prin [sysctls](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt) `net.ipv4.tcp_window_scaling=0`. 
   - [Selective Acknowledgment](https://packetlife.net/blog/2010/jun/17/tcp-selective-acknowledgments-sack/) 
 definit [aici](https://tools.ietf.org/html/rfc2018#page-3) permite trimiterea unor ack selective in functie de secventa pachetelor pierdute
   - [Timestamps](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00011.html) (pentru round-trip-time) definite [aici](https://tools.ietf.org/html/rfc7323#page-12) inregistreaza timpul de primire a confirmarilor. In felul acesta se verifica daca reteaua este congestionata sau daca fluxul de trimitere trebuie redus.
@@ -381,8 +381,9 @@ Adăugați în sysctls următoarea linie care adaugă capabilitatea de Explicit 
 ```
 Ce observați diferit la 3-way handshake?
 
+<a name="tcp_cong_plots"></a>
 ### B) Plot Congestion Graphs
-Exercițiul se bazează pe [tutorialul prezentat de Fraida Fund](https://witestlab.poly.edu/blog/tcp-congestion-control-basics/) în care sunt extragese informațiile despre cwnd folosind aplicația din linia de comandă ss (socket statistics): `ss -ein dst IP`. Citiți cu atenție tutorialul înainte de a începe rezolvarea și asigurați-vă că aveți aplicațiile `ss` și `ts` în containerul de docker (rulați `docker-compose build`).
+Exercițiul se bazează pe [tutorialul prezentat de Fraida Fund](https://witestlab.poly.edu/blog/tcp-congestion-control-basics/) în care sunt extragese informațiile despre cwnd folosind aplicația din linia de comandă ss (socket statistics): `ss -ein dst IP`. Citiți cu atenție tutorialul înainte de a începe rezolvarea și asigurați-vă că aveți aplicațiile `ss` și `ts` în containerul de docker (rulați `docker-compose build` în directorul capitolul3).
 
 Setați pe containerul router limitare de bandă cu netem, astfel încât să aveți un bottleneck de 1 Mbp/s și un buffer de 0.1 MB, în ambele direcții de comunicare:
 ```bash

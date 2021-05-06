@@ -3,9 +3,8 @@
 '''
 Sample script to send a DHCP discover
 '''
-import scapy
 from scapy.sendrecv import sendp, sniff
-from scapy.all import DHCP, ARP, BOOTP, Ether, UDP, TCP, IP
+from scapy.all import DHCP, ARP, BOOTP, Ether, UDP, TCP, IP, srp1
 
 # data link layer
 ethernet = Ether()
@@ -13,7 +12,7 @@ ethernet.dst = 'ff:ff:ff:ff:ff:ff'
 
 # network layer
 ip = IP()
-ip.dst = '255.255.255.255'
+ip.dst = '192.168.0.255'
 
 # transport layer
 udp = UDP()
@@ -29,4 +28,5 @@ dhcp.options = [("message-type", "discover"), "end"]
 
 packet = ethernet / ip / udp / bootp / dhcp
 
-ans = srp1(packet)
+ans = srp1(packet, iface='wlp4s0')
+ans.show()

@@ -70,9 +70,18 @@ import os
 
 Construim o funcție care modifică layer-ul de IP dintr-un pachet și setează tos = 3. Pentru end-points care au ECN enabled, acest număr setează biții de congestionare pe 11 care indică faptul că există o congestionare a rețelei.
 ```python
-def alter_pachet(pachet):
+def alter_packet(pachet):
     '''Implementați asta ca exercițiu.
     '''
+    if pachet.haslayer(UDP):
+        # !atentie, trebuie re-calculate campurile:
+        del pachet[IP].chksum
+        del pachet[IP].len
+        del pachet[UDP].chksum
+        del pachet[UDP].len
+        # pentru a obtine din nou len si chksum, facem rebuild
+        # se face automat, de catre scapy
+        # pachet = IP(pachet.build())
     return pachet
 ```
 
@@ -81,9 +90,12 @@ Construim o funcție care va fi apelată pentru fiecare pachet din coada NFQUEUE
 def proceseaza(pachet):
     octeti = pachet.get_payload()
     scapy_packet = IP(octeti)
-    print("Pachet: ", scapy_packet.summary())
-    pachet = alter_packet(pachet)
-    pachet.set_payload(bytes(pachet))
+    print("Pachet inainte: ")
+    scapy_packet.show()
+    scapy_packet = alter_packet(scapy_packet)
+    print("Pachet dupa: ")
+    scapy_packet.show()
+    pachet.set_payload(bytes(scapy_packet))
     pachet.accept()
 ```
 
