@@ -72,13 +72,11 @@ Construim o funcție care modifică layer-ul de IP dintr-un pachet și setează 
 ```python
 def alter_packet(pachet):
     '''Implementați asta ca exercițiu.
+    # !atentie, trebuie re-calculate campurile len si checksum
     '''
-    if pachet.haslayer(UDP):
-        # !atentie, trebuie re-calculate campurile:
+    if pachet.haslayer(IP):        
         del pachet[IP].chksum
         del pachet[IP].len
-        del pachet[UDP].chksum
-        del pachet[UDP].len
         # pentru a obtine din nou len si chksum, facem rebuild
         # se face automat, de catre scapy
         # pachet = IP(pachet.build())
