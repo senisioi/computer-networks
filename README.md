@@ -3,6 +3,7 @@
 
 <a href="https://teams.microsoft.com/l/team/19%3a2vEDoQvAYjFmnQt2BGb7hwUPIQTXsDlfqKBOxke-TZ41%40thread.tacv2/conversations?groupId=ad3aa5f1-3047-498a-861b-f1cdf98eb304&tenantId=08a1a72f-fecd-4dae-8cec-471a2fb7c2f1">
 <img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg" alt="drawing" width="25"/>
+Canalul cursului pe Teams
 </a>
 
 
