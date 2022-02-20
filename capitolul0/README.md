@@ -131,7 +131,10 @@ ifconfig
 #        loop  txqueuelen 1000  (Local Loopback)
 ```
 
-Comanda *ifconfig* ne indică două device-uri care rulează pe containerul *rt1*:
+
+### ifconfig
+
+Comanda *ifconfig* este UNIX-speciffic și ne indică două device-uri care rulează pe containerul *rt1*:
 
 - [*eht0*](http://www.tldp.org/LDP/nag/node67.html#SECTION007720000) - placa de rețea Ethernet virtuală care indică configurația pentru stabilirea unei conexiuni de rețea a containerului.
 - [*lo*](https://askubuntu.com/questions/247625/what-is-the-loopback-device-and-how-do-i-use-it) - local Loopback device definește categoria de adrese care se mapează pe localhost.
@@ -139,6 +142,56 @@ Comanda *ifconfig* ne indică două device-uri care rulează pe containerul *rt1
 - Ce este [netmask](https://www.computerhope.com/jargon/n/netmask.htm)?
 - Netmask și Subnet cu [prefix notation](https://www.ripe.net/about-us/press-centre/IPv4CIDRChart_2015.pdf)?
 - Maximum Transmission Unit [MTU](https://en.wikipedia.org/wiki/Maximum_transmission_unit) dimensiunea în bytes a pachetului maxim
+
+### ip
+Comenzile pe bază de [iproute2](https://lartc.org/howto/lartc.iproute2.html#LARTC.IPROUTE2.WHY) au fost introduse în linux pentru a înlocui ifconfig. 
+
+Prin comanda ip putem vedea:
+
+### Adresele
+```bash
+ip addr show
+```
+```
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+11: eth0@if12: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default 
+    link/ether 02:42:ac:12:00:04 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet 172.18.0.4/16 brd 172.18.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+```
+
+### Rutele
+```bash
+ip route show
+```
+```
+default via 172.18.0.1 dev eth0 
+172.18.0.0/16 dev eth0 proto kernel scope link src 172.18.0.4
+```
+
+### Links
+```bash
+ip link show
+```
+```
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+11: eth0@if12: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default 
+    link/ether 02:42:ac:12:00:04 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+```
+
+### Vecini
+```bash
+ping google.com
+ip neigh show
+```
+```
+172.18.0.1 dev eth0 lladdr 02:42:d7:56:fa:c8 REACHABLE
+```
+
 
 <a name="exercițiu1"></a>
 ### Exercițiu
