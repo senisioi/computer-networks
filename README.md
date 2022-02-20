@@ -1,10 +1,10 @@
-# 2020-2021 Computer Networks
+# 2021-2022 Computer Networks
 
-[![Gitter](https://badges.gitter.im/unibuc-computer-networks/2020.svg)](https://gitter.im/unibuc-computer-networks/2021?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Teams](https://upload.wikimedia.org/wikipedia/commons/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg)](https://teams.microsoft.com/l/team/19%3a2vEDoQvAYjFmnQt2BGb7hwUPIQTXsDlfqKBOxke-TZ41%40thread.tacv2/conversations?groupId=ad3aa5f1-3047-498a-861b-f1cdf98eb304&tenantId=08a1a72f-fecd-4dae-8cec-471a2fb7c2f1)
 
 
 ## Things to Checkout
-- ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) [Programul Masteral în Procesarea Limbajului Natural](https://nlp.unibuc.ro/master)
+- [Programul Masteral în Procesarea Limbajului Natural](https://nlp.unibuc.ro/master)
 - [DefCamp](https://def.camp/) the most important annual conference on Hacking & Information Security in Central Eastern Europe
 - [Defcon](https://www.defcon.org/) hacker comunity conference
 
