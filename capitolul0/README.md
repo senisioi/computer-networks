@@ -1,6 +1,16 @@
 # Capitolul 0 - Getting familiarized
 
+## Cuprins
+- [Introducere docker](#docker)
+- [Comenzi docker de bază](#docker_comenzi)
+- [NIC, ifconfig, iproute2](#nic)
+- [Exercițiul 1](#exercitiu1)
+- [Ping](#ping)
+- [tcpdump](#tcpdump_install)
+- [wireshark](#wireshark)
 
+
+<a name="docker"></a> 
 ## Introducere Docker
 Un container (sau serviciu) docker poate fi pornit (în mod asemănător cu o mașină virtuală) cu o imagine cu un sistem de operare. Un container seamănă mai mult cu un **proces** decât cu o mașină virtuală. Acesta nu emulează componente hardware, ci execută apeluri sistem cu dependințele necesare rulării unei aplicații. 
 
@@ -40,6 +50,7 @@ cd capitolul0
 docker-compose up -d
 ```
 
+<a name="docker_comenzi"></a> 
 ## Basic commands
 ```bash
 # list your images
@@ -113,7 +124,7 @@ docker rmi $(docker images -a -q)
 
 
 
-
+<a name="nic"></a>
 ## NIC - Network Interface Controller (Placa de rețea)
 ```bash
 # executați un shell în containerul rt1
@@ -193,8 +204,8 @@ ip neigh show
 ```
 
 
-<a name="exercițiu1"></a>
-### Exercițiu
+<a name="exercitiu1"></a>
+## Exercițiul 1
 Modificați docker-compose.yml pentru a adaugă încă o rețea și încă 3 containere atașate la rețeaua respectivă. Modificați definiția container-ului rt1 pentru a face parte din ambele rețele. 
 Exemplu de rețele:
 ```bash
@@ -214,8 +225,9 @@ networks:
 ```
 Ce se intamplă dacă constrângeți subnet-ul definit pentru a nu putea permite mai mult de 4 ip-uri într-o rețea.
 
+
 <a name="ping"></a>
-### Ping
+## Ping
 Este un tool de networking care se foloseste de [ICMP](https://en.wikipedia.org/wiki/Internet_Control_Message_Protocol) pentru a verifica dacă un host este conectat la o rețea prin IP.
 
 ```bash
@@ -265,7 +277,7 @@ De multe ori răspunsurile la ping [sunt dezactivate](https://superuser.com/ques
 
 
 <a name="tcpdump_install"></a>
-###  tcpdump
+##  tcpdump
 Este un tool care vă permite monitorizarea traficului de pe containerul/mașina pe care vă aflați. Vom folosi *tcpdump* pentru a monitoriza traficul generat de comanda ping. Pentru a rula tcpdump, trebuie să ne atașam unui container cu user **root** apoi putem rula:
 ```bash
 tcpdump -Sntv
@@ -358,3 +370,14 @@ tcpdump -S
  - Pentru mai multe detalii puteteți urmări acest [tutorial](https://danielmiessler.com/study/tcpdump/) sau [alte exemple](https://www.rationallyparanoid.com/articles/tcpdump.html)
  - Pentru exemple de filtrare mai detaliate, puteți urmări si [acest tutorial](https://forum.ivorde.com/tcpdump-how-to-to-capture-only-icmp-ping-echo-requests-t15191.html)
  - Trucuri de [filtare avansată](https://www.wains.be/pub/networking/tcpdump_advanced_filters.txt)
+
+
+<a name="Wireshark"></a>
+##  Wireshark
+
+[Wireshark](http://www.wireshark.org/download.html ) este o aplicație similară cu tcpdump care în plus are interfață grafică și mai multe funcționalități de analiză a pachetelor captate. Puteți să o instalați pe calculatoarele voastre personale și să o utilizați la laboratoare.
+În multe situații, nu avem acces la un server prin interfață grafică și atunci tcpdump ar fi de preferat. 
+
+#### Tutorial
+Puteți urmări un tutorial cu wireshark din [laboratoarele cărții A Top-down Approach](http://www-net.cs.umass.edu/wireshark-labs/Wireshark_Intro_v8.0.pdf).
+
