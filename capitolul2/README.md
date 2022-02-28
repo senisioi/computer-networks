@@ -3,7 +3,9 @@
 ## Cuprins
 - [Introducere](#intro)
 - [Domain Name System](#dns)
-- [Tpocket)
+- [HTTP/S Requests](#https)
+- [HTTP Server](#https_server)
+  - [Exercițiu HTTPS + DNS](#https_dns)
 - [UDP](#udp)
   - [Exerciții socket UDP](#exercitii_udp)
 - [TCP](#tcp)
@@ -157,10 +159,11 @@ div = supa.find('ul', {'class': 'wp-block-latest-posts__list'})
 print(div.text)
 ```
 
-### HTTP server
+<a name="https_server"></a>
+## HTTP server
 Executați următoarele comenzi pe un server AWS sau pe calculatorul vostru personal. 
 
-#### flask
+### flask
 [Flask](https://flask.palletsprojects.com/en/2.0.x/) este un [framework pentru web](https://en.wikipedia.org/wiki/Comparison_of_server-side_web_frameworks#Python) simplist și minimal pentru python. 
 ```bash
 # instalam flask
@@ -172,7 +175,7 @@ python3 simple_flask.py
 ```
 
  
-#### fastapi
+### fastapi
 [fastapi](https://fastapi.tiangolo.com/) este un alt framework gândit pentru apeluri HTTP asincrone. Executarea aplicației este preferat a se face prin-un ASGI [Asynchronous Server Gateway Interface](https://asgi.readthedocs.io/en/latest/introduction.html), în cazul nostru vom folosu [uvicorn](https://www.uvicorn.org/).
 
 ```bash
@@ -186,6 +189,18 @@ cd computer-networks/capitolul2/src
 # executăm aplicația cu uvicorn
 uvicorn simple_fastapi:app --reload --host 0.0.0.0 --port 8080
 ```
+
+<a name="https_dns"></a>
+### Exercițiu HTTP + S + DNS
+
+1. Folosiți [Github Stdent Pack](https://education.github.com/pack), înscrieți-vă cu adresa instituțională și obțineți un domeniu gratuit timp de 1 an de pe name.com.
+1. Creați o instanță EC2 pe AWS cu Ubuntu (sau orice altă instanță de mașină virtuală cu într-un cont de cloud).
+1. În meniul de configurație a intrărilor din DNS introduceți o intrare de tip `A` care să redirecționeze domeniul către adresa IPv4 a instanței voastre.
+1. Instalați certbot `sudo apt install certbot` pe instanța voastră.
+1. Executați certbot pentru a genera perechile de chei public-privat pentru domeniul vostru `sudo certbot certonly -d NUME_DOMENIU --preferred-challenges dns --manual`. Opțiunile din comanda anterioară `--preferred-challenges dns --manual` indică faptul că veți valida faptul că domeniul vă aparține printr-o intrare adăugată manual de tipul `TXT` în configurarea domeniului. În general, dacă doriți ca certificatele să se reînnoiască automat, nu folosiți cele două opțiuni, ci deschideți din security groups portul 80 și 443 care va valida automat conexiunea cu serverul.
+1. În urma execuției anterioare, în directorul `/etc/letsencrypt/live/NUME_DOMENIU/` vor fi generate perechi de chei public-private pentru domeniile voastre.
+1. Pentru a testa HTTPS, executați codul uvicorn specificând keyfile și certfile: `sudo uvicorn simple_fastapi:app --reload --host 0.0.0.0 --port 8080 --ssl-keyfile /etc/letsencrypt/live/NUME_DOMENIU/privkey.pem --ssl-certfile /etc/letsencrypt/live/NUME_DOMENIU/fullchain.pem`
+
 
 
 <a name="doh"></a>
