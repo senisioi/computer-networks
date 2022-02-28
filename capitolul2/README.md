@@ -3,10 +3,7 @@
 ## Cuprins
 - [Introducere](#intro)
 - [Domain Name System](#dns)
-- [HTTP/S requests](#https)
-  - [DNS over HTTPS](#doh)
-  - [Exerciții HTTP](#exercitii_http)
-- [Socket API](#socket)
+- [Tpocket)
 - [UDP](#udp)
   - [Exerciții socket UDP](#exercitii_udp)
 - [TCP](#tcp)
@@ -129,8 +126,7 @@ Protocolul pentru DNS lucrează la nivelul aplicației și este standardizat pen
 
 <a name="https"></a>
 ## HTTP/S requests
-Intrati in  browser si apasati tasta F12. Accesati pagina https://fmi.unibuc.ro si urmariti in tabul Network
-request-urile HTTP.
+Intrați în  browser și deschideți Developer Tools (de obicei, apăsând tasta F12). Accesați pagina https://fmi.unibuc.ro și urmăriți în tabul Network cererile HTTP.
 - Protocolul [HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
 - [Metode HTTP](http://httpbin.org/#/HTTP_Methods)
 - Protocolul [HTTPS](https://robertheaton.com/2014/03/27/how-does-https-actually-work/)
@@ -160,6 +156,37 @@ div = supa.find('ul', {'class': 'wp-block-latest-posts__list'})
 
 print(div.text)
 ```
+
+### HTTP server
+Executați următoarele comenzi pe un server AWS sau pe calculatorul vostru personal. 
+
+#### flask
+[Flask](https://flask.palletsprojects.com/en/2.0.x/) este un [framework pentru web](https://en.wikipedia.org/wiki/Comparison_of_server-side_web_frameworks#Python) simplist și minimal pentru python. 
+```bash
+# instalam flask
+pip install flask
+# ne mutam in directorul unde se gaseste simple_flask.py
+cd computer-networks/capitolul2/src
+# executam scriptul
+python3 simple_flask.py
+```
+
+ 
+#### fastapi
+[fastapi](https://fastapi.tiangolo.com/) este un alt framework gândit pentru apeluri HTTP asincrone. Executarea aplicației este preferat a se face prin-un ASGI [Asynchronous Server Gateway Interface](https://asgi.readthedocs.io/en/latest/introduction.html), în cazul nostru vom folosu [uvicorn](https://www.uvicorn.org/).
+
+```bash
+# instalam depedințele
+pip install "fastapi[all]"
+# daca variabila de environment PATH nu contine /home/$USER/bin
+# trebuie adaugat manual
+export PATH=$PATH:~/.local/bin/
+# ne mutam in directorul unde se gaseste simple_flask.py
+cd computer-networks/capitolul2/src
+# executăm aplicația cu uvicorn
+uvicorn simple_fastapi:app --reload --host 0.0.0.0 --port 8080
+```
+
 
 <a name="doh"></a>
 ### [DNS over HTTPS](https://datatracker.ietf.org/doc/rfc8484/?include_text=1)
