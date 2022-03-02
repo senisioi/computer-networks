@@ -193,7 +193,7 @@ uvicorn simple_fastapi:app --reload --host 0.0.0.0 --port 8080
 <a name="https_dns"></a>
 ### Exercițiu HTTP + S + DNS
 
-1. Folosiți [Github Stdent Pack](https://education.github.com/pack), înscrieți-vă cu adresa instituțională și obțineți un domeniu gratuit timp de 1 an de pe name.com.
+1. Folosiți [Github Student Pack](https://education.github.com/pack), înscrieți-vă cu adresa instituțională și obțineți un domeniu gratuit timp de 1 an de pe name.com.
 1. Creați o instanță EC2 pe AWS cu Ubuntu (sau orice altă instanță de mașină virtuală cu într-un cont de cloud).
 1. În meniul de configurație a intrărilor din DNS introduceți o intrare de tip `A` care să redirecționeze domeniul către adresa IPv4 a instanței voastre.
 1. Instalați certbot `sudo apt install certbot` pe instanța voastră.
