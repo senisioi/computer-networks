@@ -238,11 +238,15 @@ Numarul 16 se scrie in binar: `10000 (2^4)`, deci numărăm biții de la dreapta
 Dacă numărul ar fi stocat într-un tip de date pe 8 biți, s-ar scrie: `00010000`
 Dacă ar fi reprezentat pe 16 biți, s-ar scrie: `00000000 00010000`, completând cu 0 pe pozițiile mai mari până obținem 16 biți.
 
-În calculatoare există două tipuri de reprezentare a ordinii octeților: 
+În calculatoare există două tipuri de reprezentare a ordinii octeților în funcție de [adresele stocate ca octeți](https://en.wikipedia.org/wiki/Endianness#Overview):
 - **Big Endian** este: 00000000 00010000
-  - cel mai semnificativ bit are adresa cea mai mică, octet 0: 00010000, octet 1: 00000000
+  - ordinea bitilor este intuitivă, crescând de la dreapta la stânga
+  - **big bit** is at the **end** of the address space
+  - cel mai **semnificativ bit** are adresa cea mai **mică**, adresa 0: 00010000, adresa 1: 00000000
 - **Little Endian** este: 00010000 00000000
-  - cel mai semnificativ bit are adresa cea mai mare, octet 0: 00000000, octet 1: 00010000
+  - ordinea adreselor este intuitivă, crescând de la dreapta la stânga
+  - **little bit** is at the **end** of the address space
+  - cel mai **nesemnificativ bit** are adresa cea mai **mică**, adresa 0: 00000000, adresa 1: 00010000
 
 Pe rețea mesajele transmise trebuie să fie reprezentate într-un mod standardizat, independent de reprezentarea octeților pe mașinile de pe care sunt trimise, și acest standard este dat de Big Endian sau **Network Order**.
 
