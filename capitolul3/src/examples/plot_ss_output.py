@@ -4,8 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-out_dir = '.' #sys.argv[1]
-in_file = os.path.join(out_dir, 'socket_stats.csv')
+in_file = sys.argv[1]
 
 df = pd.read_csv(in_file)
 print(df.columns)

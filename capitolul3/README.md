@@ -367,7 +367,7 @@ Porniți TCP Server și TCP Client în containerul server, respectiv client și 
 
 <a name="tcp_cong_ex"></a>
 ### A) Exercițiu TCP Congestion Control
-Pentru a observa fast retransmit, puteți executa în contanerul server `/eloca/src/examples/tcp_losses/receiver.py` și în containerul client `/eloca/src/examples/tcp_losses/sender.py`. Captați cu wireshark sau cu `tcpdump -Sntv` pachetele de pe containerul router, veți putea observa schimburile de mesaje. 
+Pentru a observa fast retransmit, puteți executa în contanerul server `/elocal/capitolul3/src/examples/tcp_losses/receiver.py` și în containerul client `/elocal/capitolul3/src/examples/tcp_losses/sender.py`. Captați cu wireshark sau cu `tcpdump -Sntv` pachetele de pe containerul router, veți putea observa schimburile de mesaje. 
 Pentru a observa fast retransmit, setați pe interfața eth1 din containerul router o regulă de reorder și loss `tc qdisc add dev eth1 root netem reorder 80% delay 100ms`
 
 În docker-compose.yml este setată opțiunea de a folosi TCP Reno din sysctls, care folosește exact acest [fișier de linux](https://github.com/torvalds/linux/blob/master/net/ipv4/tcp_cong.c)
