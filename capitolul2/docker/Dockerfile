@@ -1,6 +1,6 @@
 FROM kalilinux/kali-rolling
 
-MAINTAINER Sergiu Nisioi <sergiu.nisioi@fmi.unibuc.ro>
+LABEL org.opencontainers.image.authors="Sergiu Nisioi <sergiu.nisioi@fmi.unibuc.ro>"
 
 USER root
 
