@@ -1,10 +1,11 @@
-# 2021-2022 Computer Networks
+# 2022-2023 Computer Networks [in progress]
 
 
-<a href="https://teams.microsoft.com/l/team/19%3a2vEDoQvAYjFmnQt2BGb7hwUPIQTXsDlfqKBOxke-TZ41%40thread.tacv2/conversations?groupId=ad3aa5f1-3047-498a-861b-f1cdf98eb304&tenantId=08a1a72f-fecd-4dae-8cec-471a2fb7c2f1">
+<a href="to_be_added">
 <img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg" alt="drawing" width="25"/>
 Canalul cursului pe Teams
 </a>
+
 
 
 
@@ -19,6 +20,6 @@ Canalul cursului pe Teams
 ## Înainte de a începe laboratorul
 Pentru laborator, vom avea nevoie de:
 - [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/) sau urmați pașii de [aici](https://gist.github.com/senisioi/0d4326775cade99ce2dec41b8d716b04)
-- [docker-compose](https://docs.docker.com/compose/install/) - este deja adăugat în acest repository
+- [docker compose](https://docs.docker.com/compose/install/) - este deja adăugat în acest repository
 - după instalarea docker, trebuie să adăugați userul cu care lucrăm în grupul de docker `sudo usermod -aG docker $USER`
 
