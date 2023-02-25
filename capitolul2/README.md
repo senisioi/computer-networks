@@ -34,7 +34,7 @@ Folosim DNS pentru a afla IP-urile corespunzătoare numelor. În general numele 
 
 În linux și macOS există aplicația `dig` cu care putem interoga entries de DNS. Puteți rula aceleași exemple dintr-un container docker `docker-compose exec rt1 bash`. 
 ```bash
-#1. cele 12 root servers de DNS:
+#1. cele 13 root servers de DNS:
 dig 
 ;; ANSWER SECTION:
 .     18942 IN  NS  m.root-servers.net.
@@ -50,6 +50,7 @@ dig
 .     18942 IN  NS  j.root-servers.net.
 .     18942 IN  NS  k.root-servers.net.
 .     18942 IN  NS  l.root-servers.net.
+.     18942 IN  NS  m.root-servers.net.
 
 #2. facem request-uri iterative pentru a afla adresa IP corespunzatoare lui fmi.unibuc.ro
 dig @a.root-servers.net fmi.unibuc.ro

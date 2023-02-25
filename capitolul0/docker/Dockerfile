@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-MAINTAINER Sergiu Nisioi <sergiu.nisioi@fmi.unibuc.ro>
+LABEL org.opencontainers.image.authors="Sergiu Nisioi <sergiu.nisioi@fmi.unibuc.ro>"
 
 USER root
 
