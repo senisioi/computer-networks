@@ -15,7 +15,7 @@ Canalul cursului pe Teams
 - [Defcon](https://www.defcon.org/) hacker comunity conference
 
 ## Informații curs
-- [Capitol separat](https://github.com/senisioi/computer-networks/blob/2021/curs/README.md)
+- [Capitol separat](https://github.com/senisioi/computer-networks/blob/2023/curs/README.md)
 
 ## Înainte de a începe cursul
 Pentru curs, vom avea nevoie de:

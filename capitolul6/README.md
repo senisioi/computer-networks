@@ -161,7 +161,7 @@ ping router
 - [bootstrap protocol](https://en.wikipedia.org/wiki/Bootstrap_Protocol) a fost înlocuit de [Dynamic Host Configuration Protocol](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol#Operation) pentru asignarea de adrese IPv4 automat device-urilor care se conectează pe rețea
 - pentru cerere de IP flow-ul include pașii pentru discover, offer, request și ack
 - container de docker [aici](https://github.com/networkboot/docker-dhcpd)
-- [exemplu de cod scapy aici](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/src/examples/dhcp.py)
+- [exemplu de cod scapy aici](https://github.com/senisioi/computer-networks/blob/2023/capitolul3/src/examples/dhcp.py)
 
 
 <a name="scapy_dns"></a> 

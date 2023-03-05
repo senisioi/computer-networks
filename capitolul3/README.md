@@ -38,7 +38,7 @@ docker-compose up -d
 # docker-compose -f capitolul3/docker-compose.yml up -d
 ```
 
-Fișierul `docker-compose.yml` definește 4 containere `server, router, client, middle` având ip-uri fixe în subneturi diferite, iar `router` este un container care funcționează ca router între cele două subrețele. Observați în [command pentru server](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/src/server.sh): `ip route add 172.10.0.0/16 via 198.10.0.1` adăugarea unei rute către subnetul în care se află clientul via ip-ul containerului router. De asemenea, în containerul client există o rută către server prin containerul router: `ip route add 198.10.0.0/16 via 172.10.0.1`.
+Fișierul `docker-compose.yml` definește 4 containere `server, router, client, middle` având ip-uri fixe în subneturi diferite, iar `router` este un container care funcționează ca router între cele două subrețele. Observați în [command pentru server](https://github.com/senisioi/computer-networks/blob/2023/capitolul3/src/server.sh): `ip route add 172.10.0.0/16 via 198.10.0.1` adăugarea unei rute către subnetul în care se află clientul via ip-ul containerului router. De asemenea, în containerul client există o rută către server prin containerul router: `ip route add 198.10.0.0/16 via 172.10.0.1`.
 
 Serviciile router și middle sunt setate să facă forwarding `net.ipv4.ip_forward=1`, lucru care se poate observa prin valoarea=1 setată: `bash /proc/sys/net/ipv4/ip_forward`. 
 
@@ -164,7 +164,7 @@ Ce se întamplă dacă suma calculată este exact numărul maxim pe N biți?
 
 <a name="#udp_socket"></a> 
 ### Socket UDP
-În capitolul2 există exemple de [server](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/src/udp_server.py) și [client](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/src/udp_client.py) pentru protocolul UDP. Cele mai importante metode de socket udp sunt:
+În capitolul2 există exemple de [server](https://github.com/senisioi/computer-networks/blob/2023/capitolul2/src/udp_server.py) și [client](https://github.com/senisioi/computer-networks/blob/2023/capitolul2/src/udp_client.py) pentru protocolul UDP. Cele mai importante metode de socket udp sunt:
 ```python
 # instantierea obiectului cu SOCK_DGRAM si IPPROTO_UDP
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, proto=socket.IPPROTO_UDP)
@@ -357,7 +357,7 @@ tc qdisc del dev eth0 root
 tc qdisc add dev eth0 root netem loss 5% 25% corrupt 5% reorder 25% 50% delay 10ms
 ```
 
-În containerul router, în [docker-compose.yml](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/docker-compose.yml) exista o `command` care inițializează containerul router și care rulează `sleep infinity`. 
+În containerul router, în [docker-compose.yml](https://github.com/senisioi/computer-networks/blob/2023/capitolul3/docker-compose.yml) exista o `command` care inițializează containerul router și care rulează `sleep infinity`. 
 `router.sh` este copiat în directorul root `/` in container prin comanda `COPY src/*.sh /` din Dockerfile-lab3, deci modificarea lui locală nu afectează fișierul din container.
 
 Introduceți în elocal un shell script `alter_packages.sh` care să execute comenzi de netem pe interfețele eth0 și eth1. Rulați-l în cadrul command după inițializarea routerului, dar înainte de sleep infinity.
@@ -424,7 +424,7 @@ Folosind netfilterque, pentru toate pachetele, introduceți în layer-ul de IP i
 
 <a name="#tcp_socket"></a> 
 ### Socket TCP
-În capitolul2 există exemple de [server](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/src/tcp_server.py) și [client](https://github.com/senisioi/computer-networks/blob/2021/capitolul2/src/tcp_client.py) pentru protocolul TCP. Cele mai importante metode sunt:
+În capitolul2 există exemple de [server](https://github.com/senisioi/computer-networks/blob/2023/capitolul2/src/tcp_server.py) și [client](https://github.com/senisioi/computer-networks/blob/2023/capitolul2/src/tcp_client.py) pentru protocolul TCP. Cele mai importante metode sunt:
 ```python
 # instantierea obiectului cu SOCK_STREAN si IPPROTO_TCP
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAN, proto=socket.IPPROTO_TCP)
@@ -443,7 +443,7 @@ s.send(b'octeti')
 
 <a name="#tcp_raw_socket"></a> 
 ### Raw Socket TCP
-Un exemplu de 3-way handshake facut cu Raw Socket este în directorul [capitolul3/src/examples/raw_socket_handshake.py](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/src/examples/raw_socket_handshake.py)
+Un exemplu de 3-way handshake facut cu Raw Socket este în directorul [capitolul3/src/examples/raw_socket_handshake.py](https://github.com/senisioi/computer-networks/blob/2023/capitolul3/src/examples/raw_socket_handshake.py)
 Putem instantia un socket brut pentru a capta mesaje TCP de pe orice port:
 ```python
 
@@ -636,7 +636,7 @@ tcp.option = [(optiune, valoare)]
 <a name="exercitii"></a> 
 ## Exerciții
 1. Instanțiați un server UDP și faceți schimb de mesaje cu un client scapy.  (Este necesara schimbarea socket-ului de L3 pentru aplicatii locale ```python conf.L3socket=L3RawSocket```)
-2. Rulați 3-way handshake între server și client folosind containerele definite în capitolul3, astfel: containerul `server` va rula `capitolul2/tcp_server.py` pe adresa '0.0.0.0', iar în containerul `client` configurați și rulați fișierul din [capitolul3/src/examples/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/2021/capitolul3/src/examples/tcp_handshake.py) pentru a face 3-way handshake.
+2. Rulați 3-way handshake între server și client folosind containerele definite în capitolul3, astfel: containerul `server` va rula `capitolul2/tcp_server.py` pe adresa '0.0.0.0', iar în containerul `client` configurați și rulați fișierul din [capitolul3/src/examples/tcp_handshake.py](https://github.com/senisioi/computer-networks/blob/2023/capitolul3/src/examples/tcp_handshake.py) pentru a face 3-way handshake.
 3. Configurați opțiunea pentru Maximum Segment Size (MSS) astfel încat să îl notificați pe server că segmentul maxim este de 1 byte. Puteți să-l configurați cu 0?
 4. Trimiteți mesaje TCP folosind flag-ul PSH și scapy.
 5. Setați flag-urile ECN în IP și flag-ul ECE in TCP pentru a notifica serverul de congestionarea rețelei.
