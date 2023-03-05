@@ -43,7 +43,7 @@ Comanda [docker-compose up -d](https://docs.docker.com/compose/reference/up/), v
 Containere care sunt configurate să ruleze o imagine dată (în cazul nostru *baseimage*, imaginea construită la pasul anterior) sunt conectate la o rețea (în cazul nostru rețeaua *dmz*) sau și au definite [un mount point](https://unix.stackexchange.com/questions/3192/what-is-meant-by-mounting-a-device-in-linux) local.
 Comanda docker-compose pe linux nu se instalează default cu docker, ci trebuie [să o instalăm separat](https://docs.docker.com/compose/install/). În cazul nostru, comanda se găsește chiar în directorul computer-networks, în acest repository. 
 
-Aplicația docker-compose [va descărca din registry](https://hub.docker.com/repository/docker/snisioi/retele) imaginea corespunzătoare pentru acest laborator. Imaginea se numește retele și are tag-ul 2021, cu versiunea pentru acest an.
+Aplicația docker-compose [va descărca din registry](https://hub.docker.com/repository/docker/snisioi/retele) imaginea corespunzătoare pentru acest capitol. Imaginea se numește retele și are tag-ul 2021, cu versiunea pentru acest an.
 ```bash
 cd capitolul0
 # start services defined in docker-compose.yml
@@ -225,6 +225,7 @@ networks:
 ```
 Ce se intamplă dacă constrângeți subnet-ul definit pentru a nu putea permite mai mult de 4 ip-uri într-o rețea.
 
+**Este corect să definim subrețele cu IP-uri: `172.111.111.0/16` și `198.13.13.0/16`?**
 
 <a name="ping"></a>
 ## Ping
