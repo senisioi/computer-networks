@@ -2,7 +2,7 @@ Computer Networking: a Top Down Approach 8e
 =========================================
 
 
-Materiale de curs sunt inspirate cartea _Computer Networking: a Top Down Approach 8e_, Jim Kurose, Keith Ross.
+Materiale de curs sunt inspirate cartea _[Computer Networking: a Top Down Approach 8e](https://gaia.cs.umass.edu/kurose_ross/index.php)_, Jim Kurose, Keith Ross.
 
 ## Bibliografie:
 - [carti pdf](https://bit.ly/biblio_retele)
