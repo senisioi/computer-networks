@@ -63,8 +63,8 @@ Mesajele trec prin mai multe routere sau servere chiar daca totul se intampla fo
 
 ## Adresele IP
 
-O adresa IP este compusa din 4 campuri a cate un byte de exemplu `192.168.5.1` avand reprezentarea binara `11000000.10101000.00000101.00000001`. Fiecare retea, fie ea publica sau privata, are o adresa de retea si o masca care desparte un IP intr-un prefix de retea si un sufix de host. Se noteaza `192.168.5.0/24` si inseamana ca primii 24 de biti din IP sunt fixi iar ceilalti poti fi folositi pentru a atribui IP-uri dispozitivelor din retea. Retaua aceasta are urmatorul range `192.168.5.1 - 192.168.5.255` 
-Masca poate fi reprezentata si de forma unei adrese IP dupa urmatoarea regula: toti bitii fixi au valoarea 1, restul au valoarea 0. Masca de 24 ar avea reprezentarea binara `11111111.11111111.11111111.00000000` si in format human readable `255.255.255.0`.
+O adresa IP este compusa din 4 campuri a cate un byte de exemplu `192.168.5.1` avand reprezentarea binara `11000000.10101000.00000101.00000001`. Fiecare retea, fie ea publica sau privata, are o adresa de retea si o masca care desparte un IP intr-un prefix de retea si un sufix de host. Se noteaza `192.168.5.0/24` si inseamana ca primii 24 de biti din IP sunt fixi iar ceilalti poti fi folositi pentru a atribui IP-uri dispozitivelor din retea. Rețaua aceasta are următorul interval `192.168.5.0 - 192.168.5.255`. Prima adresă este rezervată rețelei iar ultima adresă din interval este rezervată pentru broadcast și nu pot fi asignate unor noduri.
+Masca poate fi reprezentata si de forma unei adrese IP dupa urmatoarea regula: toti bitii fixi au valoarea 1, restul au valoarea 0. Masca de 24 ar avea reprezentarea binara `11111111.11111111.11111111.00000000` și în format uman `255.255.255.0`.
 
 ### Exercitii
 - Care este intervalul de IP-uri al adresei de retea `64.183.234.9/15`

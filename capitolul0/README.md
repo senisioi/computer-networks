@@ -3,11 +3,32 @@
 ## Cuprins
 - [Introducere docker](#docker)
 - [Comenzi docker de bază](#docker_comenzi)
+- [Referinte, tutoriale](#tutoriale)
 - [NIC, ifconfig, iproute2](#nic)
 - [Exercițiul 1](#exercitiu1)
 - [Ping](#ping)
 - [tcpdump](#tcpdump_install)
 - [wireshark](#wireshark)
+
+## Înainte de a începe
+Instalați [docker](https://docs.docker.com/engine/install/) și [docker compose](https://docs.docker.com/compose/install/) urmărind pașii din documentația oficială.
+
+Verificați că cele două comenzi funcționează executând:
+```bash
+docker ps
+docker compose ps
+
+# rezultat: CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+```
+
+Pe linux e posibil să primiți permission denied. Va trebui în acel caz să adăugați userul în grupul de docker:
+```bash
+# se adauga userul in grup
+sudo usermod -aG docker $USER
+# se face relod la setari in shellul curent
+newgrep docker
+# dupa un log out nu va mai fi nevoie sa rulati vreo comanda de mai sus
+```
 
 
 <a name="docker"></a> 
@@ -38,32 +59,46 @@ docker build -t retele:latest -f ./docker/Dockerfile .
 Contextul este directorul în care se execută construcția imaginii. În fișierul Dockerfile se poate specifica [copierea explicită](https://docs.docker.com/engine/reference/builder/) a unor fișiere / date din directorul local, iar contextul reprezintă directorul în funcție de care se pot specifica căi relative în dockerfile.
 
 
-### Orchestrate containers with docker-compose
-Comanda [docker-compose up -d](https://docs.docker.com/compose/reference/up/), va citi fișierul **docker-compose.yml** din path-ul de unde rulăm comanda și va lansa containere după cum sunt definite în fișier în secțiunea *services*: rt1, rt2, etc..
+### Orchestrate containers with docker compose
+Comanda [docker compose up -d](https://docs.docker.com/compose/reference/up/), va citi fișierul **docker compose.yml** din path-ul de unde rulăm comanda și va lansa containere după cum sunt definite în fișier în secțiunea *services*: rt1, rt2, etc..
 Containere care sunt configurate să ruleze o imagine dată (în cazul nostru *baseimage*, imaginea construită la pasul anterior) sunt conectate la o rețea (în cazul nostru rețeaua *dmz*) sau și au definite [un mount point](https://unix.stackexchange.com/questions/3192/what-is-meant-by-mounting-a-device-in-linux) local.
-Comanda docker-compose pe linux nu se instalează default cu docker, ci trebuie [să o instalăm separat](https://docs.docker.com/compose/install/). În cazul nostru, comanda se găsește chiar în directorul computer-networks, în acest repository. 
+Comanda docker compose pe linux nu se instalează default cu docker, ci trebuie [să o instalăm separat](https://docs.docker.com/compose/install/). În cazul nostru, comanda se găsește chiar în directorul computer-networks, în acest repository. 
 
-Aplicația docker-compose [va descărca din registry](https://hub.docker.com/repository/docker/snisioi/retele) imaginea corespunzătoare pentru acest capitol. Imaginea se numește retele și are tag-ul 2021, cu versiunea pentru acest an.
+Aplicația docker compose [va descărca din registry](https://hub.docker.com/repository/docker/snisioi/retele) imaginea corespunzătoare pentru acest capitol. Imaginea se numește retele și are tag-ul 2021, cu versiunea pentru acest an.
 ```bash
 cd capitolul0
-# start services defined in docker-compose.yml
-docker-compose up -d
+# start services defined in docker compose.yml
+docker compose up -d
 ```
 
 <a name="docker_comenzi"></a> 
-## Basic commands
+## Basic docker compose commands
 ```bash
+# stop services
+docker compose down
+
+# list images
+docker compose ps
+
+# attach using docker compose
+docker compose exec rt1 bash
+
+# attach as root to a container
+docker compose exec --user root rt1 bash
+
+```
+
+## Basic docker commands
+```bash
+
 # list your images
 docker image ls
 # sau
 docker images
 
-# stop services
-docker-compose down
 
 # see the containers running
 docker ps
-docker-compose ps
 
 # kill a container
 docker kill $CONTAINER_ID
@@ -89,11 +124,6 @@ docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $CO
 # attach to a container
 docker exec -it $CONTAINER_ID bash
 
-# attach using docker-compose
-docker-compose exec rt1 bash
-
-# attach as root to a container
-docker-compose exec --user root rt1 bash
 ```
 
 <a name="clean_all"></a> 
@@ -115,10 +145,13 @@ docker rmi $(docker images -a -q)
 ```
 
 
-### Docker References
+<a name="tutoriale"></a>
+## Docker References
 - [docker concepts](https://docs.docker.com/engine/docker-overview/#docker-engine)
-- [docker-compose](http://docker-k8s-lab.readthedocs.io/en/latest/docker/docker-compose.html)
-- [Compose Networking](https://runnable.com/docker/docker-compose-networking)
+- [docker compose](http://docker-k8s-lab.readthedocs.io/en/latest/docker/docker compose.html)
+- [Compose Networking](https://runnable.com/docker/docker compose-networking)
+- [Tutorial cu model de aplicație structurată pe microservicii](https://testdriven.io/courses/fastapi-celery/docker/)
+- [Introducere in Kubernetes](https://kubernetes.io/docs/tutorials/kubernetes-basics/) 
 - [Designing Scalable, Portable Docker Container Networks](https://success.docker.com/article/Docker_Reference_Architecture-_Designing_Scalable,_Portable_Docker_Container_Networks)
 - [Docker Networking Cookbook](https://github.com/TechBookHunter/Free-Docker-Books/blob/2020/book/Docker%20Networking%20Cookbook.pdf)
 
@@ -128,7 +161,7 @@ docker rmi $(docker images -a -q)
 ## NIC - Network Interface Controller (Placa de rețea)
 ```bash
 # executați un shell în containerul rt1
-docker-compose exec rt1 bash
+docker compose exec rt1 bash
 
 # listați configurațiile de rețea
 ifconfig
@@ -206,7 +239,7 @@ ip neigh show
 
 <a name="exercitiu1"></a>
 ## Exercițiul 1
-Modificați docker-compose.yml pentru a adaugă încă o rețea și încă 3 containere atașate la rețeaua respectivă. Modificați definiția container-ului rt1 pentru a face parte din ambele rețele. 
+Modificați docker compose.yml pentru a adaugă încă o rețea și încă 3 containere atașate la rețeaua respectivă. Modificați definiția container-ului rt1 pentru a face parte din ambele rețele. 
 Exemplu de rețele:
 ```bash
 networks:
@@ -268,7 +301,7 @@ ping 198.13.13.1
 8. Opțiunea `-f` este folosită pentru a face un flood de ping-uri.  Rulați un shell cu user root, apoi `ping -f 172.111.0.4`. Separat, într-un alt terminal rulați `docker stats`. Ce observați?
 
 <a name="ping_block"></a>
-De multe ori răspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva răspunsul la ping rulați userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`. Într-un container de docker nu aveți dreptul să modificați acel fișier și veți primi o eroare. Putem, în schimb, modifica structura containerului din *docker-compose.yml* și-i putem adăuga pe lângă image, networks, volumes, tty, o opțiune de [sysctls](https://docs.docker.com/compose/compose-file/compose-file-v2/#sysctls):
+De multe ori răspunsurile la ping [sunt dezactivate](https://superuser.com/questions/318870/why-do-companies-block-ping) pe servere. Pentru a dezactiva răspunsul la ping rulați userul root: `echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_all`. Într-un container de docker nu aveți dreptul să modificați acel fișier și veți primi o eroare. Putem, în schimb, modifica structura containerului din *docker compose.yml* și-i putem adăuga pe lângă image, networks, volumes, tty, o opțiune de [sysctls](https://docs.docker.com/compose/compose-file/compose-file-v2/#sysctls):
 ```
     rt1:
         ..........
