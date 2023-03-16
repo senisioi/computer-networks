@@ -242,11 +242,11 @@ Dacă ar fi reprezentat pe 16 biți, s-ar scrie: `00000000 00010000`, completân
 - **Big Endian** este: 00000000 00010000
   - ordinea bitilor este intuitivă, crescând de la dreapta la stânga
   - **big bit** is at the **end** of the address space
-  - cel mai **semnificativ bit** are adresa cea mai **mică**, adresa 0: 00010000, adresa 1: 00000000
+  - cel mai **semnificativ octet** are adresa cea mai **mică**, adresa 0: 00010000, adresa 1: 00000000
 - **Little Endian** este: 00010000 00000000
   - ordinea adreselor este intuitivă, crescând de la dreapta la stânga
   - **little bit** is at the **end** of the address space
-  - cel mai **nesemnificativ bit** are adresa cea mai **mică**, adresa 0: 00000000, adresa 1: 00010000
+  - cel mai **semnificativ octet** are adresa cea mai **mare**, adresa 0: 00000000, adresa 1: 00010000
 
 Pe rețea mesajele transmise trebuie să fie reprezentate într-un mod standardizat, independent de reprezentarea octeților pe mașinile de pe care sunt trimise, și acest standard este dat de Big Endian sau **Network Order**.
 
