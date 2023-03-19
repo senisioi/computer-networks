@@ -6,7 +6,7 @@
 - [Website principal](https://networks.hypha.ro/)
 - [Materiale Repository Github](https://github.com/senisioi/computer-networks)
 - [Bibliografie Curs](https://networks.hypha.ro/curs/)
-- :fire: [Programul Masteral în Procesarea Limbajului Natural](https://nlp.unibuc.ro/master)
+- 🔥[Programul Masteral în Procesarea Limbajului Natural](https://nlp.unibuc.ro/master)
 
 ### Security Conferences
 - [DefCamp](https://def.camp/) the most important annual conference on Hacking & Information Security in Central Eastern Europe
