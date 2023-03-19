@@ -136,10 +136,7 @@ Protocolul pentru DNS lucrează la nivelul aplicației și este standardizat pen
 <a name="https"></a>
 ## HTTP/S requests
 
-![alt text](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview/http-layers.png)
-<br>
-
-![alt text](https://blog.cloudflare.com/content/images/2015/12/http-2-file-concatenation.png)
+![alt text](https://blog.cloudflare.com/content/images/2019/09/Screen-Shot-2019-09-25-at-7.43.01-PM.png)
 <br>
 
 
@@ -244,7 +241,10 @@ Privacy-ul oferit de DoH poate fi exploatat și de [malware](https://www.zdnet.c
 
 <a name="ssh"></a>
 ## Tutorial SSH
+
 ![alt text](https://www.openssh.com/images/openssh.gif)
+<br>
+
 SSH este o aplicație client-server care permite instanțierea unui shell pe un calculator care se află într-o altă locație pe rețea.
 Reprezintă o alternativă la telent și rlogin (aplicații nesecurizate).
 Folosește protocolul TCP pentru transport. De ce?
