@@ -3,8 +3,9 @@
 
 ## Materiale
 - <a><img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg" alt="drawing" width="25"/></a> [Canalul cursului pe Teams](https://teams.microsoft.com/l/team/19%3awA2tGLn96SH2G_cNGKwPe8orFahlzuCYOLqhL30Uvao1%40thread.tacv2/conversations?groupId=e5a51008-8327-4111-89e8-0a128bfbd7ea&tenantId=08a1a72f-fecd-4dae-8cec-471a2fb7c2f1)
-- [Materiale de Curs](https://networks.hypha.ro/)
+- [Website principal](https://networks.hypha.ro/)
 - [Materiale Repository Github](https://github.com/senisioi/computer-networks)
+- [Bibliografie Curs](https://networks.hypha.ro/curs/)
 - [Programul Masteral în Procesarea Limbajului Natural](https://nlp.unibuc.ro/master)
 
 ### Security Conferences
@@ -21,6 +22,8 @@
 - [BeakerBrowser](https://beakerbrowser.com/)
 - [ScuttleBut](https://scuttlebutt.nz/about/)
 
+<details>
+<summary><i>Collective initiatives</i></summary>
 ### Collective initiatives
 - [Systerserver](https://systerserver.net/)
 - [bleu255](https://bleu255.com/)
@@ -29,6 +32,7 @@
 - [Anarchaserver](https://anarchaserver.org/)
 - [ooooo](https://www.ooooo.be/)
 - [Networks of Consent](https://gitlab.com/spritely/ocappub/-/blob/master/README.org)
+</details>
 
 
 ## Înainte de a începe cursul
