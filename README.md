@@ -15,8 +15,17 @@ Canalul cursului pe Teams
 - [Defcon](https://www.defcon.org/) hacker comunity conference
 
 ## Informații curs
-- [Capitol separat](https://github.com/senisioi/computer-networks/blob/2023/curs/README.md)
 - [Info curs](curs/)
+- [Capitolul 0](capitolul0/)
+    - [Introducere docker](capitolul0#docker)
+    - [Comenzi docker de bază](capitolul0#docker_comenzi)
+    - [Referinte, tutoriale](capitolul0#tutoriale)
+    - [NIC, ifconfig, iproute2](capitolul0#nic)
+    - [Exercițiul 1](capitolul0#exercitiu1)
+    - [Ping](capitolul0#ping)
+    - [tcpdump](capitolul0#tcpdump_install)
+    - [wireshark](capitolul0#wireshark)
+
 - [Capitolul1](capitolul1/)
 - [Capitolul2](capitolul2/)
 - [Capitolul3](capitolul3/)
