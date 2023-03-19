@@ -15,31 +15,58 @@ Canalul cursului pe Teams
 - [Defcon](https://www.defcon.org/) hacker comunity conference
 
 ## Structura
-### - [Informații pentru curs](curs/)
-### - [Capitolul 0](capitolul0/)
-- [Introducere docker](capitolul0#docker)
-- [Comenzi docker de bază](capitolul0#docker_comenzi)
-- [Referinte, tutoriale](capitolul0#tutoriale)
-- [NIC, ifconfig, iproute2](capitolul0#nic)
-- [Exercițiul 1](capitolul0#exercitiu1)
-- [Ping](capitolul0#ping)
-- [tcpdump](capitolul0#tcpdump_install)
-- [wireshark](capitolul0#wireshark)
+Cel mai ok se vede accesând acest [URL](https://senisioi.github.io/computer-networks/)
 
-### - [Capitolul1](capitolul1/)
-- [Network Stacks](capitolul1#stacks)
-- [Introducere și IDE](capitolul1#intro)
-  - [utils](capitolul1#utils)
-  - [python3 basics](capitolul1#basics)
-  - [Exerciții python](capitolul1#exercitii_python)
+### [Bibliografie curs](curs/)
+### Capitolul 0
+- [Introducere](capitolul0/)
+- [Comenzi docker](capitolul0#docker)
+- [NIC, ifconfig, iproute2](capitolul0#nic)
+- [Exercițiu](capitolul0#exercitiu1)
+- [Ping](capitolul0#ping)
+- [tcpdump, wireshark](capitolul0#tcpdump_install)
+
+### Capitolul 1
+- [Introducere](capitolul1/)
+- [Stivele de Rețea (OSI, TCP/IP)](capitolul1#stacks)
+- [python concepte de bază](capitolul1#intro)
 - [Big Endian (Network Order) vs. Little Endian](capitolul1#endianness)
 - [Python Bytes as C Types](capitolul1#ctypes)
-- [Funcția sniff și în scapy](capitolul1#scapy_sniff)
+- [Funcția sniff în scapy](capitolul1#scapy_sniff)
 
-- [Capitolul2](capitolul2/)
-- [Capitolul3](capitolul3/)
-- [Capitolul4](capitolul4/)
-- [Capitolul5](capitolul5/)
+### Capitolul 2
+- [Introducere](capitolul2#intro)
+- [Domain Name System](capitolul2#dns)
+- [HTTP/S Requests](capitolul2#https)
+- [HTTP Server](capitolul2#https_server)
+  - [Exercițiu HTTPS + DNS](capitolul2#https_dns)
+- [UDP](capitolul2#udp)
+  - [Exerciții socket UDP](capitolul2#exercitii_udp)
+- [TCP](capitolul2#tcp)
+  - [Exerciții socket TCP](capitolul2#exercitii_tcp)
+- [TCP 3-way handshake](capitolul2#shake)
+
+### Capitolul 3
+- [Introducere](capitolul3#intro)
+- [Funcțiile send(p), sr(p), sr(p)1 în scapy](capitolul3#scapy_send)
+- [UDP Datagram](capitolul3#udp)
+  - [Exemplu de calcul pentru checksum](capitolul3#checksum)
+  - [UDP Socket](capitolul3#udp_socket)
+  - [UDP Raw Socket](capitolul3#udp_raw_socket)
+  - [UDP Scapy](capitolul3#udp_scapy)
+- [TCP Segment](capitolul3#tcp)
+  - [TCP Congestion Control](capitolul3#tcp_cong)
+  - [TCP Options](capitolul3#tcp_options)
+  - [Exercițiu Retransmisii](capitolul3#tcp_retransmission)
+  - [Exercițiu Controlul Congestionării](capitolul3#tcp_cong_ex)
+  - [TCP Socket](capitolul3#tcp_socket)
+  - [TCP Raw Socket](capitolul3#tcp_raw_socket)
+  - [TCP Scapy](capitolul3#tcp_scapy)
+  - [TCP Options in Scapy](capitolul3#tcp_options_scapy)
+- [Exerciții](capitolul3#exercitii)
+
+### [Capitolul4](capitolul4/)
+### [Capitolul5](capitolul5/)
 
 
 

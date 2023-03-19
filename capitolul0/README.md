@@ -148,8 +148,6 @@ docker rmi $(docker images -a -q)
 <a name="tutoriale"></a>
 ## Docker References
 - [docker concepts](https://docs.docker.com/engine/docker-overview/#docker-engine)
-- [docker compose](http://docker-k8s-lab.readthedocs.io/en/latest/docker/docker compose.html)
-- [Compose Networking](https://runnable.com/docker/docker compose-networking)
 - [Tutorial cu model de aplicație structurată pe microservicii](https://testdriven.io/courses/fastapi-celery/docker/)
 - [Introducere in Kubernetes](https://kubernetes.io/docs/tutorials/kubernetes-basics/)
 - [Designing Scalable, Portable Docker Container Networks](https://success.docker.com/article/Docker_Reference_Architecture-_Designing_Scalable,_Portable_Docker_Container_Networks)

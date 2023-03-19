@@ -2,13 +2,13 @@
 
 ## Cuprins
 - [Network Stacks](#stacks)
-- [Introducere și IDE](#intro)
+- [Introducere în python](#intro)
   - [utils](#utils)
   - [python3 basics](#basics)
   - [Exerciții python](#exercitii_python)
 - [Big Endian (Network Order) vs. Little Endian](#endianness)
 - [Python Bytes as C Types](#ctypes)
-- [Funcția sniff și în scapy](#scapy_sniff)
+- [Funcția sniff în scapy](#scapy_sniff)
 
 
 <a name="stacks"></a> 
