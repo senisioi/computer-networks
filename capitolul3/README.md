@@ -419,7 +419,7 @@ Scrieți un script care citește fișierul csv și plotează (vezi matplotlib, s
 ### C) Explicit Congestion Notification
 
 Folosind netfilterque, pentru toate pachetele, introduceți în layer-ul de IP informația că rețeaua este congestionată și urmăriți pachetele dintre `receiver.py` și `sender.py`.
-În [Capitolul 6](https://github.com/senisioi/computer-networks/tree/2021/capitolul6#scapy_nfqueue_basic) aveți un exemplu cu NFQUEUE care interceptează pachete și le modifică în tranzit. Încercați să setați flag-urile de explicit congestion notification pe fiecare pachet de la nivelul IP.
+În [Capitolul 6](../capitolul6#scapy_nfqueue_basic) aveți un exemplu cu NFQUEUE care interceptează pachete și le modifică în tranzit. Încercați să setați flag-urile de explicit congestion notification pe fiecare pachet de la nivelul IP.
 
 
 <a name="#tcp_socket"></a> 

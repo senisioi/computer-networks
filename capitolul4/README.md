@@ -161,7 +161,7 @@ ip.show()
 <a name="ipv4routing"></a> 
 ## Subnetting, Routing, and other stuff
 Pe scurt, aici sunt link-urile cu informații esențiale despre rutare:
-- mai întâi urmăriți în partea de curs informațiile de bază despre [curs forwarding](https://github.com/senisioi/computer-networks/tree/2021/curs#forwarding) și [curs rutare](https://github.com/senisioi/computer-networks/tree/2021/curs#routing)
+- mai întâi urmăriți în partea de curs informațiile de bază despre [curs forwarding](https://gaia.cs.umass.edu/kurose_ross/videos/4/) și [curs rutare](https://gaia.cs.umass.edu/kurose_ross/videos/5/)
 - despre subnets și VPC în AWS există mai [multe explicații aici](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html) 
 - Fraida Fund are un tutorial foarte bun despre cum pot fi alocate [IP-uri subrețelelor](https://witestlab.poly.edu/blog/designing-subnets/); cu toate că nu aveți cont pe GENI, puteți replica întregul set-up pe docker modificând docker-compose.yml din capitolul3
 - pentur [Distance Vector Routing](https://en.wikipedia.org/wiki/Distance-vector_routing_protocol#Example) există un exemplu foarte ușor de urmărit pe wikipedia, inclusiv cu [Split Horizon si Poison Reverse](https://en.wikipedia.org/wiki/Split_horizon_route_advertisement)
