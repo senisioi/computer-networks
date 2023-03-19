@@ -13,15 +13,22 @@
 - [USENIX](https://www.usenix.org/conferences) academic conference
 - [BlackHat](https://www.blackhat.com/) conference
 
-### Stuff
-- [CHATONS](https://entraide.chatons.org/en/) open softare
+### Open Softare
 - [De-google-ify the internet](https://degooglisons-internet.org/en/)
-- [Pluggable Transport](https://leap.se/blog/)
 - [yunohost](https://yunohost.org/en/selfhosting) self-hosting
-- [Networks of Consent](https://gitlab.com/spritely/ocappub/-/blob/master/README.org)
+- [Pluggable Transport](https://leap.se/blog/)
+- [CHATONS](https://entraide.chatons.org/en/) open softare
 - [BeakerBrowser](https://beakerbrowser.com/)
 - [ScuttleBut](https://scuttlebutt.nz/about/)
 
+### Collective initiatives
+- [Systerserver](https://systerserver.net/)
+- [bleu255](https://bleu255.com/)
+- [Varia](https://varia.zone/)
+- [Constant](https://constantvzw.org/site/)
+- [Anarchaserver](https://anarchaserver.org/)
+- [ooooo](https://www.ooooo.be/)
+- [Networks of Consent](https://gitlab.com/spritely/ocappub/-/blob/master/README.org)
 
 
 ## Înainte de a începe cursul
