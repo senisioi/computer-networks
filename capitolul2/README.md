@@ -27,7 +27,10 @@ docker-compose up -d
 
 <a name="dns"></a> 
 ## [Domain Name System](https://dnsmonitor.com/dns-tutorial-1-the-basics/)
-![alt text](https://d1.awsstatic.com/Route53/how-route-53-routes-traffic.8d313c7da075c3c7303aaef32e89b5d0b7885e7c.png)
+
+![alt text](https://hacks.mozilla.org/files/2018/05/02_05-500x438.png)
+<br>
+
 Folosim DNS pentru a afla IP-urile corespunzătoare numelor. În general numele sunt ([Fully Qualified Domain Names](https://kb.iu.edu/d/aiuv)) salvate cu [un punct în plus la sfârșit](https://stackexchange.github.io/dnscontrol/why-the-dot).
 
 - [DNS și DNS over HTTPS cartoon](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/). 
@@ -132,16 +135,25 @@ Protocolul pentru DNS lucrează la nivelul aplicației și este standardizat pen
 
 <a name="https"></a>
 ## HTTP/S requests
+
+![alt text](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview/http-layers.png)
+<br>
+
+![alt text](https://blog.cloudflare.com/content/images/2015/12/http-2-file-concatenation.png)
+<br>
+
+
 Intrați în  browser și deschideți Developer Tools (de obicei, apăsând tasta F12). Accesați pagina https://fmi.unibuc.ro și urmăriți în tabul Network cererile HTTP.
+
 
 - Protocolul [HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
 - [Metode HTTP](http://httpbin.org/#/HTTP_Methods)
 - [HTTP/2](https://blog.cloudflare.com/http-2-for-web-developers/)
-- [Introducere în HTTPS](https://howhttps.works/)
-- [TLS 1.3](https://www.davidwong.fr/tls13/)
+- Introducere în [HTTPS](https://howhttps.works/)
+- Specificații [TLS 1.3](https://www.davidwong.fr/tls13/)
 - Protocolul [HTTPS](https://robertheaton.com/2014/03/27/how-does-https-actually-work/)
 - Video despre HTTPS [aici](https://www.youtube.com/watch?v=T4Df5_cojAs)
-- [HTTP/3 (over QUIC)](https://blog.cloudflare.com/http3-the-past-present-and-future/)
+- Urmăriți acest tuorial despre [HTTP/3 (peste QUIC)](https://blog.cloudflare.com/http3-the-past-present-and-future/)
 - [HTTP/3 tutorial](https://http3-explained.haxx.se/)
 
 
