@@ -6,7 +6,7 @@
 - [Website principal](https://networks.hypha.ro/)
 - [Materiale Repository Github](https://github.com/senisioi/computer-networks)
 - [Bibliografie Curs](https://networks.hypha.ro/curs/)
-- 🔥[Programul Masteral în Procesarea Limbajului Natural](https://nlp.unibuc.ro/master)
+- 🔥[Masterul de NLP](https://nlp.unibuc.ro/master)
 
 ### Security Conferences
 - [DefCamp](https://def.camp/) the most important annual conference on Hacking & Information Security in Central Eastern Europe
@@ -125,7 +125,7 @@ Site-ul generat din fișierele de pe git poate fi accesat la acest [URL](https:/
 
 
 ### Capitolul 6
-- [Requrements](capitolul6#intro)
+- [Introducere](capitolul6#intro)
 - [Interceptarea Pachetelor](capitolul6#scapy_nfqueue)
     - [Blocare Pachete](capitolul6#scapy_nfqueue_block)
 - [DHCP și BOOTP](capitolul6#scapy)
