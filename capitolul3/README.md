@@ -2,7 +2,6 @@
 
 ## Cuprins
 - [Introducere](#intro)
-- [Funcțiile send(p), sr(p), sr(p)1 în scapy](#scapy_send)
 - [UDP Datagram](#udp)
   - [Exemplu de calcul pentru checksum](#checksum)
   - [UDP Socket](#udp_socket)
@@ -25,20 +24,20 @@
 cd computer-networks
 
 # ștergem toate containerele create default
-docker-compose down
+docker compose down
 
 # ștergem rețelele create anterior ca să nu se suprapună cu noile subnets
 docker network prune
 
-# lucrăm cu docker-compose.yml din capitolul3
+# lucrăm cu docker compose.yml din capitolul3
 cd capitolul3
-docker-compose up -d
+docker compose up -d
 
 # sau din directorul computer-networks: 
-# docker-compose -f capitolul3/docker-compose.yml up -d
+# docker compose -f capitolul3/docker compose.yml up -d
 ```
 
-Fișierul `docker-compose.yml` definește 4 containere `server, router, client, middle` având ip-uri fixe în subneturi diferite, iar `router` este un container care funcționează ca router între cele două subrețele. Observați în [command pentru server](https://github.com/senisioi/computer-networks/blob/2023/capitolul3/src/server.sh): `ip route add 172.10.0.0/16 via 198.10.0.1` adăugarea unei rute către subnetul în care se află clientul via ip-ul containerului router. De asemenea, în containerul client există o rută către server prin containerul router: `ip route add 198.10.0.0/16 via 172.10.0.1`.
+Fișierul `docker compose.yml` definește 4 containere `server, router, client, middle` având ip-uri fixe în subneturi diferite, iar `router` este un container care funcționează ca router între cele două subrețele. Observați în [command pentru server](https://github.com/senisioi/computer-networks/blob/2023/capitolul3/src/server.sh): `ip route add 172.10.0.0/16 via 198.10.0.1` adăugarea unei rute către subnetul în care se află clientul via ip-ul containerului router. De asemenea, în containerul client există o rută către server prin containerul router: `ip route add 198.10.0.0/16 via 172.10.0.1`.
 
 Serviciile router și middle sunt setate să facă forwarding `net.ipv4.ip_forward=1`, lucru care se poate observa prin valoarea=1 setată: `bash /proc/sys/net/ipv4/ip_forward`. 
 
@@ -58,23 +57,6 @@ subnet2: 198.10.0.2      subnet1: 172.10.0.1      subnet1: 172.10.0.2
                          subnet1 <-> subnet2
                              forwarding
 ```
-
-
-
-
-<a name="scapy_send"></a> 
-## Funcțiile send(p), sr(p), sr(p)1 în scapy
-
-În scapy avem mai multe funcții de trimitere a pachetelor:
-- `send()` - trimite un pachet pe rețea la nivelul network (layer 3), iar secțiunea de ethernet este completată de către sistem
-- `answered, unanswered = sr()` - send_receive - trimite pachete pe rețea în loop și înregistrează și răspunsurile primite într-un tuplu (answered, unanswered), unde answered și unanswered reprezintă o listă de tupluri [(pachet_trimis1, răspuns_primit1), ...,(pachet_trimis100, răspuns_primit100)] 
-- `answer = sr1()` - send_receive_1 - trimite pe rețea un pachet și înregistrează primul răspunsul
-
-Pentru a trimite pachete la nivelul legatură de date (layer 2), completând manual câmpuri din secțiunea Ethernet, avem echivalentul funcțiilor de mai sus:
-- `sendp()` - send_ethernet trimite un pachet la nivelul data-link, cu layer Ether custom
-- `answered, unanswered = srp()` - send_receive_ethernet trimite pachete la layer 2 și înregistrează răspunsurile
-- `answer = srp1()` - send_receive_1_ethernet la fel ca srp, dar înregistreazî doar primul răspuns
-
 
 
 
@@ -180,7 +162,7 @@ s.sendto(b'bytes', ('adresa', port))
 
 <a name="udp_raw_socket"></a> 
 ### Raw Socket UDP
-Există raw socket cu care putem citi sau trimite pachetele in formă binară. Explicații mai multe puteți găsi și [aici](https://opensourceforu.com/2015/03/a-guide-to-using-raw-sockets/). Pentru a instantia RAW Socket avem nevoie de acces cu drepturi de administrator. Deci este de preferat să lucrăm în containerele de docker: `docker-compose exec server bash`
+Există raw socket cu care putem citi sau trimite pachetele in formă binară. Explicații mai multe puteți găsi și [aici](https://opensourceforu.com/2015/03/a-guide-to-using-raw-sockets/). Pentru a instantia RAW Socket avem nevoie de acces cu drepturi de administrator. Deci este de preferat să lucrăm în containerele de docker: `docker compose exec server bash`
 
 ```python
 import socket
@@ -222,7 +204,7 @@ b'salut'
 
 <a name="#udp_scapy"></a> 
 ### Scapy UDP
-Într-un terminal dintr-un container rulați scapy: `docker-compose exec client scapy`
+Într-un terminal dintr-un container rulați scapy: `docker compose exec client scapy`
 
 ```python
 udp_obj = UDP()
@@ -357,7 +339,7 @@ tc qdisc del dev eth0 root
 tc qdisc add dev eth0 root netem loss 5% 25% corrupt 5% reorder 25% 50% delay 10ms
 ```
 
-În containerul router, în [docker-compose.yml](https://github.com/senisioi/computer-networks/blob/2023/capitolul3/docker-compose.yml) exista o `command` care inițializează containerul router și care rulează `sleep infinity`. 
+În containerul router, în [docker compose.yml](https://github.com/senisioi/computer-networks/blob/2023/capitolul3/docker compose.yml) exista o `command` care inițializează containerul router și care rulează `sleep infinity`. 
 `router.sh` este copiat în directorul root `/` in container prin comanda `COPY src/*.sh /` din Dockerfile-lab3, deci modificarea lui locală nu afectează fișierul din container.
 
 Introduceți în elocal un shell script `alter_packages.sh` care să execute comenzi de netem pe interfețele eth0 și eth1. Rulați-l în cadrul command după inițializarea routerului, dar înainte de sleep infinity.
@@ -370,7 +352,7 @@ Porniți TCP Server și TCP Client în containerul server, respectiv client și 
 Pentru a observa fast retransmit, puteți executa în contanerul server `/elocal/capitolul3/src/examples/tcp_losses/receiver.py` și în containerul client `/elocal/capitolul3/src/examples/tcp_losses/sender.py`. Captați cu wireshark sau cu `tcpdump -Sntv` pachetele de pe containerul router, veți putea observa schimburile de mesaje. 
 Pentru a observa fast retransmit, setați pe interfața eth1 din containerul router o regulă de reorder și loss `tc qdisc add dev eth1 root netem reorder 80% delay 100ms`
 
-În docker-compose.yml este setată opțiunea de a folosi TCP Reno din sysctls, care folosește exact acest [fișier de linux](https://github.com/torvalds/linux/blob/master/net/ipv4/tcp_cong.c)
+În docker compose.yml este setată opțiunea de a folosi TCP Reno din sysctls, care folosește exact acest [fișier de linux](https://github.com/torvalds/linux/blob/master/net/ipv4/tcp_cong.c)
 ```
         sysctls:
           - net.ipv4.tcp_congestion_control=reno
@@ -383,26 +365,26 @@ Ce observați diferit la 3-way handshake?
 
 <a name="tcp_cong_plots"></a>
 ### B) Plot Congestion Graphs
-Exercițiul se bazează pe [tutorialul prezentat de Fraida Fund](https://witestlab.poly.edu/blog/tcp-congestion-control-basics/) în care sunt extragese informațiile despre cwnd folosind aplicația din linia de comandă ss (socket statistics): `ss -ein dst IP`. Citiți cu atenție tutorialul înainte de a începe rezolvarea și asigurați-vă că aveți aplicațiile `ss` și `ts` în containerul de docker (rulați `docker-compose build` în directorul capitolul3).
+Exercițiul se bazează pe [tutorialul prezentat de Fraida Fund](https://witestlab.poly.edu/blog/tcp-congestion-control-basics/) în care sunt extragese informațiile despre cwnd folosind aplicația din linia de comandă ss (socket statistics): `ss -ein dst IP`. Citiți cu atenție tutorialul înainte de a începe rezolvarea și asigurați-vă că aveți aplicațiile `ss` și `ts` în containerul de docker (rulați `docker compose build` în directorul capitolul3).
 
 Setați pe containerul router limitare de bandă cu netem, astfel încât să aveți un bottleneck de 1 Mbp/s și un buffer de 0.1 MB, în ambele direcții de comunicare:
 ```bash
-docker-compose exec router bash -c "/elocal/capitolul3/src/bottleneck.sh"
+docker compose exec router bash -c "/elocal/capitolul3/src/bottleneck.sh"
 ```
 
 Rulați pe containerul server o aplicație server iperf3
 ```bash
-docker-compose exec server bash -c "iperf3 -s -1"
+docker compose exec server bash -c "iperf3 -s -1"
 ```
 
 Rulați pe containerul client script-ul de shell care salvează valorile de timestamp și cwnd într-un csv.
 ```bash
-docker-compose exec client bash -c "/elocal/capitolul3/src/capture_stats.sh"
+docker compose exec client bash -c "/elocal/capitolul3/src/capture_stats.sh"
 ```
 
 Rulați pe containerul client o aplicație client care să comunice cu serverul timp de 60 de secunde și care să folosească TCP Reno:
 ```bash
-docker-compose exec client bash -c "iperf3 -c 198.10.0.2 -t 60 -C reno"
+docker compose exec client bash -c "iperf3 -c 198.10.0.2 -t 60 -C reno"
 ```
 După finalizarea transmisiunii, încetați execuția comenzii `capture_stats.sh` prin `Ctrl + C`.
 

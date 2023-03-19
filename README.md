@@ -17,7 +17,7 @@ Canalul cursului pe Teams
 
 
 ## Înainte de a începe cursul
-Acesta este un curs practic pe parcursul căruia vom învăța despre Internet, ce protocoale există în rețele și cum putem scrie programe pentru a interacționa cu rețelele.
+Acesta este un curs practic pe parcursul căruia vom învăța despre [Internet](https://www.nsf.gov/news/special_reports/nsf-net/index.jsp), ce protocoale există în rețele și cum putem scrie programe pentru a interacționa cu rețelele.
 
 O mare parte din exemplele de cod pot fi executate direct pe calculatoarele voastre (pe host). 
 O parte din exemple utilizează containere de docker pentru a reproductibilitate. Așadar, ca să puteți reproduce toate experimentele și demonstratoarele de la curs, veți avea de:
@@ -27,7 +27,7 @@ O parte din exemple utilizează containere de docker pentru a reproductibilitate
 
 
 ## Materiale
-Acesta este un repository de git, site-ul generat poate fi accesat la acest [URL](https://senisioi.github.io/computer-networks/)
+Site-ul generat din fișierele de pe git poate fi accesat la acest [URL](https://senisioi.github.io/computer-networks/)
 
 
 ### [Bibliografie curs](curs/)
@@ -36,18 +36,18 @@ Acesta este un repository de git, site-ul generat poate fi accesat la acest [URL
 - [Introducere](capitolul0/)
 - [Comenzi docker](capitolul0#docker)
 - [NIC, ifconfig, iproute2](capitolul0#nic)
-- [Exercițiu](capitolul0#exercitiu1)
-- [Ping](capitolul0#ping)
-- [tcpdump, wireshark](capitolul0#tcpdump_install)
+- [Exercițiul 1](capitolul0#exercitiu1)
+- [ping](capitolul0#ping)
+- [Exerciții tcpdump, wireshark](capitolul0#tcpdump_install)
 - [Suport Video - Chapter 1: Computer Networks and the Internet](https://gaia.cs.umass.edu/kurose_ross/videos/1/)
 
 ### Capitolul 1
 - [Introducere](capitolul1/)
 - [Stivele de Rețea (OSI, TCP/IP)](capitolul1#stacks)
-- [python concepte de bază](capitolul1#intro)
+- [python - concepte de bază](capitolul1#intro)
 - [Big Endian (Network Order) vs. Little Endian](capitolul1#endianness)
-- [Python Bytes as C Types](capitolul1#ctypes)
-- [Funcția sniff în scapy](capitolul1#scapy_sniff)
+- [Python Bytes și Tipuri de date în C](capitolul1#ctypes)
+- [Funcția `sniff` în scapy](capitolul1#scapy_sniff)
 - [Suport Video - Chapter 1: Computer Networks and the Internet](https://gaia.cs.umass.edu/kurose_ross/videos/1/)
 
 ### Capitolul 2
@@ -60,7 +60,9 @@ Acesta este un repository de git, site-ul generat poate fi accesat la acest [URL
   - [Exerciții socket UDP](capitolul2#exercitii_udp)
 - [TCP](capitolul2#tcp)
   - [Exerciții socket TCP](capitolul2#exercitii_tcp)
-- [TCP 3-way handshake](capitolul2#shake)
+  - [TCP 3-way handshake](capitolul2#shake)
+- [Funcțiile send(p), sr(p), sr(p)1 în scapy](#scapy_send)
+  - [Exercițiu DNS](#exercitii_send)
 - [Suport Video - Chapter 2: The Application Layer](https://gaia.cs.umass.edu/kurose_ross/videos/2/)
 
 ### Capitolul 3

@@ -306,6 +306,7 @@ except KeyboardInterrupt:
 
 Testați din containerul `server`: `docker-compose exec server bash -c "ping fmi.unibuc.ro"`
 
+
 <a name="exercitii"></a> 
 ## Exerciții
 1. Urmăriți mai multe exemple din scapy [aici](https://scapy.readthedocs.io/en/latest/usage.html#simple-one-liners)

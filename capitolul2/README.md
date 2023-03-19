@@ -6,11 +6,14 @@
 - [HTTP/S Requests](#https)
 - [HTTP Server](#https_server)
   - [Exercițiu HTTPS + DNS](#https_dns)
+- [SSH](#ssh)
 - [UDP](#udp)
   - [Exerciții socket UDP](#exercitii_udp)
 - [TCP](#tcp)
   - [Exerciții socket TCP](#exercitii_tcp)
   - [TCP 3-way handshake](#shake)
+- [Funcțiile send(p), sr(p), sr(p)1 în scapy](#scapy_send)
+  - [Exercițiu DNS](#exercitii_send)
 
 <a name="intro"></a> 
 ## Introducere
@@ -24,7 +27,7 @@ docker-compose up -d
 
 <a name="dns"></a> 
 ## [Domain Name System](https://dnsmonitor.com/dns-tutorial-1-the-basics/)
-
+![alt text](https://d1.awsstatic.com/Route53/how-route-53-routes-traffic.8d313c7da075c3c7303aaef32e89b5d0b7885e7c.png)
 Folosim DNS pentru a afla IP-urile corespunzătoare numelor. În general numele sunt ([Fully Qualified Domain Names](https://kb.iu.edu/d/aiuv)) salvate cu [un punct în plus la sfârșit](https://stackexchange.github.io/dnscontrol/why-the-dot).
 
 - [DNS și DNS over HTTPS cartoon](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/). 
@@ -130,10 +133,17 @@ Protocolul pentru DNS lucrează la nivelul aplicației și este standardizat pen
 <a name="https"></a>
 ## HTTP/S requests
 Intrați în  browser și deschideți Developer Tools (de obicei, apăsând tasta F12). Accesați pagina https://fmi.unibuc.ro și urmăriți în tabul Network cererile HTTP.
+
 - Protocolul [HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
 - [Metode HTTP](http://httpbin.org/#/HTTP_Methods)
+- [HTTP/2](https://blog.cloudflare.com/http-2-for-web-developers/)
+- [Introducere în HTTPS](https://howhttps.works/)
+- [TLS 1.3](https://www.davidwong.fr/tls13/)
 - Protocolul [HTTPS](https://robertheaton.com/2014/03/27/how-does-https-actually-work/)
 - Video despre HTTPS [aici](https://www.youtube.com/watch?v=T4Df5_cojAs)
+- [HTTP/3 (over QUIC)](https://blog.cloudflare.com/http3-the-past-present-and-future/)
+- [HTTP/3 tutorial](https://http3-explained.haxx.se/)
+
 
 ```python
 import requests
@@ -217,6 +227,31 @@ Privacy-ul oferit de DoH poate fi exploatat și de [malware](https://www.zdnet.c
 2. Executati pe containerul `rt1` scriptul 'simple_flask.py' care deserveste API HTTP pentru GET si POST. Daca accesati in browser [http://localhost:8001](http://localhost:8001) ce observati?
 3. Conectați-vă la containerul `docker-compose exec rt2 bash`. Testati conexiunea catre API-ul care ruleaza pe rt1 folosind curl: `curl -X POST http://rt1:8001/post  -d '{"value": 10}' -H 'Content-Type: application/json'`. Scrieti o metoda POST care ridică la pătrat un numărul definit în `value`. Apelați-o din cod folosind python requests.
 4. Urmăriți alte exemple de request-uri pe [HTTPbin](http://httpbin.org/)
+
+
+
+<a name="ssh"></a>
+## Tutorial SSH
+![alt text](https://www.openssh.com/images/openssh.gif)
+SSH este o aplicație client-server care permite instanțierea unui shell pe un calculator care se află într-o altă locație pe rețea.
+Reprezintă o alternativă la telent și rlogin (aplicații nesecurizate).
+Folosește protocolul TCP pentru transport. De ce?
+De obicei portul 22 este rezervat pentru SSH
+Permite și crearea unui tunel prin care să se transmită date în mod securizat
+Cea mai sigură metodă este conectarea prin pereche cheie publică-cheie privată, dar funcționează și prin conexiune pe bază de parolă.
+
+Dacă avem un server deschis pe localhost, putem folosi SSH pentru a face un tunel prin TCP prin care să trimitem orice fel de mesaje. Asta înseamnă că putem trimite mesaje TCP prin TCP-ul deschis cu SSH.
+
+### Exerciții SSH
+1. **Aplicație server deschisă pe localhost pe server, accesibilă local prin tunel SSH**
+Puteți încerca să deschideți un server simplu (folosind `simple_flask.py` deschis cu `localhost:8002` pe un server remote). Folisiți `ssh -N -L 8083:localhost:8002 USER@IP_SERVER` ca să redirecționați mesajele care vin pe portul local 8083 către adresa localhost:8002 de pe server. Puteți accesa aplicația din browserul local folosind portul local pe care tocmai l-am alocat (8083)
+
+2. **Dynamic Port Forwarding (nerecomandat)**
+Putem transforma server-ul într-un proxy securizat prin care să trimitem toate mesajele `ssh -N -D 8081 USER@IP_SERVER`. *Dynamic port forwarding* deschide un canal de comunicare de pe adresa `localhost:8081` către server, encapsulând orice mesaj de la nivelele inferioare. 
+La nivelul browserului putem seta SOCKS proxy ca fiind `localhost:8081`.
+Dacă verificăm în browser care este adresa IP, vom vedea că este chiar adresa serverului pe care am instanțiat conexiunea SSH cu dynamic port forwarding.
+
+3. **Încercați mai multe [exemple de tuneluri SSH](https://www.ssh.com/academy/ssh/tunneling-example)**
 
 
 <a name="socket"></a> 
@@ -376,7 +411,7 @@ O diagramă a procesului anterior este reprezentată aici:
 ### Transmission Control Protocol - [TCP](https://tools.ietf.org/html/rfc793#page-15)
 
 Este un protocol mai avansat de la [nivelul transport](http://www.erg.abdn.ac.uk/users/gorry/course/inet-pages/transport.html). 
-Header-ul acestuia este mai complex și va fi explicat în detaliu în [capitolul3](https://github.com/senisioi/computer-networks/blob/2023/capitolul3/README.md#tcp):
+Header-ul acestuia este mai complex și va fi explicat în detaliu în [capitolul3](../capitolul3#tcp):
 ```
   0                   1                   2                   3   Offs.
   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 
@@ -539,3 +574,22 @@ Serverul dacă primește mesaju, trimite automat un mesaj cu flag-ul ACK și Ack
 - ack 2416620958 - semnifică am primit octeți pana la 2416620957, aștept octeți de la Seq Nr 2416620958
 - length 0 - un mesaj de confirmare nu are payload 
 
+
+
+<a name="scapy_send"></a> 
+## Funcțiile send(p), sr(p), sr(p)1 în scapy
+
+În scapy avem mai multe funcții de trimitere a pachetelor:
+- `send()` - trimite un pachet pe rețea la nivelul network (layer 3), iar secțiunea de ethernet este completată de către sistem
+- `answered, unanswered = sr()` - send_receive - trimite pachete pe rețea în loop și înregistrează și răspunsurile primite într-un tuplu (answered, unanswered), unde answered și unanswered reprezintă o listă de tupluri [(pachet_trimis1, răspuns_primit1), ...,(pachet_trimis100, răspuns_primit100)] 
+- `answer = sr1()` - send_receive_1 - trimite pe rețea un pachet și înregistrează primul răspunsul
+
+Pentru a trimite pachete la nivelul legatură de date (layer 2), completând manual câmpuri din secțiunea Ethernet, avem echivalentul funcțiilor de mai sus:
+- `sendp()` - send_ethernet trimite un pachet la nivelul data-link, cu layer Ether custom
+- `answered, unanswered = srp()` - send_receive_ethernet trimite pachete la layer 2 și înregistrează răspunsurile
+- `answer = srp1()` - send_receive_1_ethernet la fel ca srp, dar înregistreazî doar primul răspuns
+
+<a name="exercitii_send"></a> 
+### Exercițiu scapy
+1. Urmăriți exemplul de cereri DNS executate în [capitolul 6](../capitolul6#scapy_dns) în secțiunea de DNS. Încercați să executați codul respectiv și să returnați răspunsuri DNS pentru un domeniu arbitrar.
+2. Scrieți un server DNS și setați-l să fie DNS-ul principal pentru calculatorul vostru. Contorizați timp de o zi care domenii sunt cerute în timpul navigărilor obișnuite. Observați care domenii sunt folosite pentru marketing.
