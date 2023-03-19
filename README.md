@@ -14,19 +14,28 @@ Canalul cursului pe Teams
 - [DefCamp](https://def.camp/) the most important annual conference on Hacking & Information Security in Central Eastern Europe
 - [Defcon](https://www.defcon.org/) hacker comunity conference
 
-## Informații curs
-- [Info curs](curs/)
-- [Capitolul 0](capitolul0/)
-    - [Introducere docker](capitolul0#docker)
-    - [Comenzi docker de bază](capitolul0#docker_comenzi)
-    - [Referinte, tutoriale](capitolul0#tutoriale)
-    - [NIC, ifconfig, iproute2](capitolul0#nic)
-    - [Exercițiul 1](capitolul0#exercitiu1)
-    - [Ping](capitolul0#ping)
-    - [tcpdump](capitolul0#tcpdump_install)
-    - [wireshark](capitolul0#wireshark)
+## Structura
+### - [Informații pentru curs](curs/)
+### - [Capitolul 0](capitolul0/)
+- [Introducere docker](capitolul0#docker)
+- [Comenzi docker de bază](capitolul0#docker_comenzi)
+- [Referinte, tutoriale](capitolul0#tutoriale)
+- [NIC, ifconfig, iproute2](capitolul0#nic)
+- [Exercițiul 1](capitolul0#exercitiu1)
+- [Ping](capitolul0#ping)
+- [tcpdump](capitolul0#tcpdump_install)
+- [wireshark](capitolul0#wireshark)
 
-- [Capitolul1](capitolul1/)
+### - [Capitolul1](capitolul1/)
+- [Network Stacks](capitolul1#stacks)
+- [Introducere și IDE](capitolul1#intro)
+  - [utils](capitolul1#utils)
+  - [python3 basics](capitolul1#basics)
+  - [Exerciții python](capitolul1#exercitii_python)
+- [Big Endian (Network Order) vs. Little Endian](capitolul1#endianness)
+- [Python Bytes as C Types](capitolul1#ctypes)
+- [Funcția sniff și în scapy](capitolul1#scapy_sniff)
+
 - [Capitolul2](capitolul2/)
 - [Capitolul3](capitolul3/)
 - [Capitolul4](capitolul4/)
