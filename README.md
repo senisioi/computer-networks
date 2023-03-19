@@ -23,8 +23,7 @@ O mare parte din exemplele de cod pot fi executate direct pe calculatoarele voas
 O parte din exemple utilizează containere de docker pentru a reproductibilitate. Așadar, ca să puteți reproduce toate experimentele și demonstratoarele de la curs, veți avea de:
 - [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 - [docker compose](https://docs.docker.com/compose/install/linux/)
-- de preferat să fie instalate pe Linux sau MacOS, deși majoritatea Windows 
-
+- de preferat să fie instalate pe Linux sau MacOS
 
 
 ## Materiale
@@ -32,6 +31,7 @@ Acesta este un repository de git, site-ul generat poate fi accesat la acest [URL
 
 
 ### [Bibliografie curs](curs/)
+
 ### Capitolul 0
 - [Introducere](capitolul0/)
 - [Comenzi docker](capitolul0#docker)
