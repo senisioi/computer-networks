@@ -56,6 +56,7 @@ Site-ul generat din fișierele de pe git poate fi accesat la acest [URL](https:/
 - [HTTP/S Requests](capitolul2#https)
 - [HTTP Server](capitolul2#https_server)
   - [Exercițiu HTTPS + DNS](capitolul2#https_dns)
+- [SSH](capitolul2#ssh)
 - [UDP](capitolul2#udp)
   - [Exerciții socket UDP](capitolul2#exercitii_udp)
 - [TCP](capitolul2#tcp)
