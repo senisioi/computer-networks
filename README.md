@@ -1,19 +1,27 @@
-# 2022-2023 Computer Networks [in progress]
+# 2022-2023 Computer Networks
 
 
-<a href="https://teams.microsoft.com/l/team/19%3awA2tGLn96SH2G_cNGKwPe8orFahlzuCYOLqhL30Uvao1%40thread.tacv2/conversations?groupId=e5a51008-8327-4111-89e8-0a128bfbd7ea&tenantId=08a1a72f-fecd-4dae-8cec-471a2fb7c2f1">
-<img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg" alt="drawing" width="25"/>
-Canalul cursului pe Teams
-</a>
-
-
-
-
-## Things to Checkout
-- [Materiale de Curs](https://senisioi.github.io/computer-networks/)
+## Materiale
+- <a><img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg" alt="drawing" width="25"/></a> [Canalul cursului pe Teams](https://teams.microsoft.com/l/team/19%3awA2tGLn96SH2G_cNGKwPe8orFahlzuCYOLqhL30Uvao1%40thread.tacv2/conversations?groupId=e5a51008-8327-4111-89e8-0a128bfbd7ea&tenantId=08a1a72f-fecd-4dae-8cec-471a2fb7c2f1)
+- [Materiale de Curs](https://networks.hypha.ro/)
+- [Materiale Repository Github](https://github.com/senisioi/computer-networks)
 - [Programul Masteral în Procesarea Limbajului Natural](https://nlp.unibuc.ro/master)
+
+### Security Conferences
 - [DefCamp](https://def.camp/) the most important annual conference on Hacking & Information Security in Central Eastern Europe
-- [Defcon](https://www.defcon.org/) hacker comunity conference
+- [DefCon](https://www.defcon.org/) hacker comunity conference
+- [USENIX](https://www.usenix.org/conferences) academic conference
+- [BlackHat](https://www.blackhat.com/) conference
+
+### Stuff
+- [CHATONS](https://entraide.chatons.org/en/) open softare
+- [De-google-ify the internet](https://degooglisons-internet.org/en/)
+- [Pluggable Transport](https://leap.se/blog/)
+- [yunohost](https://yunohost.org/en/selfhosting) self-hosting
+- [Networks of Consent](https://gitlab.com/spritely/ocappub/-/blob/master/README.org)
+- [BeakerBrowser](https://beakerbrowser.com/)
+- [ScuttleBut](https://scuttlebutt.nz/about/)
+
 
 
 ## Înainte de a începe cursul
@@ -68,7 +76,6 @@ Site-ul generat din fișierele de pe git poate fi accesat la acest [URL](https:/
 
 ### Capitolul 3
 - [Introducere](capitolul3#intro)
-- [Funcțiile send(p), sr(p), sr(p)1 în scapy](capitolul3#scapy_send)
 - [UDP Datagram](capitolul3#udp)
   - [Exemplu de calcul pentru checksum](capitolul3#checksum)
   - [UDP Socket](capitolul3#udp_socket)
