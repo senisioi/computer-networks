@@ -16,6 +16,16 @@ Canalul cursului pe Teams
 
 ## Informații curs
 - [Capitol separat](https://github.com/senisioi/computer-networks/blob/2023/curs/README.md)
+- [Info curs](curs/)
+- [Capitolul1](capitolul1/)
+- [Capitolul2](capitolul2/)
+- [Capitolul3](capitolul3/)
+- [Capitolul4](capitolul4/)
+- [Capitolul5](capitolul5/)
+
+
+
+
 
 ## Înainte de a începe cursul
 Pentru curs, vom avea nevoie de:
