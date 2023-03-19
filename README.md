@@ -53,7 +53,7 @@ Site-ul generat din fișierele de pe git poate fi accesat la acest [URL](https:/
 ### Capitolul 2
 - [Introducere](capitolul2#intro)
 - [Domain Name System](capitolul2#dns)
-- [HTTP/S Requests](capitolul2#https)
+- [HTTP/S/1.1/2/3](capitolul2#https)
 - [HTTP Server](capitolul2#https_server)
   - [Exercițiu HTTPS + DNS](capitolul2#https_dns)
 - [SSH](capitolul2#ssh)
@@ -62,8 +62,8 @@ Site-ul generat din fișierele de pe git poate fi accesat la acest [URL](https:/
 - [TCP](capitolul2#tcp)
   - [Exerciții socket TCP](capitolul2#exercitii_tcp)
   - [TCP 3-way handshake](capitolul2#shake)
-- [Funcțiile send(p), sr(p), sr(p)1 în scapy](#scapy_send)
-  - [Exercițiu DNS](#exercitii_send)
+- [Funcțiile send(p), sr(p), sr(p)1 în scapy](capitolul2#scapy_send)
+  - [Exercițiu DNS](capitolul2#exercitii_send)
 - [Suport Video - Chapter 2: The Application Layer](https://gaia.cs.umass.edu/kurose_ross/videos/2/)
 
 ### Capitolul 3
@@ -119,7 +119,7 @@ Site-ul generat din fișierele de pe git poate fi accesat la acest [URL](https:/
     - [Micro DNS Server](capitolul6#scapy_dns_server)
     - [DNS Spoofing](capitolul6#scapy_dns_spoofing)
     - [Suport Video - DNS](https://youtu.be/6lRcMh5Yphg)
-- [Exerciții](#exercitii)
+- [Exerciții](capitolul6#exercitii)
 
 ### Capitol extra 1
 -  [Configurarea unui router virtual](capitolulX1)

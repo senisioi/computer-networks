@@ -20,17 +20,17 @@
 cd computer-networks
 
 # ștergem toate containerele create default
-docker-compose down
+docker compose down
 
 # ștergem rețelele create anterior ca să nu se suprapună cu noile subnets
 docker network prune
 
-# lucrăm cu docker-compose.yml din capitolul3
+# lucrăm cu docker compose.yml din capitolul3
 cd capitolul3
-docker-compose up -d
+docker compose up -d
 
 # sau din directorul computer-networks: 
-# docker-compose -f capitolul3/docker-compose.yml up -d
+# docker compose -f capitolul3/docker compose.yml up -d
 ```
 
 
@@ -113,7 +113,7 @@ except KeyboardInterrupt:
 ### Blocarea unui IP
 Ne atașăm containerului router:
 ```bash
-docker-compose exec router bash
+docker compose exec router bash
 ```
 
 Dintr-un terminal de python sau dintr-un fișier rulăm:
@@ -147,7 +147,7 @@ except KeyboardInterrupt:
 
 Într-un alt terminal ne atașăm containerului server:
 ```bash
-docker-compose exec server bash
+docker compose exec server bash
 # nu va mai merge
 ping router 
 ```
@@ -240,7 +240,7 @@ E posibil ca reply-ul nostru să ajungă la containerul `server`, dar și reply-
 ##### 1. iptables forward către nfqueue
 Ne atașăm containerului `router` pentru a ataca containerul `server`. Construim o regulă de iptables prin care toate pachetele care trebuie forwardate (-I FORWARD) să treacă prin regula NFQUEUE cu număr de identificare 10 (putem alege orice număr).
 ```bash
-docker-compose exec router bash
+docker compose exec router bash
 
 iptables -I FORWARD -j NFQUEUE --queue-num 10
 ```
@@ -304,7 +304,7 @@ except KeyboardInterrupt:
     queue.unbind()
 ```
 
-Testați din containerul `server`: `docker-compose exec server bash -c "ping fmi.unibuc.ro"`
+Testați din containerul `server`: `docker compose exec server bash -c "ping fmi.unibuc.ro"`
 
 
 <a name="exercitii"></a> 
