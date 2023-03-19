@@ -14,12 +14,11 @@
 - [USENIX](https://www.usenix.org/conferences) academic conference
 - [BlackHat](https://www.blackhat.com/) conference
 
-### Open Softare
+### Open Software
 - [De-google-ify the internet](https://degooglisons-internet.org/en/)
 - [yunohost](https://yunohost.org/en/selfhosting) self-hosting
 - [Pluggable Transport](https://leap.se/blog/)
-- [CHATONS](https://entraide.chatons.org/en/) open softare
-- [BeakerBrowser](https://beakerbrowser.com/)
+- [CHATONS](https://entraide.chatons.org/en/) open software
 - [ScuttleBut](https://scuttlebutt.nz/about/)
 
 ### Collective initiatives
@@ -36,7 +35,7 @@
 Acesta este un curs practic pe parcursul căruia vom învăța despre [Internet](https://www.nsf.gov/news/special_reports/nsf-net/index.jsp), ce protocoale există în rețele și cum putem scrie programe pentru a interacționa cu rețelele.
 
 O mare parte din exemplele de cod pot fi executate direct pe calculatoarele voastre (pe host). 
-O parte din exemple utilizează containere de docker pentru a reproductibilitate. Așadar, ca să puteți reproduce toate experimentele și demonstratoarele de la curs, veți avea de:
+O parte din exemple utilizează containere de docker. Așadar, ca să puteți reproduce toate experimentele și demonstratoarele de la curs, veți avea de:
 - [docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
 - [docker compose](https://docs.docker.com/compose/install/linux/)
 - de preferat să fie instalate pe Linux sau MacOS
