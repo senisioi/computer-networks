@@ -6,7 +6,7 @@
 - [Website principal](https://networks.hypha.ro/)
 - [Materiale Repository Github](https://github.com/senisioi/computer-networks)
 - [Bibliografie Curs](https://networks.hypha.ro/curs/)
-- [Programul Masteral în Procesarea Limbajului Natural](https://nlp.unibuc.ro/master)
+- :fire: [Programul Masteral în Procesarea Limbajului Natural](https://nlp.unibuc.ro/master)
 
 ### Security Conferences
 - [DefCamp](https://def.camp/) the most important annual conference on Hacking & Information Security in Central Eastern Europe
@@ -22,8 +22,6 @@
 - [BeakerBrowser](https://beakerbrowser.com/)
 - [ScuttleBut](https://scuttlebutt.nz/about/)
 
-<details>
-<summary><i>Collective initiatives</i></summary>
 ### Collective initiatives
 - [Systerserver](https://systerserver.net/)
 - [bleu255](https://bleu255.com/)
@@ -32,7 +30,6 @@
 - [Anarchaserver](https://anarchaserver.org/)
 - [ooooo](https://www.ooooo.be/)
 - [Networks of Consent](https://gitlab.com/spritely/ocappub/-/blob/master/README.org)
-</details>
 
 
 ## Înainte de a începe cursul
