@@ -15,10 +15,10 @@
 - [BlackHat](https://www.blackhat.com/) conference
 
 ### Open Software
-- [De-google-ify the internet](https://degooglisons-internet.org/en/)
+- [snowflake proxy](https://snowflake.torproject.org/)
+- [de-google-ify the internet](https://degooglisons-internet.org/en/)
 - [yunohost](https://yunohost.org/en/selfhosting) self-hosting
 - [Pluggable Transport](https://leap.se/blog/)
-- [CHATONS](https://entraide.chatons.org/en/) open software
 - [ScuttleBut](https://scuttlebutt.nz/about/)
 
 ### Collective initiatives
@@ -29,6 +29,12 @@
 - [Anarchaserver](https://anarchaserver.org/)
 - [ooooo](https://www.ooooo.be/)
 - [Networks of Consent](https://gitlab.com/spritely/ocappub/-/blob/master/README.org)
+
+<!--
+### Books & Authors
+- [Tiziana Terranova](https://monoskop.org/Tiziana_Terranova)
+- [Matteo Pasquinelli](http://matteopasquinelli.com/)
+-->
 
 
 ## Înainte de a începe cursul

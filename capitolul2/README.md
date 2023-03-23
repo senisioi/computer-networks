@@ -33,12 +33,19 @@ docker compose up -d
 
 Folosim DNS pentru a afla IP-urile corespunzătoare numelor. În general numele sunt ([Fully Qualified Domain Names](https://kb.iu.edu/d/aiuv)) salvate cu [un punct în plus la sfârșit](https://stackexchange.github.io/dnscontrol/why-the-dot).
 
+
+- [Tutorial introductiv](https://howdns.works/)
+- [DNS Root Servers](https://root-servers.org/)
 - [DNS și DNS over HTTPS cartoon](https://hacks.mozilla.org/2018/05/a-cartoon-intro-to-dns-over-https/). 
 - [DNS server types](https://www.cloudflare.com/learning/dns/dns-server-types/)
+- [Introduction to DNSSEC](https://blog.ovhcloud.com/an-introduction-to-dnssec/)
 - [DNSSEC](https://www.cloudflare.com/dns/dnssec/how-dnssec-works/)
 
 
-În linux și macOS există aplicația `dig` cu care putem interoga entries de DNS. Puteți rula aceleași exemple dintr-un container docker `docker compose exec rt1 bash`. 
+În linux și macOS există aplicația `dig` cu care putem interoga entries de DNS. Pe windows există aplicația [nslookup](http://www.steves-internet-guide.com/using-nslookup/). 
+
+Puteți rula exemplele de mai jos dintr-un container docker `docker compose exec rt1 bash`. 
+
 ```bash
 #1. cele 13 root servers de DNS:
 dig 
