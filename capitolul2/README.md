@@ -5,6 +5,7 @@
 - [Domain Name System](#dns)
 - [HTTP/S Requests](#https)
 - [HTTP Server](#https_server)
+  - [Exercițiu Port Forward](#https_port_forward)
   - [Exercițiu HTTPS + DNS](#https_dns)
 - [SSH](#ssh)
 - [UDP](#udp)
@@ -216,6 +217,16 @@ cd computer-networks/capitolul2/src
 # executăm aplicația cu uvicorn
 uvicorn simple_fastapi:app --reload --host 0.0.0.0 --port 8080
 ```
+
+<a name="https_port_forward"></a>
+### Exercițiu Port Forwarding
+1. Verificați cu provider-ul de internet dacă puteți obține un nume de DNS dinamic. De ex, [la digi puteți obține](https://blogman.ro/cum-setam-dns-dinamic-la-rds-si-la-ce-ne-ajuta/) un subdomeniu pe `go.ro` care să trimită de fiecare dată către router-ul vostru de acasă.
+1. Dacă nu aveți opțiune de DNS dinamic, verificați dacă puteți face configurări la routerul vostru pentru IP-ul public pe care îl primiți.
+1. Configurați routerul să facă Port forwarding. Asta presupune următorii pași:
+  - asignați calculatorului de acasă același IP în funcție de adresa fizică (ex. pt `192.168.0.15`:`02:42:ac:1e:00:02`)
+  - deschideți un server http pe calculatorul de acasă pe un port oarecare (să zicem `8080`)
+  - în meniul cu port forwarding redirecționați orice mesaj care vine de pe internet pe portul `80` către `192.168.0.15:8080`
+1. Daca locuiți în cămin și nu aveți drept ce acces pe routerul pe care îl folosiți pentru internet, puteți face un Mesh VPN [prin zerotier](https://www.zerotier.com/) astfel încât să puteți accesa calculatorul de acasă prin intermediul unei rețele private. În acel mesh VPN puteți configura un DNS cu orice nume doriți voi.
 
 <a name="https_dns"></a>
 ### Exercițiu HTTP + S + DNS
