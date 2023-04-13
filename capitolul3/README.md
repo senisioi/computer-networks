@@ -233,27 +233,39 @@ Pe baza [explicațiilor de aici](https://stackoverflow.com/questions/41166420/se
 
 
 <a name="tcp"></a> 
-## [TCP Segment](https://tools.ietf.org/html/rfc793#page-15)
+## [TCP Segment]()
+### RFCs:
+- [rfc9293, 2022](https://www.rfc-editor.org/rfc/rfc9293) - cea mai recenta specificatie
+- [rfc6528, 2012](https://www.rfc-editor.org/rfc/rfc6528) - Initial Seq Attack
+- [rfc6691, 2012](https://www.rfc-editor.org/rfc/rfc6691) - Optiuni si MSS
+- [rfc879, 2011](https://www.rfc-editor.org/rfc/rfc6093) - clarificari despre URG
+- [rfc879, 1983](https://www.rfc-editor.org/rfc/rfc879) - MSS
+- [rfc793, 1981](https://tools.ietf.org/html/rfc793)
 ```
-  0               1               2               3              4 Offs.
-  0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 0 1 2 3 4 5 6 7 
- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
- |          Source Port          |       Destination Port        |  1
- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
- |                        Sequence Number                        |  2
- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
- |                    Acknowledgment Number                      |  3
- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
- | Data  |0 0 0| |C|E|U|A|P|R|S|F|                               |
- |Offset | Res.|N|W|C|R|C|S|S|Y|I|            Window             |  4
- |       |     |S|R|E|G|K|H|T|N|N|                               |
- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
- |           Checksum            |         Urgent Pointer        |  5
- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
- |                    Options   (if data offset > 5)             | 
- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
- |                    Application data                           | 
- -+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |          Source Port          |       Destination Port        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                        Sequence Number                        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                    Acknowledgment Number                      |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |  Data |       |C|E|U|A|P|R|S|F|                               |
+   | Offset| Rsrvd |W|C|R|C|S|S|Y|I|            Window             |
+   |       |       |R|E|G|K|H|T|N|N|                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |           Checksum            |         Urgent Pointer        |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                           [Options]                           |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                                                               :
+   :                             Data                              :
+   :                                                               |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+          Note that one tick mark represents one bit position.
+
 ```
 
 Prima specificație a protocolului TCP a fost în [RFC793](https://tools.ietf.org/html/rfc793)
