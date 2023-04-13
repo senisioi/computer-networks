@@ -275,10 +275,11 @@ Prima specificație a protocolului TCP a fost în [RFC793](https://tools.ietf.or
 - [Sequence și Acknowledgment](http://www.firewall.cx/networking-topics/protocols/tcp/134-tcp-seq-ack-numbers.html) sunt folosite pentru indicarea secvenței de bytes transmisă și notificarea că acea secvență a fost primită
 - Data offset - dimensiunea header-ului în multipli de 32 de biți
 - Res - 3 biți rezervați
-- NS, CWR, ECE - biți pentru notificarea explicită a existenței congestionării [ECN](https://www.juniper.net/documentation/us/en/software/junos/cos/topics/concept/cos-qfx-series-explicit-congestion-notification-understanding.html), explicat mai bine și [aici](http://blog.catchpoint.com/2015/10/30/tcp-flags-cwr-ece/). NS e o sumă binară pentru sigurantă, CWR - indică necesitatea micsorării ferestrei de congestionare iar ECE este un bit de echo care indică prezența congestionarii.
+- CWR, ECE - biți pentru notificarea explicită a existenței congestionării [ECN](https://www.juniper.net/documentation/us/en/software/junos/cos/topics/concept/cos-qfx-series-explicit-congestion-notification-understanding.html), explicat mai bine și [aici](http://blog.catchpoint.com/2015/10/30/tcp-flags-cwr-ece/).
+<!-- NS e o sumă binară pentru sigurantă, CWR - indică necesitatea micsorării ferestrei de congestionare iar ECE este un bit de echo care indică prezența congestionarii. -->
 - URG, ACK, PSH, RST, SYN, FIN - [flags](http://www.firewall.cx/networking-topics/protocols/tcp/136-tcp-flag-options.html)
 - Window Size - folosit pentru [flow control](http://www.ccs-labs.org/teaching/rn/animations/flow/), exemplu [aici](http://www.inacon.de/ph/data/TCP/Header_fields/TCP-Header-Field-Window-Size_OS_RFC-793.htm)
-- Urgent Pointer - mai multe detalii in [RFC6093](https://tools.ietf.org/html/rfc6093), pe scurt explicat [aici](http://www.firewall.cx/networking-topics/protocols/tcp/137-tcp-window-size-checksum.html).
+- Urgent Pointer - mai multe detalii in [RFC6093](https://tools.ietf.org/html/rfc6093), pe scurt explicat [aici](http://www.firewall.cx/networking-topics/protocols/tcp/137-tcp-window-size-checksum.html). Conform ultimei specificații "New applications SHOULD NOT set the URGENT flag [39](https://www.rfc-editor.org/rfc/rfc9293#RFC6093) due to implementation differences and middlebox issues (SHLD-13)."
 - Checksum - suma în complement fată de 1 a bucăților de câte 16 biți, complementatî cu 1, vezi mai multe detalii [aici](https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Checksum_computation) și [RFC1071 aici](https://tools.ietf.org/html/rfc1071)
 Se calculează din concatenarea: unui pseudo-header de IP [adresa IP sursă, IP dest (32 biti fiecare), placeholder (8 biti setati pe 0), [protocol](https://en.wikipedia.org/wiki/List_of_IP_protocol_numbers) (8 biti), și lungimea în bytes a întregii secțiuni TCP sau UDP (16 biti)], TCP sau UDP header cu checksum setat pe 0, și secțiunea de date.
 
@@ -312,15 +313,16 @@ Toate se bazează pe specificațiile din [RFC 2581](https://tools.ietf.org/html/
 
 - [ECE (ECN-Echo)](https://tools.ietf.org/html/rfc3168) este folosit de către receptor pentru a-l notifica pe emițător să reducă fluxul de date.
 - CWR (Congestion window reduced) e folosit de către emițător pentru a confirma notificarea ECE primită către receptor și că `cwnd` a scăzut.
+<!---
 - [NS](https://tools.ietf.org/html/draft-ietf-tsvwg-tcp-nonce-04) o sumă de control pe un bit care se calculează în funcție de sumele anterioare și care încearcă să prevină modificarea accidentală sau intenționată a pachetelor în tranzit.
-
+-->
 
 
 <a name="tcp_options"></a> 
 ### Optiuni TCP
 O [listă completă de opțiuni se găsește aici](http://www.networksorcery.com/enp/Protocol/tcp.htm#Options) si [aici](https://www.iana.org/assignments/tcp-parameters/tcp-parameters.xhtml). Optiunile au coduri, dimensiuni si specificatii particulare.
 Probabil cele mai importante sunt prezentate pe scurt în [acest tutorial](http://www.firewall.cx/networking-topics/protocols/tcp/138-tcp-options.html): 
-  - [Maximum Segment Size (MSS)](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00005.html) definit [aici](https://tools.ietf.org/html/rfc793#page-18) seteaza dimensiunea maxima a segmentului pentru a se evita fragmetarea la nivelul Network.
+  - [Maximum Segment Size (MSS)](http://fivedots.coe.psu.ac.th/~kre/242-643/L08/html/mgp00005.html) opțiune obligatorie definită [aici](https://www.rfc-editor.org/rfc/rfc9293#name-maximum-segment-size-option) seteaza dimensiunea maxima a segmentului pentru a se evita fragmetarea la nivelul Network.
   - [Window Scaling](https://cloudshark.io/articles/tcp-window-scaling-examples/) definit [aici](https://tools.ietf.org/html/rfc7323#page-8) - campul Window poate fi scalat cu valoarea Window * 2^WindowScaleOption; opțiune permite redimensionarea ferestrei până la (2^16 - 1) * 2^14. În linux si docker puteți dezactiva window scaling prin [sysctls](https://www.kernel.org/doc/Documentation/networking/ip-sysctl.txt) `net.ipv4.tcp_window_scaling=0`. 
   - [Selective Acknowledgment](https://packetlife.net/blog/2010/jun/17/tcp-selective-acknowledgments-sack/) 
 definit [aici](https://tools.ietf.org/html/rfc2018#page-3) permite trimiterea unor ack selective in functie de secventa pachetelor pierdute
@@ -328,6 +330,8 @@ definit [aici](https://tools.ietf.org/html/rfc2018#page-3) permite trimiterea un
   - [No-Operation](https://tools.ietf.org/html/rfc793#page-18) - no operation este folosit pentru separare între opțiuni sau pentru alinierea octetilor.
   - [End of Option List](https://tools.ietf.org/html/rfc793#page-18) - defineste capatul listei de optiuni
   - [Multipath TCP (MPTCP)](https://datatracker.ietf.org/doc/draft-ietf-mptcp-rfc6824bis/) - extensie a protocolului TCP care este inca abordata ca zona de cercetare pentru a permite mai multe path-uri de comunicare pentru o sesiune TCP. Explicat [aici](https://www.slashroot.in/what-tcp-multipath-and-how-does-multipath-tcp-work) sau in acest [film](https://www.youtube.com/watch?v=k-5pGlbiB3U).
+  - [Alte opțiuni TCP](https://www.rfc-editor.org/rfc/rfc9293#name-other-common-options) experimentale sau des întâlnite. 
+  - [Packet Mood?](https://www.ietf.org/rfc/rfc5841.txt)
 
 <a name="tcp_retransmission"></a>
 ### Exercițiu TCP Retransmission
