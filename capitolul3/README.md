@@ -235,12 +235,12 @@ Pe baza [explicațiilor de aici](https://stackoverflow.com/questions/41166420/se
 <a name="tcp"></a> 
 ## [TCP Segment]()
 ### RFCs:
-- [rfc9293, 2022](https://www.rfc-editor.org/rfc/rfc9293) - cea mai recenta specificatie
+- [rfc9293, 2022](https://www.rfc-editor.org/rfc/rfc9293) - cea mai recentă specificație
 - [rfc6528, 2012](https://www.rfc-editor.org/rfc/rfc6528) - Initial Seq Attack
-- [rfc6691, 2012](https://www.rfc-editor.org/rfc/rfc6691) - Optiuni si MSS
-- [rfc879, 2011](https://www.rfc-editor.org/rfc/rfc6093) - clarificari despre URG
+- [rfc6691, 2012](https://www.rfc-editor.org/rfc/rfc6691) - Optiuni și MSS
+- [rfc879, 2011](https://www.rfc-editor.org/rfc/rfc6093) - clarificări despre URG
 - [rfc879, 1983](https://www.rfc-editor.org/rfc/rfc879) - MSS
-- [rfc793, 1981](https://tools.ietf.org/html/rfc793)
+- [rfc793, 1981](https://tools.ietf.org/html/rfc793) - specificația inițială
 ```
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
