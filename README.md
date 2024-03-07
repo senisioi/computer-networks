@@ -1,8 +1,8 @@
-# 2022-2023 Computer Networks
+# 2023-2024 Computer Networks
 
 
 ## Materiale
-- <a><img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg" alt="drawing" width="25"/></a> [Canalul cursului pe Teams](https://teams.microsoft.com/l/team/19%3awA2tGLn96SH2G_cNGKwPe8orFahlzuCYOLqhL30Uvao1%40thread.tacv2/conversations?groupId=e5a51008-8327-4111-89e8-0a128bfbd7ea&tenantId=08a1a72f-fecd-4dae-8cec-471a2fb7c2f1)
+- <a><img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg" alt="drawing" width="25"/></a> [Canalul cursului pe Teams](https://teams.microsoft.com/l/team/19%3ah9ASoeOdaZtViVRLyieKrmhRV32Y7ZW8urQtBwQORV41%40thread.tacv2/conversations?groupId=eabb0f56-ea2d-4227-882f-69e405998b48&tenantId=08a1a72f-fecd-4dae-8cec-471a2fb7c2f1)
 - [Website principal](https://networks.hypha.ro/)
 - [Materiale Repository Github](https://github.com/senisioi/computer-networks)
 - [Bibliografie Curs](https://networks.hypha.ro/curs/)
