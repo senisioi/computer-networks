@@ -26,7 +26,7 @@ Pe linux e posibil să primiți permission denied. Va trebui în acel caz să ad
 # se adauga userul in grup
 sudo usermod -aG docker $USER
 # se face relod la setari in shellul curent
-newgrep docker
+newgrp docker
 # dupa un log out nu va mai fi nevoie sa rulati vreo comanda de mai sus
 ```
 
