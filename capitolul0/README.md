@@ -255,6 +255,19 @@ networks:
                   gateway: 198.13.13.1
 ```
 Ce se intamplă dacă constrângeți subnet-ul definit pentru a nu putea permite mai mult de 4 ip-uri într-o rețea.
+networks:
+    dmz:
+        ipam:
+            driver: default
+            config:
+                - subnet: 192.168.10.0/24 # Exemplu de subnet /24 din intervalul privat
+                  gateway: 192.168.10.1
+    net:
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.18.0.0/20 # Exemplu de subnet /20 din intervalul privat
+                  gateway: 172.18.0.1
 
 **Este corect să definim subrețele cu IP-uri: `172.111.111.0/16` și `198.13.13.0/16`?**
 
