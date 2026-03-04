@@ -2,7 +2,7 @@
 
 
 ## Materiale
-- <a><img src="" alt="drawing" width="25"/></a> [Canalul cursului pe Teams 2026](https://teams.cloud.microsoft/l/team/19%3AEU_1UDbS7MjkxYAT-TG-_xbs0IqY9hZIwmsJ2RiAHzk1%40thread.tacv2/conversations?groupId=861c2263-6bae-4224-ad1e-3ba255147481&tenantId=08a1a72f-fecd-4dae-8cec-471a2fb7c2f1)
+- [Canalul cursului pe Teams 2026](https://teams.cloud.microsoft/l/team/19%3AEU_1UDbS7MjkxYAT-TG-_xbs0IqY9hZIwmsJ2RiAHzk1%40thread.tacv2/conversations?groupId=861c2263-6bae-4224-ad1e-3ba255147481&tenantId=08a1a72f-fecd-4dae-8cec-471a2fb7c2f1)
 - [Website principal](https://networks.hypha.ro/)
 - [Materiale Repository Github](https://github.com/senisioi/computer-networks)
 - [Bibliografie Curs](https://networks.hypha.ro/curs/)
