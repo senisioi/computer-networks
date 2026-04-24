@@ -1,0 +1,119 @@
+# ============================================================
+# OBJECT 1: Deployment
+# Controlează câte pod-uri rulează și cum arată fiecare.
+# Dacă un pod cade, Deployment-ul îl recreează automat.
+# ============================================================
+
+# Grupul de API Kubernetes care gestionează Deployment-uri
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  # Numele cu care referim acest obiect în kubectl (ex: kubectl get deployment flask-deployment)
+  name: flask-deployment
+  labels:
+    # Etichetă opțională pentru organizare 
+    app: flask-web
+
+spec:
+  # Starea dorită: menține mereu exact 2 pod-uri active.
+  # Dacă unul cade, Kubernetes pornește imediat un altul în locul lui.
+  replicas: 2
+
+  selector:
+    matchLabels:
+      # Cum găsește Deployment-ul pod-urile pe care le controlează.
+      # Trebuie să fie identic cu labels din template.metadata de mai jos.
+      app: flask-web
+
+  # Șablonul (blueprint) folosit pentru a crea fiecare pod nou.
+  template:
+    metadata:
+      labels:
+        # Eticheta pe care o primește fiecare pod creat de acest Deployment.
+        # Service-ul de mai jos folosește această etichetă pentru a trimite trafic.
+        app: flask-web
+
+    spec:
+      containers:
+      - name: flask-container
+        # Imaginea Docker pe care am construit-o local și am încărcat-o cu "kind load"
+        image: my-flask-app:v1
+
+        # Nu descărca imaginea de pe internet — folosește ce e deja pe nod.
+        # Fără acest flag, Kubernetes ar încerca Docker Hub și ar eșua (ImagePullBackOff).
+        imagePullPolicy: IfNotPresent
+
+        ports:
+          # Documentație: indică că procesul Flask ascultă pe portul 5000.
+          # NU deschide sau expune nimic — asta e treaba Service-ului.
+        - containerPort: 5000
+
+        resources:
+          requests:
+            # Minimul GARANTAT de Kubernetes pentru acest container.
+            # Scheduler-ul folosește aceste valori pentru a alege un nod cu suficiente resurse.
+            # 50m = 50 milicores = 5% dintr-un core CPU
+            cpu: "50m"
+            # 128Mi = 128 mebibytes RAM garantați
+            memory: "128Mi"
+          limits:
+            # Plafonul DUR — containerul nu poate depăși aceste valori.
+            # Dacă depășește memoria, kernelul îl omoară: OOMKilled (exit code 137).
+            # Dacă depășește CPU (200m), este throttled (încetinit), nu omorât.
+            # Notă: pe Apple Silicon, Python 3.9 folosește pagini de memorie de 16KB
+            # (față de 4KB pe x86), deci necesită mai multă memorie decât pe alte arhitecturi.
+            cpu: "200m"
+            memory: "512Mi"
+
+        env:
+          # Injectează variabila de mediu NODE_NAME în container.
+          # În loc de o valoare statică, citește câmpul spec.nodeName din metadatele pod-ului.
+          # Kubernetes completează automat acest câmp cu numele nodului pe care rulează pod-ul.
+          # Aplicația Flask îl citește cu os.getenv("NODE_NAME") și îl afișează în pagină.
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+
+---
+
+# ============================================================
+# OBJECT 2: Service
+# Oferă o adresă de rețea stabilă pentru un set dinamic de pod-uri.
+# Pod-urile primesc IP-uri noi la fiecare repornire — Service-ul rămâne mereu același.
+# ============================================================
+
+apiVersion: v1
+kind: Service
+
+metadata:
+  name: flask-service
+
+spec:
+  # Tipul Service-ului — determină de unde este accesibil:
+  #   ClusterIP  (implicit) → doar din interiorul clusterului
+  #   NodePort              → de pe mașina locală, printr-un port pe nod  ← folosim asta
+  #   LoadBalancer          → din internet, prin un load balancer cloud
+  type: NodePort
+
+  selector:
+    # Trimite traficul spre orice pod care are eticheta app=flask-web.
+    # Aceasta este legătura dintre Service și pod-urile create de Deployment.
+    # Dacă schimbi eticheta aici fără să o schimbi și în Deployment, traficul nu mai ajunge.
+    app: flask-web
+
+  ports:
+    - protocol: TCP
+      # port: portul intern al Service-ului în cluster.
+      # Alte pod-uri din cluster pot apela "flask-service:5000" pentru a ajunge la Flask.
+      port: 5000
+
+      # targetPort: portul pe care Flask ascultă ÎN INTERIORUL containerului.
+      # Trebuie să coincidă cu portul din CMD-ul aplicației (app.run(port=5000)).
+      targetPort: 5000
+
+      # nodePort: portul deschis pe nod, accesibil de pe mașina locală.
+      # Fluxul complet: browser → nod:30500 → Service:5000 → container:5000
+      # Valori permise: 30000–32767
+      nodePort: 30500
