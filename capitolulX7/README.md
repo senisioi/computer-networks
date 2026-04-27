@@ -126,7 +126,7 @@ kubectl get nodes
 ```
 *(Expected output: Un nod cu statusul `Ready`.)*
 
-### Pasul crucial: Încărcarea imaginii în cluster
+### Încărcarea imaginii în cluster
 
 Kubernetes caută de obicei imaginile pe internet (Docker Hub, GHCR etc.). Deoarece `my-flask-app:v1` există **doar pe calculatorul vostru local**, trebuie să o "injectăm" manual în nodurile clusterului KinD:
 
