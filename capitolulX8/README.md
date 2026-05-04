@@ -269,7 +269,19 @@ kubectl port-forward service/flask-service 5000:5000 -n seminar
 
 Reîmprospătați pagina de mai multe ori. Observați:
 - **Contorul crește continuu** — Redis este partajat între toate replicile Flask
-- **Numele pod-ului se schimbă** — Service-ul distribuie cererile (load balancing)
+- **Numele pod-ului se schimbă sau nu se schimbă** — Service-ul distribuie cererile (load balancing), dar e posibil ca prin browser sa se faca forwarding la un singur port. 
+
+Soluția: rulează curl din interiorul clusterului, dintr-un pod temporar care accesează Service-ul prin ClusterIP:
+```bash
+kubectl run curl-test --image=curlimages/curl -it --rm -n seminar --restart=Never -- sh
+```
+
+
+si din interiorul podului:
+
+```bash
+for i in $(seq 1 10); do curl -s http://flask-service:5000/ | grep -o 'flask-deployment[^<]*'; sleep 0.5; done
+```
 
 ### Explorarea DNS intern cu `kubectl exec`
 
@@ -426,14 +438,4 @@ Readiness Probe este mecanismul prin care Kubernetes protejează utilizatorii de
 2. **Cerință:** Într-un alt terminal, scalați Redis la 0 replici. Notați exact câte secunde durează până pod-urile Flask trec la `0/1 READY` (calculați din `periodSeconds` și `failureThreshold` din `04-flask.yaml` — estimarea voastră trebuie să corespundă cu observația).
 3. Verificați că Service-ul nu mai direcționează trafic: `kubectl get endpoints flask-service -n seminar`.
 4. **Cerință:** Reporniți Redis (`replicas=1`) și urmăriți recuperarea. De data aceasta, măsurați cât durează pod-urile să revină la `1/1 READY`.
-5. **Discuție:** Ce s-ar fi întâmplat dacă în loc de Readiness Probe ar fi fost Liveness Probe? Ar fi afectat altfel comportamentul?
 
-### Exercițiul 6: Resource Limits și contorul partajat
-
-Resursele din Kubernetes nu sunt infinite — fiecare container trebuie să declare ce are nevoie.
-
-1. Scalați flask-deployment la **5 replici**: `kubectl scale deployment/flask-deployment --replicas=5 -n seminar`.
-2. **Cerință:** Rulați `kubectl top pods -n seminar` (necesită metrics-server — poate nu e disponibil în KinD implicit; dacă nu funcționează, folosiți OpenLens → Workloads → Pods pentru a vedea consumul de resurse).
-3. Faceți 20 de reîmprospătări rapide ale paginii. Observați contorul — crește secvențial indiferent de replică? De ce?
-4. **Cerință:** Resetați contorul accesând `http://localhost:5000/reset` (sau `/reset` prin port-forward). Verificați în browser că numărul a revenit la 1.
-5. **Discuție:** Redis are `replicas: 1` și stochează starea pe disk (dacă e configurat cu persistență) sau în memorie. Ce s-ar întâmpla cu contorul dacă pod-ul Redis ar fi șters și recreat? Cum ați rezolva această problemă în producție? *(Indiciu: cercetați conceptele `PersistentVolume` și `PersistentVolumeClaim`.)*
