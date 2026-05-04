@@ -169,7 +169,7 @@ kubectl get secret flask-secret -n seminar \
   -o jsonpath='{.data.REDIS_PASSWORD}' | base64 --decode
 ```
 
-> **Discuție importantă:** Base64 **nu este criptare** — oricine are acces la cluster poate decoda valorile. Secretele Kubernetes sunt mai degrabă o convenție de separare a configurației decât o protecție reală. Soluții pentru criptare adevărată includ: [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets), [HashiCorp Vault](https://www.vaultproject.io/), sau **Encryption at Rest** activat în `kube-apiserver`.
+> **Discuție:** Base64 **nu este criptare** — oricine are acces la cluster poate decoda valorile. Secretele Kubernetes sunt mai degrabă o convenție de separare a configurației decât o protecție reală. Soluții pentru criptare adevărată includ: [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets), [HashiCorp Vault](https://www.vaultproject.io/), sau **Encryption at Rest** activat în `kube-apiserver`.
 
 ---
 
@@ -267,7 +267,7 @@ kubectl port-forward service/flask-service 5000:5000 -n seminar
 
 Reîmprospătați pagina de mai multe ori. Observați:
 - **Contorul crește continuu** — Redis este partajat între toate replicile Flask
-- **Numele pod-ului se schimbă** — Service-ul distribuie cererile (load balancing) in anumite cazuri, depinde de OS si cum e facut point forwarding. Mai simplu e sa intram in container
+- **Numele pod-ului se schimbă** — Service-ul distribuie cererile (load balancing) in anumite cazuri, depinde de OS si cum e facut port forwarding. Mai simplu e sa intram in container
 ```bash
  kubectl run curl-test --image=curlimages/curl -it --rm -n seminar --restart=Never -- sh
 ```
@@ -420,15 +420,4 @@ Kubernetes oferă un sistem DNS intern — fiecare Service primește automat un 
 3. Verificați variabilele de mediu injectate: `env | grep -E "REDIS|APP_TITLE|NODE"`. Identificați care variabile vin din ConfigMap, care din Secret și care din `fieldRef`.
 4. **Cerință:** Fără a ieși din container, rulați `curl http://localhost:5000/health/ready`. Ce răspuns primiți? Ce înseamnă?
 
-### Exercițiul 5: Experimentul cu Readiness Probe
 
-Readiness Probe este mecanismul prin care Kubernetes protejează utilizatorii de un serviciu care nu este pregătit.
-
-1. Porniți un terminal separat și urmăriți starea pod-urilor în timp real:
-   ```bash
-   kubectl get pods -n seminar -w
-   ```
-2. **Cerință:** Într-un alt terminal, scalați Redis la 0 replici. Notați exact câte secunde durează până pod-urile Flask trec la `0/1 READY` (calculați din `periodSeconds` și `failureThreshold` din `04-flask.yaml` — estimarea voastră trebuie să corespundă cu observația).
-3. Verificați că Service-ul nu mai direcționează trafic: `kubectl get endpoints flask-service -n seminar`.
-4. **Cerință:** Reporniți Redis (`replicas=1`) și urmăriți recuperarea. De data aceasta, măsurați cât durează pod-urile să revină la `1/1 READY`.
-5. **Discuție:** Ce s-ar fi întâmplat dacă în loc de Readiness Probe ar fi fost Liveness Probe? Ar fi afectat altfel comportamentul?
