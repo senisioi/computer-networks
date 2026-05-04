@@ -1,4 +1,4 @@
-# Capitolul X8: Kubernetes în Adâncime — Configurare, Sănătate și Multi-Servicii
+# Capitolul X8: Kubernetes - Configurare, Health și Multi-Servicii
 
 În capitolul anterior (X7) am învățat fundamentele: cum să deployăm o singură aplicație pe un cluster KinD, cum să o scalăm și cum Kubernetes o auto-vindecă. Aplicațiile reale nu sunt niciodată un singur container — ele sunt compuse din **mai multe servicii** care colaborează.
 
