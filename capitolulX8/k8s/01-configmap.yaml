@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flask-config
+  namespace: seminar
+data:
+  # Adresa DNS internă a serviciului Redis în interiorul clusterului.
+  # Kubernetes rezolvă automat numele "<service>.<namespace>.svc.cluster.local".
+  # Forma scurtă "redis-service" funcționează din același namespace.
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  APP_TITLE: "Contor de vizite - Kubernetes X8"

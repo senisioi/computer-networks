@@ -1,4 +1,4 @@
-# Capitolul X8: Kubernetes - Configurare, Health și Multi-Servicii
+# Capitolul X8: Kubernetes în Adâncime — Configurare, Sănătate și Multi-Servicii
 
 În capitolul anterior (X7) am învățat fundamentele: cum să deployăm o singură aplicație pe un cluster KinD, cum să o scalăm și cum Kubernetes o auto-vindecă. Aplicațiile reale nu sunt niciodată un singur container — ele sunt compuse din **mai multe servicii** care colaborează.
 
@@ -50,7 +50,7 @@
            Browser / curl
 ```
 
-**Observații din diagramă:**
+**Observații cheie din diagramă:**
 - Cele 3 replici Flask partajează **același Redis** — de aceea contorul crește indiferent de ce replică servește cererea
 - `redis-service` este de tip **ClusterIP** (nu are port pe host) — Redis nu este expus în afara clusterului
 - `flask-service` este de tip **NodePort** — Flask este accesibil din browser pe portul `30501`
@@ -64,7 +64,7 @@
 | **Namespace** | Spațiu de nume izolat în cluster. Ca un "folder" pentru obiectele K8s. | `kubectl get pods -n seminar` |
 | **ClusterIP** | Service accesibil doar din interiorul clusterului. Implicit. | Definit în YAML: `type: ClusterIP` |
 | **DNS intern** | Kubernetes oferă DNS automat: `<service>.<namespace>.svc.cluster.local` | `curl redis-service:6379` (din pod) |
-| **ConfigMap** | Stochează configurație non-sensibilă (no secrets) (chei/valori). | `kubectl get configmap -n seminar` |
+| **ConfigMap** | Stochează configurație non-sensibilă (chei/valori). | `kubectl get configmap -n seminar` |
 | **Secret** | Stochează date sensibile codificate în base64. | `kubectl get secret -n seminar` |
 | **Liveness Probe** | Dacă eșuează, containerul este **repornit**. | Definit în spec.containers[].livenessProbe |
 | **Readiness Probe** | Dacă eșuează, pod-ul este **scos din Service** (nu mai primește trafic). | Definit în spec.containers[].readinessProbe |
@@ -83,10 +83,7 @@ Asigurați-vă că aveți un cluster KinD funcțional. Puteți reutiliza cluster
 # Verificați dacă clusterul din X7 mai există
 kind get clusters
 
-# Stergeti-l
-kind delete cluster --name k8s-flask
-
-# Creați unul nou
+# Dacă nu există, creați unul nou
 kind create cluster --name k8s-flask
 ```
 
@@ -172,7 +169,7 @@ kubectl get secret flask-secret -n seminar \
   -o jsonpath='{.data.REDIS_PASSWORD}' | base64 --decode
 ```
 
-> Base64 **nu este criptare** — oricine are acces la cluster poate decoda valorile. Secretele Kubernetes sunt mai degrabă o convenție de separare a configurației decât o protecție reală. Soluții pentru criptare adevărată includ: [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets), [HashiCorp Vault](https://www.vaultproject.io/), sau **Encryption at Rest** activat în `kube-apiserver`.
+> **Discuție importantă:** Base64 **nu este criptare** — oricine are acces la cluster poate decoda valorile. Secretele Kubernetes sunt mai degrabă o convenție de separare a configurației decât o protecție reală. Soluții pentru criptare adevărată includ: [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets), [HashiCorp Vault](https://www.vaultproject.io/), sau **Encryption at Rest** activat în `kube-apiserver`.
 
 ---
 
@@ -203,7 +200,7 @@ kubectl logs deployment/redis-deployment -n seminar
 
 <a name="pasul-5"></a>
 
-Analizați cu atenție `04-flask.yaml` înainte de a-l aplica. Conține mai multe concepte noi:
+Analizați cu atenție `04-flask.yaml` înainte de a-l aplica. Conține mai multe concepte noi simultan:
 
 **`envFrom: configMapRef`** — injectează **toate** perechile cheie/valoare din ConfigMap ca variabile de mediu în container:
 ```yaml
@@ -261,7 +258,8 @@ Obțineți IP-ul nodului KinD:
 NODE_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[0].address}')
 echo "Accesați: http://$NODE_IP:30501"
 ```
-Cateodata acesta este blocat in browser, mai simplu este sa folosiți port-forward ca data trecuta:
+
+Sau folosiți port-forward pentru acces rapid:
 ```bash
 kubectl port-forward service/flask-service 5000:5000 -n seminar
 # Deschideți http://localhost:5000
@@ -269,19 +267,7 @@ kubectl port-forward service/flask-service 5000:5000 -n seminar
 
 Reîmprospătați pagina de mai multe ori. Observați:
 - **Contorul crește continuu** — Redis este partajat între toate replicile Flask
-- **Numele pod-ului se schimbă sau nu se schimbă** — Service-ul distribuie cererile (load balancing), dar e posibil ca prin browser sa se faca forwarding la un singur port. 
-
-Soluția: rulează curl din interiorul clusterului, dintr-un pod temporar care accesează Service-ul prin ClusterIP:
-```bash
-kubectl run curl-test --image=curlimages/curl -it --rm -n seminar --restart=Never -- sh
-```
-
-
-si din interiorul podului:
-
-```bash
-for i in $(seq 1 10); do curl -s http://flask-service:5000/ | grep -o 'flask-deployment[^<]*'; sleep 0.5; done
-```
+- **Numele pod-ului se schimbă** — Service-ul distribuie cererile (load balancing)
 
 ### Explorarea DNS intern cu `kubectl exec`
 
@@ -309,7 +295,7 @@ exit
 
 ---
 
-## Pasul 7: Simularea defecțiunii — Readiness Probe 
+## Pasul 7: Simularea defecțiunii — Readiness Probe în acțiune
 
 <a name="pasul-7"></a>
 
@@ -342,7 +328,7 @@ kubectl get pods -n seminar -w
 # Pod-urile Flask revin la 1/1 READY pe măsură ce readiness probe trece din nou
 ```
 
-> **Scenariul real:** Într-o aplicație de producție, dacă baza de date are o întrerupere temporară (restart, upgrade), Readiness Probe-ul asigură că niciun trafic nu ajunge la instanțele aplicației care nu pot deservi cereri. Utilizatorii primesc erori de la Load Balancer (ex: `503 Service Unavailable`) în loc de erori din aplicație.
+> **Scenariul real:** Într-o aplicație de producție, dacă baza de date are o întrerupere temporară (restart, upgrade), Readiness Probe-ul asigură că niciun trafic nu ajunge la instanțele aplicației care nu pot deservi cereri. Utilizatorii primesc erori de la Load Balancer (ex: `503 Service Unavailable`) în loc de erori confuze din aplicație.
 
 ---
 
@@ -381,7 +367,7 @@ kind delete cluster --name k8s-flask
 
 <a name="exerciții-practice"></a>
 
-### Exercițiul 1: Deploy complet și verificare
+### Exercițiul 1: Deploy complet și verificare fundamentală
 
 Reporniți de la zero: creați clusterul, construiți și încărcați imaginea, aplicați toate manifestele în ordine.
 
@@ -399,7 +385,7 @@ Una dintre valorile ConfigMap-ului este `APP_TITLE` — titlul afișat în pagin
    kubectl rollout restart deployment/flask-deployment -n seminar
    ```
 3. Accesați din nou pagina și verificați că titlul s-a actualizat.
-4. Salvati screenshot
+4. **Discuție:** De ce Kubernetes nu repornește automat pod-urile la schimbarea ConfigMap-ului? Ce avantaje și dezavantaje are acest comportament?
 
 ### Exercițiul 3: Inspecția Secretelor și discuție de securitate
 
@@ -438,4 +424,14 @@ Readiness Probe este mecanismul prin care Kubernetes protejează utilizatorii de
 2. **Cerință:** Într-un alt terminal, scalați Redis la 0 replici. Notați exact câte secunde durează până pod-urile Flask trec la `0/1 READY` (calculați din `periodSeconds` și `failureThreshold` din `04-flask.yaml` — estimarea voastră trebuie să corespundă cu observația).
 3. Verificați că Service-ul nu mai direcționează trafic: `kubectl get endpoints flask-service -n seminar`.
 4. **Cerință:** Reporniți Redis (`replicas=1`) și urmăriți recuperarea. De data aceasta, măsurați cât durează pod-urile să revină la `1/1 READY`.
+5. **Discuție:** Ce s-ar fi întâmplat dacă în loc de Readiness Probe ar fi fost Liveness Probe? Ar fi afectat altfel comportamentul?
 
+### Exercițiul 6: Resource Limits și contorul partajat
+
+Resursele din Kubernetes nu sunt infinite — fiecare container trebuie să declare ce are nevoie.
+
+1. Scalați flask-deployment la **5 replici**: `kubectl scale deployment/flask-deployment --replicas=5 -n seminar`.
+2. **Cerință:** Rulați `kubectl top pods -n seminar` (necesită metrics-server — poate nu e disponibil în KinD implicit; dacă nu funcționează, folosiți OpenLens → Workloads → Pods pentru a vedea consumul de resurse).
+3. Faceți 20 de reîmprospătări rapide ale paginii. Observați contorul — crește secvențial indiferent de replică? De ce?
+4. **Cerință:** Resetați contorul accesând `http://localhost:5000/reset` (sau `/reset` prin port-forward). Verificați în browser că numărul a revenit la 1.
+5. **Discuție:** Redis are `replicas: 1` și stochează starea pe disk (dacă e configurat cu persistență) sau în memorie. Ce s-ar întâmpla cu contorul dacă pod-ul Redis ar fi șters și recreat? Cum ați rezolva această problemă în producție? *(Indiciu: cercetați conceptele `PersistentVolume` și `PersistentVolumeClaim`.)*

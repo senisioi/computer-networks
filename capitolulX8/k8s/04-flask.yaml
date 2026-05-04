@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-deployment
+  namespace: seminar
+  labels:
+    app: flask-web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flask-web
+  template:
+    metadata:
+      labels:
+        app: flask-web
+    spec:
+      containers:
+      - name: flask-container
+        image: flask-redis-app:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+
+        # --- Configuratie din ConfigMap si Secret ---
+        envFrom:
+        - configMapRef:
+            name: flask-config   # Injectează REDIS_HOST, REDIS_PORT, APP_TITLE ca variabile de mediu
+        env:
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: flask-secret
+              key: REDIS_PASSWORD
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+
+        # --- Limite de resurse ---
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "250m"
+            memory: "128Mi"
+
+        # --- Liveness Probe ---
+        # Dacă acest endpoint returnează eroare de 3 ori consecutiv,
+        # Kubernetes repornește containerul automat.
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 5000
+          initialDelaySeconds: 5   # Așteaptă 5 secunde după pornire înainte de primul check
+          periodSeconds: 10         # Verifică la fiecare 10 secunde
+          failureThreshold: 3
+
+        # --- Readiness Probe ---
+        # Cât timp acest endpoint returnează eroare, pod-ul este scos din rotația
+        # Service-ului — nu mai primește trafic, dar nu este repornit.
+        # Dacă Redis cade, Flask-ul devine "not ready" și cererile nu mai ajung la el.
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          failureThreshold: 2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-service
+  namespace: seminar
+spec:
+  type: NodePort
+  selector:
+    app: flask-web
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30501

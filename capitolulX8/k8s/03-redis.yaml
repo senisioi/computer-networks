@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+  namespace: seminar
+  labels:
+    app: redis
+spec:
+  replicas: 1  # Redis cu stare locală nu se scalează orizontal fără configurație suplimentară
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine  # Imagine oficială de pe Docker Hub — KinD o va descărca automat
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: "50m"       # 50 milicores (0.05 CPU)
+            memory: "64Mi"
+          limits:
+            cpu: "200m"
+            memory: "128Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: seminar
+spec:
+  # ClusterIP este tipul implicit — serviciul este accesibil DOAR din interiorul clusterului.
+  # Nu există port pe mașina locală pentru Redis — este o bază de date internă, nu o interfață publică.
+  type: ClusterIP
+  selector:
+    app: redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
