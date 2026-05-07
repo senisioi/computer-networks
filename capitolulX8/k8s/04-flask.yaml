@@ -44,7 +44,7 @@ spec:
             memory: "64Mi"
           limits:
             cpu: "250m"
-            memory: "128Mi"
+            memory: "1024Mi"
 
         # --- Liveness Probe ---
         # Dacă acest endpoint returnează eroare de 3 ori consecutiv,

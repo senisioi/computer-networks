@@ -85,7 +85,10 @@ Asigurați-vă că aveți un cluster KinD funcțional. Puteți reutiliza cluster
 # Verificați dacă clusterul din X7 mai există
 kind get clusters
 
-# Dacă nu există, creați unul nou
+#stergem clusterul vechi 
+kind delete cluster --name k8s-flask
+
+# Cream unul nou
 kind create cluster --name k8s-flask
 ```
 
@@ -105,6 +108,12 @@ Analizați `flask-redis/app.py`. Față de capitolul X7, această versiune:
 - Expune două endpointuri de health: `/health/live` și `/health/ready`
 - Endpointul `/health/ready` face un `r.ping()` real către Redis — dacă Redis nu răspunde, returnează `503 Service Unavailable`
 
+
+## Exercitiu 1:
+
+Instalati in dockerfile pachetul curl. 
+
+
 Construiți imaginea:
 ```bash
 cd flask-redis
@@ -115,6 +124,8 @@ docker build -t flask-redis-app:v1 .
 ```bash
 kind load docker-image flask-redis-app:v1 --name k8s-flask
 ```
+
+
 
 > **De reținut:** Imaginea `redis:7-alpine` din `03-redis.yaml` are `imagePullPolicy` implicit (`IfNotPresent` pentru imagini cu tag specific), deci KinD o va descărca de pe Docker Hub la prima pornire. Numai imaginile voastre custom trebuie încărcate manual cu `kind load`.
 
@@ -355,6 +366,7 @@ Deschideți OpenLens și conectați-vă la clusterul `kind-k8s-flask`. Exploraț
 6. **Workloads → Deployments** → click pe `flask-deployment` → **Conditions** — puteți vedea starea Readiness probe-urilor.
 
 ---
+Doar ca info, nu rulati:
 
 ## Pasul 9: Curățarea mediului
 
