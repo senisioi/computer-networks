@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: laborator
+data:
+  # Adresa internă a serviciului PostgreSQL (rezolvată de CoreDNS)
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: "notesdb"
+  DB_USER: "notes_user"
+
+  # URL-ul intern al API-ului (folosit de frontend pentru a-l contacta)
+  # Formatul: http://<service-name>.<namespace>.svc.cluster.local:<port>
+  API_URL: "http://api-service.laborator.svc.cluster.local:5001"

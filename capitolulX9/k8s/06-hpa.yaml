@@ -1,0 +1,32 @@
+# Horizontal Pod Autoscaler pentru serviciul API.
+#
+# Prerequisit: metrics-server trebuie instalat în cluster.
+# Instalare pentru KinD (cu patch pentru TLS insecure):
+#
+#   kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+#   kubectl patch deployment metrics-server -n kube-system \
+#     --type='json' \
+#     -p='[{"op":"add","path":"/spec/template/spec/containers/0/args/-","value":"--kubelet-insecure-tls"}]'
+#
+# Verificare că metrics-server funcționează:
+#   kubectl top pods -n laborator
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-hpa
+  namespace: laborator
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-deployment
+  minReplicas: 2    # Minim 2 replici chiar și fără trafic (High Availability)
+  maxReplicas: 8    # Maxim 8 replici sub sarcină mare
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 50   # Scalează când utilizarea medie CPU depășește 50% din requests

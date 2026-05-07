@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notițe de Curs — Kubernetes X9</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    body { background: #f0f4f8; }
+    .navbar { background: #326ce5 !important; }
+    .note-card { transition: box-shadow 0.2s; }
+    .note-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+    .infra-badge { font-family: monospace; font-size: 0.8rem; }
+    .api-ok { color: #198754; }
+    .api-error { color: #dc3545; }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark mb-4">
+  <div class="container">
+    <span class="navbar-brand fw-bold">
+      <i class="bi bi-journal-bookmark-fill"></i> Notițe de Curs
+    </span>
+    <span class="text-white-50 small">Kubernetes Microservices — Capitolul X9</span>
+  </div>
+</nav>
+
+<div class="container pb-5">
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ 'warning' if category == 'warning' else ('danger' if category == 'danger' else 'success') }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    {% endfor %}
+  {% endwith %}
+
+  <div class="row g-4">
+
+    <!-- Left column: Add note form -->
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-header fw-semibold">
+          <i class="bi bi-plus-circle"></i> Adaugă o notă nouă
+        </div>
+        <div class="card-body">
+          <form method="POST" action="/notes">
+            <div class="mb-3">
+              <label class="form-label small fw-semibold">Titlu *</label>
+              <input type="text" name="title" class="form-control" placeholder="ex: OSI Model" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-semibold">Conținut</label>
+              <textarea name="content" class="form-control" rows="4"
+                        placeholder="Notițe, concepte, link-uri..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="bi bi-save"></i> Salvează
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Infrastructure info panel -->
+      <div class="card shadow-sm mt-3 border-0" style="background:#e8f0fe;">
+        <div class="card-body p-3">
+          <p class="fw-semibold mb-2 small text-muted text-uppercase">
+            <i class="bi bi-cpu"></i> Infrastructură (această cerere)
+          </p>
+          <table class="table table-sm table-borderless mb-0 small">
+            <tr>
+              <td class="text-muted">Frontend Pod</td>
+              <td><code class="infra-badge">{{ pod_name }}</code></td>
+            </tr>
+            <tr>
+              <td class="text-muted">Node</td>
+              <td><code class="infra-badge">{{ node_name }}</code></td>
+            </tr>
+            <tr>
+              <td class="text-muted">API URL</td>
+              <td><code class="infra-badge">{{ api_url }}</code></td>
+            </tr>
+            <tr>
+              <td class="text-muted">API Status</td>
+              <td>
+                {% if api_status == 'ok' %}
+                  <span class="api-ok fw-semibold"><i class="bi bi-check-circle-fill"></i> OK</span>
+                {% else %}
+                  <span class="api-error fw-semibold"><i class="bi bi-x-circle-fill"></i> {{ api_status }}</span>
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td class="text-muted">Note în DB</td>
+              <td><strong>{{ note_count }}</strong></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column: Notes list -->
+    <div class="col-md-8">
+      <h5 class="fw-semibold mb-3">
+        <i class="bi bi-collection"></i> Notele mele
+        <span class="badge bg-secondary ms-2">{{ note_count }}</span>
+      </h5>
+
+      {% if notes %}
+        <div class="row g-3">
+          {% for note in notes %}
+          <div class="col-12">
+            <div class="card note-card shadow-sm border-0">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="flex-grow-1">
+                    <h6 class="card-title fw-semibold mb-1">{{ note.title }}</h6>
+                    {% if note.content %}
+                      <p class="card-text text-muted small mb-1">{{ note.content }}</p>
+                    {% endif %}
+                    <small class="text-muted">
+                      <i class="bi bi-clock"></i> {{ note.created_at[:19] }}
+                      &nbsp;·&nbsp;
+                      <i class="bi bi-hash"></i> ID: {{ note.id }}
+                    </small>
+                  </div>
+                  <form method="POST" action="/notes/{{ note.id }}/delete" class="ms-3"
+                        onsubmit="return confirm('Ștergi nota \'{{ note.title }}\'?')">
+                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                      <i class="bi bi-trash3"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="text-center text-muted py-5">
+          <i class="bi bi-journal-x" style="font-size:3rem;"></i>
+          <p class="mt-3">Nu există note. Adăugați prima notă folosind formularul din stânga!</p>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
