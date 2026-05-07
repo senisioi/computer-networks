@@ -463,6 +463,13 @@ Notați cele trei tipuri de adrese și observați că aparțin unor **subrețele
 | Service `flask-service` | ? | ? | ClusterIP (virtual, stabil) |
 | Node `k8s-flask-control-plane` | ? | ? | Node IP |
 
+
+```bash
+kubectl get nodes k8s-flask-control-plane -o jsonpath='{.spec.podCIDR}'
+```
+
+Eu obtin subnetul: 10.244.0.0/24
+
 Faceti screenshot cu tabelul. 
 
 **Pasul 2:** Lansați un pod de debugging cu `nicolaka/netshoot` — o imagine specializată pentru diagnosticarea rețelei, care conține `ip`, `ping`, `tcpdump`, `curl`, `nslookup` și alte unelte:
