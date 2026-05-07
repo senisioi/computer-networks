@@ -28,6 +28,8 @@
 - [Pasul 8: Explorarea cu OpenLens](#pasul-8-explorarea-cu-openlens)
 - [Pasul 9: Curățarea mediului](#pasul-9-curățarea-mediului)
 - [Exerciții Practice](#exerciții-practice)
+  - [Exercițiul 5: IP-urile pod-urilor — subnetting, comunicare directă și de ce există Service-urile](#exercițiul-5-ip-urile-pod-urilor--subnetting-comunicare-directă-și-de-ce-există-service-urile)
+  - [Exercițiul 6: Network Policies — firewall la nivelul pod-urilor](#exercițiul-6-network-policies--firewall-la-nivelul-pod-urilor)
 
 ---
 
@@ -420,4 +422,101 @@ Kubernetes oferă un sistem DNS intern — fiecare Service primește automat un 
 3. Verificați variabilele de mediu injectate: `env | grep -E "REDIS|APP_TITLE|NODE"`. Identificați care variabile vin din ConfigMap, care din Secret și care din `fieldRef`.
 4. **Cerință:** Fără a ieși din container, rulați `curl http://localhost:5000/health/ready`. Ce răspuns primiți? Ce înseamnă?
 
+---
+
+### Exercițiul 5: IP-urile pod-urilor — subnetting, comunicare directă și de ce există Service-urile
+
+În Kubernetes, **fiecare pod primește o adresă IP unică** din blocul de adrese al clusterului (Pod CIDR). Aceasta este o adresă IP reală, rutabilă în interiorul clusterului — nu o adresă virtuală. Există trei categorii distincte de adrese IP în cluster, cu roluri complet diferite.
+
+**Pasul 1:** Listați toate adresele IP din namespace-ul `seminar`:
+
+```bash
+# IP-urile pod-urilor (Pod CIDR, ex: 10.244.x.x)
+kubectl get pods -o wide -n seminar
+
+# IP-urile Service-urilor (Service CIDR / ClusterIP, ex: 10.96.x.x)
+kubectl get services -n seminar
+
+# IP-ul nodului (adresa nodului Docker, ex: 172.18.0.x)
+kubectl get nodes -o wide
+```
+
+Notați cele trei tipuri de adrese și observați că aparțin unor **subrețele diferite** (uitati-va la al doilea octet, ar trebui sa fie diferit). Completați tabelul:
+
+| Resursă | Adresă IP | Subnet (CIDR) | Tip |
+|---|---|---|---|
+| Pod `flask-deployment-xxx` | ? | ? | Pod IP (efemer) |
+| Pod `redis-deployment-xxx` | ? | ? | Pod IP (efemer) |
+| Service `redis-service` | ? | ? | ClusterIP (virtual, stabil) |
+| Service `flask-service` | ? | ? | ClusterIP (virtual, stabil) |
+| Node `k8s-flask-control-plane` | ? | ? | Node IP |
+
+Faceti screenshot cu tabelul. 
+
+**Pasul 2:** Lansați un pod de debugging cu `nicolaka/netshoot` — o imagine specializată pentru diagnosticarea rețelei, care conține `ip`, `ping`, `tcpdump`, `curl`, `nslookup` și alte unelte:
+
+```bash
+kubectl run netshoot --image=nicolaka/netshoot -it --rm -n seminar --restart=Never -- bash
+```
+
+Din interiorul acestui pod, investigați interfețele de rețea și tabela de rutare:
+
+```bash
+# Adresa IP a pod-ului curent și interfața de rețea
+ip addr show eth0
+
+# Tabela de rutare
+ip route
+
+# Observați:
+# - adresa IP a pod-ului (din Pod CIDR, ex: 10.244.x.y)
+# - gateway-ul implicit (adresa bridge-ului de pe nod, ex: 10.244.x.1)
+# - ruta pentru întregul Pod CIDR (ex: 10.244.0.0/16 via 10.244.x.1)
+```
+
+> **De ce traficul trece prin gateway chiar și între pod-uri de pe același nod?**
+> Fiecare pod este izolat într-un network namespace propriu — practic o "cutie" separată cu propria interfață `eth0`, ca și cum ar fi o mașină distinctă. Pod-urile nu se "văd" direct între ele la nivel de interfață, deci orice pachet care iese din pod urmează singura rută disponibilă: spre gateway-ul de pe nod (un bridge virtual). Nodul preia pachetul și îl livrează la destinație — fie local, fie pe alt nod — aplicând pe drum regulile `iptables` pentru traducerea Service IP → Pod IP. Efectul secundar util este că tot traficul inter-pod trece printr-un singur punct de control. 
+
+**Pasul 3:** Comunicare directă pod-to-pod prin IP, fără Service și fără DNS.
+
+Obțineți IP-ul pod-ului Redis:
+
+```bash
+# Rulat din afara containerului (un alt terminal)
+REDIS_POD_IP=$(kubectl get pod -l app=redis -n seminar -o jsonpath='{.items[0].status.podIP}')
+echo "Redis Pod IP: $REDIS_POD_IP"
+```
+
+Din interiorul pod-ului `netshoot`, conectați-vă direct la IP-ul Redis, ocolind complet Service-ul și DNS-ul:
+
+```bash
+# Înlocuiți <REDIS_POD_IP> cu valoarea obținută mai sus
+curl <REDIS_POD_IP>:6379
+
+# Răspunsul așteptat este una din variantele:
+#   curl: (52) Empty reply from server   → conexiune TCP reușită, Redis a închis-o (nu vorbește HTTP)
+#   -ERR wrong number of arguments       → Redis a procesat cererea ca o comandă invalidă
+# Ambele confirmă că traficul IP direct pod-to-pod funcționează.
+# Dacă Redis nu ar fi accesibil, ai primi: "Connection refused" sau timeout.
+```
+
+**Pasul 4:** Demonstrarea instabilității IP-urilor de pod.
+
+Forțați repornirea pod-ului Redis — pod-ul va fi șters și recreat, primind un **nou IP**:
+
+```bash
+kubectl rollout restart deployment/redis-deployment -n seminar
+kubectl get pods -o wide -n seminar -w
+# Urmăriți: IP-ul noului pod Redis este diferit față de cel vechi
+```
+
+Verificați că Service-ul `redis-service` (ClusterIP) **nu s-a schimbat**:
+
+```bash
+kubectl get service redis-service -n seminar
+```
+
+**Cerință:** Acesta este motivul pentru care Service-urile există. Scrieți un scurt paragraf care explică: de ce o arhitectură care s-ar baza pe IP-urile directe ale pod-urilor în loc de Service-uri ar fi fragilă în producție?
+
+---
 
