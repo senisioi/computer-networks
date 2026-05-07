@@ -302,7 +302,7 @@ exit
 
 ---
 
-## Pasul 7: Simularea defecțiunii — Readiness Probe în acțiune
+## Pasul 7: Readiness Probe în acțiune
 
 <a name="pasul-7"></a>
 
@@ -374,7 +374,7 @@ kind delete cluster --name k8s-flask
 
 <a name="exerciții-practice"></a>
 
-### Exercițiul 1: Deploy complet și verificare fundamentală
+### Exercițiul 1: Deploy complet și verificare
 
 Reporniți de la zero: creați clusterul, construiți și încărcați imaginea, aplicați toate manifestele în ordine.
 
