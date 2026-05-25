@@ -314,6 +314,8 @@ for i in $(seq 1 10); do
 done
 ```
 
+*(**WSL** cu workaround de la Pasul 3: lăsați pornit `kubectl port-forward -n laborator-lb svc/lb-api-student-nodeport 18081:8000` și în buclă folosiți **`http://127.0.0.1:18081/`** în loc de `:30809`.)*
+
 **Ce ar trebui să se întâmple?** Acum ar trebui să vedeți mereu același hostname returnat pentru toate cele 10 request-uri, deoarece IP-ul vostru a fost „lipit” de o anumită replică. Puteți dezactiva setarea ștergând liniile de `sessionAffinity` și reaplicând manifestul ca să vedeți diferența.
 
 
