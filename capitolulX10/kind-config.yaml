@@ -1,0 +1,17 @@
+# Configurație KinD pentru laboratorul X10 — acces din browser/curl pe macOS, Windows și Linux.
+#
+# Docker Desktop pe Mac/Windows rulează containere într-o mașină virtuală; IP-ul nodului KinD nu este în
+# mod obișnuit accesibil de pe gazdă. extraPortMappings publică aceleași porturi ca NodePort-urile
+# serviciilor (30808 NGINX, 30809 backend test) și pe localhost-ul calculatorului vostru.
+
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      - containerPort: 30808
+        hostPort: 30808
+        protocol: TCP
+      - containerPort: 30809
+        hostPort: 30809
+        protocol: TCP

@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lb-api-deployment
+  namespace: laborator-lb
+  labels:
+    app: lb-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: lb-api
+  template:
+    metadata:
+      labels:
+        app: lb-api
+    spec:
+      containers:
+        - name: api
+          image: lb-demo-api:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+---
+# Serviciul intern folosit de NGINX pentru distribuire round-robin (implicit) între replici.
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb-api-backend
+  namespace: laborator-lb
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  selector:
+    app: lb-api
+  ports:
+    - port: 8000
+      targetPort: 8000
+---
+# Serviciu NodePort opțional: acces direct de pe stația de lucru (același selector ca backend-ul).
+# La Exercițiul 3 setăm aici sessionAffinity: ClientIP pentru "sticky sessions" după IP client.
+apiVersion: v1
+kind: Service
+metadata:
+  name: lb-api-student-nodeport
+  namespace: laborator-lb
+spec:
+  type: NodePort
+  sessionAffinity: None
+  selector:
+    app: lb-api
+  ports:
+    - port: 8000
+      targetPort: 8000
+      nodePort: 30809
