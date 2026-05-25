@@ -205,6 +205,24 @@ curl -s "http://127.0.0.1:30808/" | python3 -m json.tool
     "kubernetes": true
 }
 
+**În caz că nu vă merg comenzile de mai sus pe WSL (Docker Desktop)**, uneori NodePort pe `localhost` (`30808`, `30809`) dă reset sau nu răspunde. În **două terminale**, lăsați fiecare `port-forward` pornit, apoi rulați `curl`-urile echivalente:
+
+Înlocuire pentru **`30808`** (prin NGINX):
+
+```bash
+kubectl port-forward -n laborator-lb svc/nginx-lb-service 18080:8080
+# în alt terminal:
+curl -s "http://127.0.0.1:18080/" | python3 -m json.tool
+```
+
+Înlocuire pentru **`30809`** (direct pe backend; serviciul are **port cluster 8000**, nu `8080`):
+
+```bash
+kubectl port-forward -n laborator-lb svc/lb-api-student-nodeport 18081:8000
+# în alt terminal:
+curl -s "http://127.0.0.1:18081/" | python3 -m json.tool
+```
+
 ---
 
 ## Exerciții (nu exista tema, nu trebuie uploadate nicaieri).
@@ -221,6 +239,8 @@ for i in $(seq 1 10); do
   curl -s "http://127.0.0.1:30808/" | python3 -c "import sys, json; d=json.load(sys.stdin); print(d.get('hostname','?'))"
 done
 ```
+
+*(**WSL**, cu `port-forward` de la Pasul 3 pe `nginx-lb-service`: lăsați `kubectl port-forward ... 18080:8080` pornit și folosiți același script, înlocuind `30808` cu **`18080` în URL-ul `curl`**: `http://127.0.0.1:18080/`.) La toate exercitiile trebuie sa schimbati portul pe WSL*
 
 **Cerință:** Ganditi-va de ce, uneori, același hostname poate apărea de două ori la rând (*Hint:* gândiți-vă la diferența dintre *round-robin* strict și *random* uniform din iptables). Puteti citi despre asta suplimentar.
 
