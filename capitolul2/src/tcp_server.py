@@ -1,4 +1,4 @@
-# TCP Server
+#TCP SERVER
 import socket
 import logging
 import time
@@ -11,15 +11,18 @@ port = 10000
 adresa = 'localhost'
 server_address = (adresa, port)
 sock.bind(server_address)
-logging.info("Serverul a pornit pe %s si portnul portul %d", adresa, port)
+logging.info("Serverul a pornit pe %s si portul %d", adresa, port)
 sock.listen(5)
-while True:
-    logging.info('Asteptam conexiui...')
-    conexiune, address = sock.accept()
-    logging.info("Handshake cu %s", address)
-    time.sleep(2)
-    data = conexiune.recv(1024)
-    logging.info('Content primit: "%s"', data)
-    conexiune.send(b"Server a primit mesajul: " + data)
-    conexiune.close()
-sock.close()
+
+try:
+    while True:
+        logging.info('Asteptam conexiuni...')
+        conexiune, address = sock.accept()
+        logging.info("Handshake cu %s", address)
+        time.sleep(2)
+        data = conexiune.recv(1024)
+        logging.info('Content primit: "%s"', data)
+        conexiune.send(b"Server a primit mesajul: " + data)
+        conexiune.close()
+except KeyboardInterrupt:
+    sock.close()
